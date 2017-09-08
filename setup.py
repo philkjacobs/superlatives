@@ -5,26 +5,26 @@ from tornado.ioloop import IOLoop
 from tornado.httpserver import HTTPServer
 from tornado.web import (
     Application,
-    HTTPError,
-    RequestHandler,
     StaticFileHandler,
+    RequestHandler,
 )
-
-
-class MainHandler(RequestHandler):
-    def get(self):
-        self.write("Hello world")
 
 
 class CustomStaticFileHandler(StaticFileHandler):
     def write_error(self, status_code, **kwargs):
         self.write(r"<h1> 404 Not Found (╯°□°)╯︵ ┻━┻ ")
 
+
+class MainHandler(RequestHandler):
+    def get(self):
+        self.render("web/html/index.html")
+
+
 def main():
     application = Application(
         [
             (r"/", MainHandler),
-            (r"/(.*)", CustomStaticFileHandler, {'path': os.path.join(os.path.dirname(__file__), "web")}),
+            (r"/(.*)", CustomStaticFileHandler, {'path': ""}),
         ],
         debug=True,
         static_path=os.path.join(os.path.dirname(__file__), "web"),
