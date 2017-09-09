@@ -1,32 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
 class Component extends React.Component {
   render() {
     return (
-      <ListGroup>
-        <ListGroupItem bsStyle="success">Hello</ListGroupItem>
-        <ListGroupItem bsStyle="info">World</ListGroupItem>
-        <ListGroupItem bsStyle="warning">Bootstrap</ListGroupItem>
-        <ListGroupItem bsStyle="danger">React</ListGroupItem>
-        <ListGroupItem bsStyle="success">Hello</ListGroupItem>
-        <ListGroupItem bsStyle="info">World</ListGroupItem>
-        <ListGroupItem bsStyle="warning">Bootstrap</ListGroupItem>
-        <ListGroupItem bsStyle="danger">React</ListGroupItem>
-        <ListGroupItem bsStyle="success">Hello</ListGroupItem>
-        <ListGroupItem bsStyle="info">World</ListGroupItem>
-        <ListGroupItem bsStyle="warning">Bootstrap</ListGroupItem>
-        <ListGroupItem bsStyle="danger">React</ListGroupItem>
-        <ListGroupItem bsStyle="success">Hello</ListGroupItem>
-        <ListGroupItem bsStyle="info">World</ListGroupItem>
-        <ListGroupItem bsStyle="warning">Bootstrap</ListGroupItem>
-        <ListGroupItem bsStyle="danger">React</ListGroupItem>
-        <ListGroupItem bsStyle="success">Hello</ListGroupItem>
-        <ListGroupItem bsStyle="info">World</ListGroupItem>
-        <ListGroupItem bsStyle="warning">Bootstrap</ListGroupItem>
-        <ListGroupItem bsStyle="danger">React</ListGroupItem>
-      </ListGroup>
+      <div>
+        <h1>Welcome to Superlatives</h1>
+        <button onClick={this.hostGameButtonPresed}>Host Game</button>
+        <button onClick={this.joinGameButtonPresed}>Join Game</button>
+      </div>
     )
   }
 }
