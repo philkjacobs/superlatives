@@ -31,6 +31,7 @@ def main():
     )
     http_server = HTTPServer(application)
     http_server.listen(5000)
+    print("Server is running on port 5000....")
     IOLoop.instance().start()
 
 
