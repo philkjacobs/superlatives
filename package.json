@@ -13,13 +13,14 @@
     "url": "git+https://github.com/philkjacobs/superlatives.git"
   },
   "dependencies": {
-    "react": "15.6.1",
-    "react-bootstrap": "0.31.3",
-    "react-dom": "15.6.1",
     "babel": "6.5.1",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.2",
-    "babel-preset-react": "6.24.1"
+    "babel-preset-react": "6.24.1",
+    "react": "15.6.1",
+    "react-bootstrap": "0.31.3",
+    "react-dom": "15.6.1",
+    "react-notify-toast": "^0.3.2"
   },
   "author": "Mathew Antony and Philip Jacobs",
   "license": "MIT",
