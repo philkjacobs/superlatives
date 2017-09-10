@@ -3,14 +3,33 @@ import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
 
 class HostGame extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      gameId: props.gameId
+    }
+  }
+
   render(){
     return(
       <div>
-        <h3>Here's your special game code. Share this with your friends: </h3>
-        ABC12345
+        <h3>Heres your special game code. Share this with your friends </h3>
+        {this.state.gameId}
       </div>
     )
   }
+
+  fetchGameID(){
+    // Magic code to fetch game ID
+  }
+}
+
+HostGame.propTypes = {
+  gameId: React.PropTypes.string.isRequired
+};
+
+HostGame.defaultProps = {
+  gameId: "TEST GAME"
 }
 
 class JoinGame extends React.Component {
@@ -50,8 +69,8 @@ class Application extends React.Component {
       <div>
         <Notifications />
         <h1>Welcome to Superlatives</h1>
-        <button onClick={this.hostGameButtonPressed}>Host Game</button>
-        <button onClick={this.joinGameButtonPressed}>Join Game</button>
+        <button onClick={this.hostGameButtonPressed} className="btn-rounded btn-outlined orange-btn">Host Game</button>
+        <button onClick={this.joinGameButtonPressed} className="btn-rounded btn-outlined green-btn">Join Game</button>
         {this.state.showHostScreen ? <HostGame /> : null}
         {this.state.showJoinScreen ? <JoinGame /> : null}
       </div>
