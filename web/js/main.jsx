@@ -77,6 +77,7 @@ class HostGame extends React.Component {
     }
 
     this.startGameButtonPressed = this.startGameButtonPressed.bind(this)
+
   }
 
   render(){

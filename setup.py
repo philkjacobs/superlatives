@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 import os
+import logging
 from tornado.ioloop import IOLoop
 from tornado.httpserver import HTTPServer
 from tornado.web import (
@@ -8,6 +9,10 @@ from tornado.web import (
     StaticFileHandler,
     RequestHandler,
 )
+
+# Configuring logging to show debug statements with a certain format
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s %(levelname)s %(message)s')
 
 
 class CustomStaticFileHandler(StaticFileHandler):
@@ -21,7 +26,9 @@ class MainHandler(RequestHandler):
 
 
 def main():
+
     application = Application(
+
         [
             (r"/", MainHandler),
             (r"/(.*)", CustomStaticFileHandler, {'path': ""}),
@@ -31,7 +38,9 @@ def main():
     )
     http_server = HTTPServer(application)
     http_server.listen(5000)
+    logging.debug('Server is running on port 5000')
     IOLoop.instance().start()
+
 
 
 if __name__ == "__main__":
