@@ -17,10 +17,12 @@
     "babel-core": "6.26.0",
     "babel-loader": "7.1.2",
     "babel-preset-react": "6.24.1",
+    "css-loader": "^0.28.7",
     "react": "15.6.1",
     "react-bootstrap": "0.31.3",
     "react-dom": "15.6.1",
-    "react-notify-toast": "^0.3.2"
+    "react-notify-toast": "^0.3.2",
+    "style-loader": "^0.18.2"
   },
   "author": "Mathew Antony and Philip Jacobs",
   "license": "MIT",

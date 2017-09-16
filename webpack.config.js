@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: "./web/js/main.jsx",
+    entry: ["./web/js/main.jsx"],
     output: {
         path: path.join(__dirname, "/web/static"),
         publicPath: "/",
@@ -18,8 +18,6 @@ module.exports = {
                     presets:['react']
                 }
             }
-
-
         ]
 
     }
