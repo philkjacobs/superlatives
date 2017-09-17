@@ -1,6 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
+import AssignSupers from './components/AssignSupers.jsx';
+
+var players = ['Brian', 'Philip', 'Julia', 'Ben', 'Jeremy', 'Tessa']
 
 class HostGame extends React.Component {
   constructor(props){
@@ -58,28 +61,31 @@ class Application extends React.Component {
     super(props);
     this.state = {
       showHostScreen: false,
-      showJoinScreen: false
+      showJoinScreen: false,
+      showWaitingScreen:false,
+      statusText:""
     }
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
     this.joinGameButtonPressed = this.joinGameButtonPressed.bind(this);
+    this.goToWaitingScreen = this.goToWaitingScreen.bind(this);
   }
   render() {
     return (
       <div>
         <Notifications />
         <h1>Welcome to Superlatives</h1>
+        <p>{this.state.statusText}</p>
         <button onClick={this.hostGameButtonPressed} className="btn-rounded btn-outlined orange-btn">Host Game</button>
         <button onClick={this.joinGameButtonPressed} className="btn-rounded btn-outlined green-btn">Join Game</button>
         {this.state.showHostScreen ? <HostGame /> : null}
         {this.state.showJoinScreen ? <JoinGame /> : null}
+        {this.state.showWaitingScreen ? null : <AssignSupers players={players} onStatusChange={function(status, statusText){this.goToWaitingScreen(status, statusText)}.bind(this)}/>}
       </div>
     )
   }
 
   hostGameButtonPressed(){
-    console.log("Host button pressed");
-    
     this.setState({
       showHostScreen: true,
       showJoinScreen: false
@@ -88,8 +94,6 @@ class Application extends React.Component {
   }
 
   joinGameButtonPressed(){
-    console.log("Join game button pressed");
-
     this.setState({
       showJoinScreen: true,
       showHostScreen: false
@@ -98,6 +102,13 @@ class Application extends React.Component {
 
   goToWaitingRoom(){
     notify.show('Not yet built!');
+  }
+
+  goToWaitingScreen(status, statusText){
+    this.setState({
+      showWaitingScreen:status,
+      statusText:statusText
+    });
   }
 
 }
