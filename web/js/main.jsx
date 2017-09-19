@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
+import ReadSupers from './components/ReadSupers.jsx';
 
 class HostGame extends React.Component {
   constructor(props){
@@ -58,7 +59,8 @@ class Application extends React.Component {
     super(props);
     this.state = {
       showHostScreen: false,
-      showJoinScreen: false
+      showJoinScreen: false,
+      showWaitingScreen: false
     }
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
@@ -69,10 +71,12 @@ class Application extends React.Component {
       <div>
         <Notifications />
         <h1>Welcome to Superlatives</h1>
+        <p>{this.state.statusText}</p>
         <button onClick={this.hostGameButtonPressed} className="btn-rounded btn-outlined orange-btn">Host Game</button>
         <button onClick={this.joinGameButtonPressed} className="btn-rounded btn-outlined green-btn">Join Game</button>
         {this.state.showHostScreen ? <HostGame /> : null}
         {this.state.showJoinScreen ? <JoinGame /> : null}
+        {this.state.showWaitingScreen ? null : <ReadSupers onStatusChange={function(status, statusText){this.goToWaitingScreen(status, statusText)}.bind(this)}/>}
       </div>
     )
   }
@@ -82,7 +86,8 @@ class Application extends React.Component {
     
     this.setState({
       showHostScreen: true,
-      showJoinScreen: false
+      showJoinScreen: false,
+      statusText:""
     });
 
   }
@@ -98,6 +103,13 @@ class Application extends React.Component {
 
   goToWaitingRoom(){
     notify.show('Not yet built!');
+  }
+
+  goToWaitingScreen(status, statusText){
+    this.setState({
+      showWaitingScreen:status,
+      statusText:statusText
+    });
   }
 
 }
