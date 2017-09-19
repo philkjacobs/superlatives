@@ -110,7 +110,6 @@ class Application extends React.Component {
       statusText:statusText
     });
   }
-
 }
 
 ReactDOM.render(
