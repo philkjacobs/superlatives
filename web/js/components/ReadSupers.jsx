@@ -36,8 +36,7 @@ export default class ReadSupers extends React.Component {
     super(props);
 
     this.state = {
-      currentSuper:"",
-      supersList:[]
+      supersList:supers
     }
 
     this.nextButtonClicked = this.nextButtonClicked.bind(this)
@@ -47,7 +46,7 @@ export default class ReadSupers extends React.Component {
     return (
       <div>
         <Notifications />
-        <Superlative name={this.state.currentSuper}/>
+        <Superlative name={this.state.supersList[0].name}/>
         <button onClick={this.nextButtonClicked}>Next superlative</button>
       </div>
     )
@@ -57,7 +56,6 @@ export default class ReadSupers extends React.Component {
   componentDidMount(){
     this.setState({
       supersList:supers,
-      currentSuper:supers[0].name
     })
   }
 
@@ -67,10 +65,7 @@ export default class ReadSupers extends React.Component {
     // If there are supers left, go to next super; otherwise go to Done screen.
     this.state.supersList.shift()
 
-    if(this.state.supersList.length>0){
-      this.state.currentSuper = this.state.supersList[0].name
-      
-    } else {
+    if(this.state.supersList.length==0){
       this.props.onStatusChange(true,"That's it! Host a new game or join an existing one.");
     }
 
