@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
+import ReadSupers from './components/ReadSupers.jsx';
 import Timer from '../js/components/Timer.jsx';
 import AssignSupers from './components/AssignSupers.jsx';
 
@@ -190,7 +191,8 @@ class Application extends React.Component {
     
     this.setState({
       showHostScreen: true,
-      showJoinScreen: false
+      showJoinScreen: false,
+      statusText:""
     });
 
   }
