@@ -161,8 +161,8 @@ class Application extends React.Component {
     super(props);
     this.state = {
       showHostScreen: false,
-      showJoinScreen: false,
       showWaitingScreen:false,
+      shouldStartGame:false,
       statusText:""
     }
 
@@ -178,9 +178,7 @@ class Application extends React.Component {
         <p>{this.state.statusText}</p>
         <button onClick={this.hostGameButtonPressed} className="btn-rounded btn-outlined orange-btn">Host Game</button>
         <button onClick={this.joinGameButtonPressed} className="btn-rounded btn-outlined green-btn">Join Game</button>
-        {this.state.showHostScreen ? <HostGame /> : null}
-        {this.state.showJoinScreen ? <JoinGame /> : null}
-        {this.state.showWaitingScreen ? null : <AssignSupers players={players} onStatusChange={function(status, statusText){this.goToWaitingScreen(status, statusText)}.bind(this)}/>}
+        {this.state.showHostScreen ? <HostGame /> : <JoinGame />}
       </div>
     )
   }
@@ -189,8 +187,7 @@ class Application extends React.Component {
     console.log("Host button pressed");
     
     this.setState({
-      showHostScreen: true,
-      showJoinScreen: false
+      showHostScreen: true
     });
 
   }
@@ -199,7 +196,6 @@ class Application extends React.Component {
     console.log("Join game button pressed");
 
     this.setState({
-      showJoinScreen: true,
       showHostScreen: false
     });
   }
