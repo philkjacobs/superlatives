@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
 import Timer from '../js/components/Timer.jsx';
+import AssignSupers from './components/AssignSupers.jsx';
+
 
 // Hard-coding player names. These will eventually live-update as new players are added to the database for a given gameID
 var players = ['Mathew', 'Jeremy', 'Ben', 'Philip', 'Julia', 'Brian']
