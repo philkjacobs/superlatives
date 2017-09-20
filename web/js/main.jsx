@@ -46,62 +46,12 @@ class WriteSuperlatives extends React.Component{
 	}
 }
 
-class WaitingRoom extends React.Component {
-	render(){
-		return(
-			<div>
-				<h3>Waiting Room</h3>
-				{this.props.players.map(function(player){
-						return (
-							<Player name={player} />
-						);
-				}.bind(this))}
-			</div>
-		)
-	}
-}
-
 function Player(props){
 	return(
 		<div>
 			{props.name}
 		</div>
-	);
-  constructor(props){
-    super(props)
-    this.state = {
-      super: ""
-    };
-
-    this.handleChange = this.handleChange.bind(this)
-  }
-
-  handleChange(e){
-    this.setState({
-      super: e.target.value
-    });
-  }
-
-  render(){
-    return(
-      <div>
-        <Timer />
-        <form onSubmit={this.onSubmit.bind(this)}>
-            <label>
-              <input type="text" value={this.state.super} onChange={this.handleChange}/>
-            </label>
-            <input type="submit" value="Add Super"/>
-          </form>
-      </div>
-    )
-  }
-
-  onSubmit(e){
-    e.preventDefault();
-    console.log("Add " + this.state.super + " to super list.")
-
-      // Send super to super entity for gameID
-  }
+	)
 }
 
 class WaitingRoom extends React.Component {
@@ -211,7 +161,9 @@ class Application extends React.Component {
     super(props);
     this.state = {
       showHostScreen: false,
-      showJoinScreen: false
+      showJoinScreen: false,
+      showWaitingScreen:false,
+      statusText:""
     }
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
@@ -223,10 +175,12 @@ class Application extends React.Component {
       <div>
         <Notifications />
         <h1>Welcome to Superlatives</h1>
+        <p>{this.state.statusText}</p>
         <button onClick={this.hostGameButtonPressed} className="btn-rounded btn-outlined orange-btn">Host Game</button>
         <button onClick={this.joinGameButtonPressed} className="btn-rounded btn-outlined green-btn">Join Game</button>
         {this.state.showHostScreen ? <HostGame /> : null}
         {this.state.showJoinScreen ? <JoinGame /> : null}
+        {this.state.showWaitingScreen ? null : <AssignSupers players={players} onStatusChange={function(status, statusText){this.goToWaitingScreen(status, statusText)}.bind(this)}/>}
       </div>
     )
   }
@@ -252,6 +206,13 @@ class Application extends React.Component {
 
   goToWaitingRoom(){
     notify.show('Not yet built!');
+  }
+
+  goToWaitingScreen(status, statusText){
+    this.setState({
+      showWaitingScreen:status,
+      statusText:statusText
+    });
   }
 
 }
