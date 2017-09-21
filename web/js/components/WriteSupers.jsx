@@ -36,6 +36,7 @@ export default class WriteSupers extends React.Component {
 
   onSubmit(e){
     e.preventDefault();
+    this.setState({super:""})
     console.log("Add " + this.state.super + " to super list.")
 
       // Send super to super entity for gameID

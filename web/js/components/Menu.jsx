@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import WriteSupers from './WriteSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 
 // Hard-coding player names. These will eventually live-update as new players are added to the database for a given gameID
@@ -25,18 +26,19 @@ export class WaitingRoom extends React.Component {
   render(){
     return(
       <div>
-      <h3>Heres your special game code: {this.props.gameId}.</h3>
-      <p>Share this with your friends</p>
-        <h3>Waiting Room</h3>
-        {this.props.players.map(function(player){
-            return (
-              <Player name={player} />
-            );
-        }.bind(this))}
-        {this.props.isHost ? <button className="btn-rounded btn-outlined orange-btn" onClick={this.startGameButtonPressed}>
-          Start Game
-        </button> : null}
-        {this.state.startGame ? <WriteSupers /> : null}
+        {this.state.startGame ? <WriteSupers /> : <div>
+        <h3>Heres your special game code: {this.props.gameId}.</h3>
+        <p>Share this with your friends</p>
+          <h3>Waiting Room</h3>
+          {this.props.players.map(function(player){
+              return (
+                <Player name={player} />
+              );
+          }.bind(this))}
+          {this.props.isHost ? <button className="btn-rounded btn-outlined orange-btn" onClick={this.startGameButtonPressed}>
+            Start Game
+          </button> : null}
+        </div>}
       </div>
     )
   }

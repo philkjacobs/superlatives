@@ -2,13 +2,13 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
 import AssignSupers from './components/AssignSupers.jsx';
-import WriteSupers from './components/WriteSupers.jsx';
 import * as Menu from './components/Menu.jsx';
 
 class Application extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      playerName:"Mathew",
       isHost:false,
       showHostScreen: false,
       showWaitingScreen:false,
