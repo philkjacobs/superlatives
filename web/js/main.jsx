@@ -1,50 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
-import Timer from '../js/components/Timer.jsx';
 import AssignSupers from './components/AssignSupers.jsx';
+import WriteSupers from './components/WriteSupers.jsx';
 
 // Hard-coding player names. These will eventually live-update as new players are added to the database for a given gameID
 var players = ['Mathew', 'Jeremy', 'Ben', 'Philip', 'Julia', 'Brian']
-
-class WriteSuperlatives extends React.Component{
-
-	constructor(props){
-		super(props)
-		this.state = {
-			super: ""
-		};
-
-		this.handleChange = this.handleChange.bind(this)
-	}
-
-	handleChange(e){
-		this.setState({
-			super: e.target.value
-		});
-	}
-
-	render(){
-		return(
-			<div>
-				<Timer />
-				<form onSubmit={this.onSubmit.bind(this)}>
-		        <label>
-		          <input type="text" value={this.state.super} onChange={this.handleChange}/>
-		        </label>
-		        <input type="submit" value="Add Super"/>
-		      </form>
-			</div>
-		)
-	}
-
-	onSubmit(e){
-		e.preventDefault();
-		console.log("Add " + this.state.super + " to super list.")
-
-    	// Send super to super entity for gameID
-	}
-}
 
 function Player(props){
 	return(
@@ -98,7 +59,7 @@ class HostGame extends React.Component {
         <button className="btn-rounded btn-outlined orange-btn" onClick={this.startGameButtonPressed}>
           Start Game
         </button>
-        {this.state.startGame ? <WriteSuperlatives /> : null}
+        {this.state.startGame ? <WriteSupers /> : null}
       </div>
     )
   }
