@@ -13,7 +13,11 @@ class Application extends React.Component {
       showHostScreen: false,
       showWaitingScreen:false,
       statusText:"",
+
+      // Testing with FOOBAR for now. This will eventually be blank and populated once the call's made to the server.
       gameId:"FOOBAR",
+
+      // This will either be "none", "write", "assign", "read"
       gameState:"none"
     }
 
