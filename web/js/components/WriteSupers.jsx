@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Superlative from 'Superlative.jsx'
+import Superlative from './Superlative.jsx'
 import Notifications, {notify} from 'react-notify-toast';
-import Timer from 'Timer.jsx';
+import Timer from './Timer.jsx';
 
 export default class WriteSupers extends React.Component {
   constructor(props){
