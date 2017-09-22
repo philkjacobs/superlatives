@@ -26,7 +26,7 @@ export class WaitingRoom extends React.Component {
   render(){
     return(
       <div>
-        {this.state.startGame ? <WriteSupers /> : <div>
+        {this.state.startGame ? <WriteSupers submitSuper={this.props.submitSuper} /> : <div>
         <h3>Heres your special game code: {this.props.gameId}.</h3>
         <p>Share this with your friends</p>
           <h3>Waiting Room</h3>
@@ -45,6 +45,7 @@ export class WaitingRoom extends React.Component {
 
   startGameButtonPressed(){
     // Change game state so other devices will start the game too
+    // TODO: This needs to change state at the Application level
     this.setState({
       startGame: true
     })

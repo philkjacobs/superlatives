@@ -24,7 +24,7 @@ export default class WriteSupers extends React.Component {
     return(
       <div>
         <Timer />
-        <form onSubmit={this.onSubmit.bind(this)}>
+        <form onSubmit={this.props.submitSuper}>
             <label>
               <input type="text" value={this.state.super} onChange={this.handleChange}/>
             </label>
@@ -39,6 +39,7 @@ export default class WriteSupers extends React.Component {
     this.setState({super:""})
     console.log("Add " + this.state.super + " to super list.")
 
-      // Send super to super entity for gameID
+    // Send super to super entity for gameID
+
   }
 }
