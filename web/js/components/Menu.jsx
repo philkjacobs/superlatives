@@ -63,16 +63,16 @@ export class JoinGame extends React.Component {
     this.state = {
       goToWaitingRoom: false
     }
-    this.onSubmit = this.onSubmit.bind(this)
+    // this.onSubmit = this.onSubmit.bind(this)
   }
   render(){
     return(
       <div>
           {this.state.goToWaitingRoom ? <WaitingRoom players={players} gameId={this.props.gameId}/> : <div>
           <h3>Enter magic code to join game:</h3>
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.props.onSubmit(this.props.gameId)}>
               <label>
-                <input type="text" />
+                <input type="text" value={this.props.gameId} onChange={this.props.onChange}/>
               </label>
               <input type="submit" value="Join Game" />
             </form>
@@ -82,11 +82,11 @@ export class JoinGame extends React.Component {
     )
   }
 
-  onSubmit(e){
-    e.preventDefault();
-    // For now, it's always true. Eventually, it'll do a check before going to the waiting room
-    this.setState({
-      goToWaitingRoom: true
-    });
-  }
+  // onSubmit(e){
+  //   e.preventDefault();
+  //   // For now, it's always true. Eventually, it'll do a check before going to the waiting room
+  //   this.setState({
+  //     goToWaitingRoom: true
+  //   });
+  // }
 }

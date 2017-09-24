@@ -16,7 +16,7 @@ class Application extends React.Component {
       statusText:"",
 
       // Testing with FOOBAR for now. This will eventually be blank and populated once the message is received the server.
-      gameId:"FOOBAR",
+      gameId:"",
 
       // This will either be "none", "write", "assign", "read"
       gameState:"none"
@@ -24,7 +24,8 @@ class Application extends React.Component {
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
     this.joinGameButtonPressed = this.joinGameButtonPressed.bind(this);
-    this.handleChange = this.handleChange.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleIdChange = this.handleIdChange.bind(this);
 
   }
   render() {
@@ -36,25 +37,32 @@ class Application extends React.Component {
         <div>
         <form>
             <label>
-              <input type="text" placeholder="Enter name..." value={this.state.playerName} onChange={this.handleChange}/>
+              <input type="text" placeholder="Enter name..." value={this.state.playerName} onChange={this.handleNameChange}/>
             </label>
           </form>
       </div>
         <button onClick={this.hostGameButtonPressed} className="btn-rounded btn-outlined orange-btn">Host Game</button>
         <button onClick={this.joinGameButtonPressed} className="btn-rounded btn-outlined green-btn">Join Game</button>
-        {this.state.showHostScreen ? <Menu.WaitingRoom players={Menu.players} isHost={this.state.isHost} gameId={this.state.gameId} /> : null}
-        {this.state.showJoinScreen ? <Menu.JoinGame gameId={this.state.gameId}/> : null}
+        {this.state.showHostScreen ? <Menu.WaitingRoom players={Menu.players} isHost={this.state.isHost} gameId={this.state.gameId} submitSuper={function(data){this.writeSuper(data)}.bind(this)} /> : null}
+        {this.state.showJoinScreen ? <Menu.JoinGame gameId={this.state.gameId} onChange={function(e){this.handleIdChange(e)}.bind(this)} onSubmit={function(data){this.login(data)}.bind(this)}/> : null}
       </div>
     )
   }
 
-  handleChange(e){
+  handleNameChange(e){
     this.setState({
       playerName: e.target.value
     });
   }
 
+  handleIdChange(e){
+    this.setState({
+      gameId: e.target.value
+    });
+  }
+
   hostGameButtonPressed(){
+    this.login(this.state.playerName)
     this.setState({
       isHost: true,
       showHostScreen: true,
@@ -79,6 +87,7 @@ class Application extends React.Component {
 
   login(data){
     // Send player name and gameId (only if joining)
+    console.log('Sending to server: ' + this.state.playerName + ' '+this.state.gameId)
   }
 
   changeGameState(state){
