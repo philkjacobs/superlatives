@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
-import AssignSupers from './components/AssignSupers.jsx';
 import * as Menu from './components/Menu.jsx';
 
 class Application extends React.Component {
@@ -18,7 +17,7 @@ class Application extends React.Component {
       // Testing with FOOBAR for now. This will eventually be blank and populated once the message is received the server.
       gameId:"",
 
-      // This will either be "none", "write", "assign", "read"
+      // This will either be "none", "write", "assign", "read", "wait"
       gameState:"none"
     }
 
@@ -35,16 +34,34 @@ class Application extends React.Component {
         <h1>Welcome to Superlatives</h1>
         <p>{this.state.statusText}</p>
         <div>
-        <form>
-            <label>
-              <input type="text" placeholder="Enter name..." value={this.state.playerName} onChange={this.handleNameChange}/>
-            </label>
-          </form>
-      </div>
-        <button onClick={this.hostGameButtonPressed} className="btn-rounded btn-outlined orange-btn">Host Game</button>
-        <button onClick={this.joinGameButtonPressed} className="btn-rounded btn-outlined green-btn">Join Game</button>
-        {this.state.showHostScreen ? <Menu.WaitingRoom players={Menu.players} isHost={this.state.isHost} gameId={this.state.gameId} submitSuper={function(data){this.writeSuper(data)}.bind(this)} /> : null}
-        {this.state.showJoinScreen ? <Menu.JoinGame gameId={this.state.gameId} onChange={function(e){this.handleIdChange(e)}.bind(this)} onSubmit={function(data){this.login(data)}.bind(this)}/> : null}
+          <form>
+              <label>
+                <input type="text" placeholder="Enter name..." value={this.state.playerName} onChange={this.handleNameChange}/>
+              </label>
+            </form>
+        </div>
+        <button
+          onClick={this.hostGameButtonPressed}
+          className="btn-rounded btn-outlined orange-btn">Host Game
+        </button>
+        <button
+          onClick={this.joinGameButtonPressed}
+          className="btn-rounded btn-outlined green-btn">Join Game
+        </button>
+
+        {this.state.showHostScreen ? <Menu.WaitingRoom
+          players={Menu.players}
+          isHost={this.state.isHost}
+          gameId={this.state.gameId}
+          submitSuper={function(data){this.writeSuper(data)}.bind(this)}
+          changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
+          gameState={this.state.gameState}/> : null}
+
+
+        {this.state.showJoinScreen ? <Menu.JoinGame
+          gameId={this.state.gameId}
+          onChange={function(e){this.handleIdChange(e)}.bind(this)}
+          onSubmit={function(data){this.login(data)}.bind(this)}/> : null}
       </div>
     )
   }
@@ -78,10 +95,10 @@ class Application extends React.Component {
     });
   }
 
-  goToWaitingScreen(status, statusText){
+  changeStatus(status, statusText){
     this.setState({
-      showWaitingScreen:status,
-      statusText:statusText
+      statusText:statusText,
+      gameState:status
     });
   }
 

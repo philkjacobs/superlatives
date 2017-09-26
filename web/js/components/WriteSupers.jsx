@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Superlative from './Superlative.jsx'
+import AssignSupers from './AssignSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 import Timer from './Timer.jsx';
 
@@ -15,6 +16,7 @@ export default class WriteSupers extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   handleChange(e){
@@ -23,15 +25,17 @@ export default class WriteSupers extends React.Component {
     });
   }
 
+  onSubmit(e){
+    e.preventDefault();
+    this.setState({super:""})
+    this.props.submitSuper(this.state.super)
+  }
+
   render(){
     return(
       <div>
         <Timer now={now}/>
-        <form onSubmit={function(e){
-          e.preventDefault();
-          this.setState({super:""})
-          this.props.submitSuper(this.state.super)}.bind(this)
-        }>
+        <form onSubmit={this.onSubmit}>
             <label>
               <input type="text" value={this.state.super} onChange={this.handleChange}/>
             </label>
