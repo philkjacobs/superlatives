@@ -6,28 +6,16 @@ import Notifications, {notify} from 'react-notify-toast';
 // Hard-coding supers for testing 
 var supers = [
   {
-  "name":"Most likely to die in a freak accident",
-  "created_by":"A",
-  "assigned_by":"B",
-  "receipient":"C"
+  "name":"Most likely to die in a freak accident"
   },
   {
-  "name":"Most loyal",
-  "created_by":"D",
-  "assigned_by":"E",
-  "receipient":"F"
+  "name":"Most loyal"
   },
   {
-  "name":"Best hair",
-  "created_by":"D",
-  "assigned_by":"E",
-  "receipient":"F"
+  "name":"Best hair"
   },
   {
-  "name":"Most likely to become president",
-  "created_by":"D",
-  "assigned_by":"E",
-  "receipient":"F"
+  "name":"Most likely to become president"
   }
 ]
 

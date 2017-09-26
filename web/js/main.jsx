@@ -13,8 +13,6 @@ class Application extends React.Component {
       showJoinScreen:false,
       showWaitingScreen:false,
       statusText:"",
-
-      // Testing with FOOBAR for now. This will eventually be blank and populated once the message is received the server.
       gameId:"",
 
       // This will either be "none", "write", "assign", "read", "wait"
