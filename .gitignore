@@ -3,4 +3,3 @@ node_modules/
 web/static/
 .DS_STORE
 *.pyc
->>>>>>> initial database and state interactions in the backend
