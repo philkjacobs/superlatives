@@ -5,7 +5,7 @@ var TimerExample = React.createClass({
     getInitialState: function(){
         return { 
         	elapsed: 0,
-        	timeLimit:10
+        	timeLimit:15
         };
     },
 
@@ -26,9 +26,7 @@ var TimerExample = React.createClass({
     },
 
     tick: function(){
-
     	this.setState({elapsed: new Date() - this.props.start});
-
     },
 
     render: function() {
@@ -37,7 +35,7 @@ var TimerExample = React.createClass({
         var secondsLeft = this.state.timeLimit - seconds;
         var timerText;
 
-        // If time is less than 0, change timerText to "Time to play!"
+        // If time is less than 0, change timerText to "Time up!"
         if(secondsLeft>0){
         	timerText = secondsLeft + " seconds left"
         } else {
@@ -52,7 +50,7 @@ var TimerExample = React.createClass({
 export default class Timer extends React.Component {
   render() {
     return (
-    	<TimerExample start={Date.now()} />
+    	<TimerExample start={this.props.now} />
     );
   }
 }
