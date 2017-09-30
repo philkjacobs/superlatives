@@ -34,7 +34,7 @@ export default class WriteSupers extends React.Component {
   render(){
     return(
       <div>
-        <Timer now={now}/>
+        <Timer now={this.props.now}/>
         <form onSubmit={this.onSubmit}>
             <label>
               <input type="text" value={this.state.super} onChange={this.handleChange}/>

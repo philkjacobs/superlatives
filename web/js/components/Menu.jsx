@@ -44,10 +44,11 @@ export class WaitingRoom extends React.Component {
 
       {this.props.gameState=="write" ?
         <WriteSupers
-            submitSuper={this.props.submitSuper}
-            changeStatus={this.props.changeStatus}
-            players={this.props.players}
-            gameState={this.props.gameState}/> : null }
+          submitSuper={this.props.submitSuper}
+          changeStatus={this.props.changeStatus}
+          players={this.props.players}
+          gameState={this.props.gameState}
+          now={Date.now()}/> : null }
 
       {this.props.gameState=="assign" ?
         <AssignSupers
