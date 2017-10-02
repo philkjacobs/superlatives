@@ -1,46 +1,23 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import Superlative from './Superlative.jsx'
 import Notifications, {notify} from 'react-notify-toast';
 
 // Hard-coding supers for testing 
 var supers = [
   {
-  "name":"Best cuticles",
-  "created_by":"A",
-  "assigned_by":"B",
-  "receipient":"C"
+  "name":"Best cuticles"
   },
   {
-  "name":"Best smile",
-  "created_by":"D",
-  "assigned_by":"E",
-  "receipient":"F"
+  "name":"Best smile"
   },
   {
-  "name":"Best hair",
-  "created_by":"D",
-  "assigned_by":"E",
-  "receipient":"F"
+  "name":"Best hair"
   },
   {
-  "name":"Most likely to become president",
-  "created_by":"D",
-  "assigned_by":"E",
-  "receipient":"F"
+  "name":"Most likely to become president"
   }
 ]
-
-function Superlative(props){
-  return(
-    <div>
-      <h1>{props.name}</h1>
-    </div>
-  )
-}
-
-Superlative.propTypes = {
-  name: React.PropTypes.string.isRequired
-}
 
 function Player(props){
   return(
@@ -99,7 +76,7 @@ export default class AssignSupers extends React.Component {
       this.state.currentSuper = this.state.supersList[0].name
       
     } else {
-      this.props.onStatusChange(true,"You've assigned all supers! Waiting for your friends to finish...");
+      this.props.changeStatus("wait", "You've assigned all supers! Waiting for your friends to finish...")
     }
 
     this.setState(this.state)

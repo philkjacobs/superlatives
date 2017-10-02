@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import WriteSupers from './WriteSupers.jsx';
+import AssignSupers from './AssignSupers.jsx';
+import ReadSupers from './ReadSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 
 // Hard-coding player names. These will eventually live-update as new players are added to the database for a given gameID
@@ -26,7 +28,7 @@ export class WaitingRoom extends React.Component {
   render(){
     return(
       <div>
-        {this.state.startGame ? <WriteSupers submitSuper={this.props.submitSuper} /> : <div>
+      {this.props.gameState=="none" ? <div>
         <h3>Heres your special game code: {this.props.gameId}.</h3>
         <p>Share this with your friends</p>
           <h3>Waiting Room</h3>
@@ -38,7 +40,24 @@ export class WaitingRoom extends React.Component {
           {this.props.isHost ? <button className="btn-rounded btn-outlined orange-btn" onClick={this.startGameButtonPressed}>
             Start Game
           </button> : null}
-        </div>}
+        </div> : null }
+
+      {this.props.gameState=="write" ?
+        <WriteSupers
+          submitSuper={this.props.submitSuper}
+          changeStatus={this.props.changeStatus}
+          players={this.props.players}
+          gameState={this.props.gameState}
+          now={Date.now()}/> : null }
+
+      {this.props.gameState=="assign" ?
+        <AssignSupers
+          changeStatus={this.props.changeStatus}
+          players={this.props.players}/> : null }
+
+      {this.props.gameState=="read" ?
+        <ReadSupers /> : null }
+
       </div>
     )
   }
