@@ -59,6 +59,6 @@ export default class ReadSupers extends React.Component {
   }
 
   newGameButtonPressed(){
-    this.props.changeStatus("none", "")
+    this.props.changeStatus("menu", "")
   }
 }

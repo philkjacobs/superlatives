@@ -28,7 +28,7 @@ export class WaitingRoom extends React.Component {
   render(){
     return(
       <div>
-      {this.props.gameState=="none" ? <div>
+      {this.props.gameState=="room" ? <div>
         <h3>Heres your special game code: {this.props.gameId}.</h3>
         <p>Share this with your friends</p>
           <h3>Waiting Room</h3>
@@ -102,11 +102,4 @@ export class JoinGame extends React.Component {
     )
   }
 
-  // onSubmit(e){
-  //   e.preventDefault();
-  //   // For now, it's always true. Eventually, it'll do a check before going to the waiting room
-  //   this.setState({
-  //     goToWaitingRoom: true
-  //   });
-  // }
 }
