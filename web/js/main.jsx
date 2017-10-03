@@ -37,7 +37,11 @@ class Application extends React.Component {
           <div>
             <form>
                 <label>
-                  <input type="text" placeholder="Enter name..." value={this.state.playerName} onChange={this.handleNameChange}/>
+                  <input
+                    type="text"
+                    placeholder="Enter name..."
+                    value={this.state.playerName}
+                    onChange={this.handleNameChange}/>
                 </label>
               </form>
           </div>
@@ -56,6 +60,7 @@ class Application extends React.Component {
           isHost={this.state.isHost}
           gameId={this.state.gameId}
           submitSuper={function(data){this.writeSuper(data)}.bind(this)}
+          assignSuper={function(data){this.assignSuper(data)}.bind(this)}
           changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
           gameState={this.state.gameState}/> : null}
 
@@ -128,6 +133,7 @@ class Application extends React.Component {
 
   assignSuper(data){
     // Writer super object to server
+    console.log("Assigned super to " +data)
   }
 }
 

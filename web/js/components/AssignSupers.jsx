@@ -22,7 +22,7 @@ var supers = [
 function Player(props){
   return(
     <div>
-      <button onClick={function(){props.buttonClicked();}}>
+      <button onClick={function(player){props.buttonClicked(props.name);}}>
       {props.name}
       </button>
     </div>
@@ -66,7 +66,9 @@ export default class AssignSupers extends React.Component {
     })
   }
 
-  playerButtonClicked(){
+  playerButtonClicked(player){
+
+    this.props.assignSuper(player)
     
     // Save assignment to server
     // If there are supers left, go to next super; otherwise go to Done screen.
