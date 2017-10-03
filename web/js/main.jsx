@@ -26,11 +26,14 @@ class Application extends React.Component {
 
   }
   render() {
+    if(this.state.gameState!="none") var style = {display:'none'}
+      
     return (
       <div>
         <Notifications />
         <h1>Welcome to Superlatives</h1>
         <p>{this.state.statusText}</p>
+        <div style={style}>
         <div>
           <form>
               <label>
@@ -46,6 +49,7 @@ class Application extends React.Component {
           onClick={this.joinGameButtonPressed}
           className="btn-rounded btn-outlined green-btn">Join Game
         </button>
+        </div>
 
         {this.state.showHostScreen ? <Menu.WaitingRoom
           players={Menu.players}
