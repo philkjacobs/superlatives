@@ -56,7 +56,8 @@ export class WaitingRoom extends React.Component {
           players={this.props.players}/> : null }
 
       {this.props.gameState=="read" ?
-        <ReadSupers /> : null }
+        <ReadSupers
+          changeStatus={this.props.changeStatus} /> : null }
 
       </div>
     )
