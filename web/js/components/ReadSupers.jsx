@@ -28,14 +28,15 @@ export default class ReadSupers extends React.Component {
     }
 
     this.nextButtonClicked = this.nextButtonClicked.bind(this)
+    this.newGameButtonPressed = this.newGameButtonPressed.bind(this)
 
   }
   render() {
     return (
       <div>
         <Notifications />
-        {this.state.supersList.length==0 ? notify.show('Thats it! Host a new game or join an existing one.', 'success') : null}
-        <Superlative name={this.state.supersList[0].name}/>
+        {this.state.supersList.length==0 ? <div>That's it! <button onClick={this.newGameButtonPressed}>Back to menu</button></div> : <Superlative name={this.state.supersList[0].name}/>}
+        
         <button onClick={this.nextButtonClicked}>Next superlative</button>
       </div>
     )
@@ -55,5 +56,9 @@ export default class ReadSupers extends React.Component {
     this.setState({
       supersList:this.state.supersList.slice(1)      
     })
+  }
+
+  newGameButtonPressed(){
+    this.props.changeStatus("none", "")
   }
 }
