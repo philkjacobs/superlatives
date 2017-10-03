@@ -15,8 +15,8 @@ class Application extends React.Component {
       statusText:"",
       gameId:"",
 
-      // This will either be "none", "write", "assign", "read", "wait"
-      gameState:"none"
+      // This will either be "menu", "wait", "write", "assign", "read"
+      gameState:"menu"
     }
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
@@ -26,29 +26,29 @@ class Application extends React.Component {
 
   }
   render() {
-    if(this.state.gameState!="none") var style = {display:'none'}
-      
+    if(this.state.gameState!="menu") var style = {display:'none'}
+
     return (
       <div>
         <Notifications />
         <h1>Welcome to Superlatives</h1>
         <p>{this.state.statusText}</p>
         <div style={style}>
-        <div>
-          <form>
-              <label>
-                <input type="text" placeholder="Enter name..." value={this.state.playerName} onChange={this.handleNameChange}/>
-              </label>
-            </form>
-        </div>
-        <button
-          onClick={this.hostGameButtonPressed}
-          className="btn-rounded btn-outlined orange-btn">Host Game
-        </button>
-        <button
-          onClick={this.joinGameButtonPressed}
-          className="btn-rounded btn-outlined green-btn">Join Game
-        </button>
+          <div>
+            <form>
+                <label>
+                  <input type="text" placeholder="Enter name..." value={this.state.playerName} onChange={this.handleNameChange}/>
+                </label>
+              </form>
+          </div>
+          <button
+            onClick={this.hostGameButtonPressed}
+            className="btn-rounded btn-outlined orange-btn">Host Game
+          </button>
+          <button
+            onClick={this.joinGameButtonPressed}
+            className="btn-rounded btn-outlined green-btn">Join Game
+          </button>
         </div>
 
         {this.state.showHostScreen ? <Menu.WaitingRoom
@@ -85,7 +85,8 @@ class Application extends React.Component {
     this.setState({
       isHost: true,
       showHostScreen: true,
-      showJoinScreen: false
+      showJoinScreen: false,
+      gameState:"room"
     });
   }
 
@@ -102,6 +103,13 @@ class Application extends React.Component {
       statusText:statusText,
       gameState:status
     });
+
+    if(this.state.statusText=="menu"){
+      this.setState({
+        showHostScreen: false,
+        showJoinScreen: false
+      });
+    }
   }
 
   login(data){
