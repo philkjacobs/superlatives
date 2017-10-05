@@ -33,7 +33,7 @@ class TestWebsocketHandler(AsyncTestCase):
 
 
     @gen_test
-    def test_create_game(self):
+    def test_create_game_two_player(self):
         host = "Phil"
         player = "Mathew"
 
@@ -48,7 +48,7 @@ class TestWebsocketHandler(AsyncTestCase):
         game = response['data']['game']
         logging.error(game)
         player_connection = yield websocket_connect(
-            'ws://localhost:{}/ws?name={}&game={}'.format(self.port, host, game)
+            'ws://localhost:{}/ws?name={}&game={}'.format(self.port, player, game)
         )
 
         response = yield player_connection.read_message()
