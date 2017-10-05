@@ -20,7 +20,8 @@ class Application extends React.Component {
       players:[],
       // This will either be "menu", "room", "wait", "write", "assign", "read"
       gameState:"menu",
-      socket:""
+      socket:"",
+      supers:[]
     }
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
@@ -81,6 +82,8 @@ class Application extends React.Component {
 
         {this.state.gameState=="assign" ? <AssignSupers
           players={this.state.players}
+          supers={this.state.supers}
+          currentSuper={supers[0].name}
           changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
           assignSuper={function(data){this.assignSuper(data)}.bind(this)} /> : null }
 
