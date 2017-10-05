@@ -10,13 +10,12 @@ class Application extends React.Component {
     this.state = {
       playerName:"",
       isHost:false,
-      showHostScreen: false,
       showJoinScreen:false,
       showWaitingScreen:false,
       statusText:"",
       gameId:"",
-
-      // This will either be "menu", "wait", "write", "assign", "read"
+      players:[],
+      // This will either be "menu", "room", "wait", "write", "assign", "read"
       gameState:"menu"
     }
 
@@ -57,20 +56,20 @@ class Application extends React.Component {
           </button>
         </div>
 
-        {this.state.showHostScreen ? <Menu.WaitingRoom
-          players={Menu.players}
+        {this.state.showJoinScreen ? <Menu.JoinGame
+          gameId={this.state.gameId}
+          onChange={function(e){this.handleIdChange(e)}.bind(this)}
+          onSubmit={function(data){this.login('join')}.bind(this)}/> : null}
+
+        {this.state.gameState=="room" ? <Menu.WaitingRoom
+          players={this.state.players}
           isHost={this.state.isHost}
           gameId={this.state.gameId}
           submitSuper={function(data){this.writeSuper(data)}.bind(this)}
           assignSuper={function(data){this.assignSuper(data)}.bind(this)}
           changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
-          gameState={this.state.gameState}/> : null}
-
-
-        {this.state.showJoinScreen ? <Menu.JoinGame
-          gameId={this.state.gameId}
-          onChange={function(e){this.handleIdChange(e)}.bind(this)}
-          onSubmit={function(data){this.login('join')}.bind(this)}/> : null}
+          gameState={this.state.gameState}
+          changeGameState={function(state){this.changeGameState(state)}.bind(this)}/> : null}
       </div>
     )
   }
@@ -91,16 +90,13 @@ class Application extends React.Component {
     this.login('host')
     this.setState({
       isHost: true,
-      showHostScreen: true,
-      showJoinScreen: false,
-      gameState:"room"
+      showJoinScreen: false
     });
   }
 
   joinGameButtonPressed(){
     this.setState({
       isHost: false,
-      showHostScreen: false,
       showJoinScreen: true
     });
   }
@@ -136,13 +132,21 @@ class Application extends React.Component {
 
     // Handle messages sent by the server.
     socket.onmessage = function(event) {
-      var message = event.data;
-      console.log(message);
-    };
+      var response = JSON.parse(event.data);
+
+      // Assuming success, go to the waiting room
+      this.setState({
+        gameId:response.data.game,
+        players:response.data.players,
+        gameState:"room",
+        showJoinScreen:false
+      })
+    }.bind(this);
   }
 
   changeGameState(state){
     // Send message to server with new game state
+    console.log("Change state to write!")
   }
 
   writeSuper(data){

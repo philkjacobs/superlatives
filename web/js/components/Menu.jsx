@@ -5,9 +5,6 @@ import AssignSupers from './AssignSupers.jsx';
 import ReadSupers from './ReadSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 
-// Hard-coding player names. These will eventually live-update as new players are added to the database for a given gameID
-export var players = ['Mathew', 'Jeremy', 'Ben', 'Philip', 'Julia', 'Brian']
-
 export function Player(props){
   return(
     <div>
@@ -28,7 +25,7 @@ export class WaitingRoom extends React.Component {
   render(){
     return(
       <div>
-      {this.props.gameState=="room" ? <div>
+      <div>
         <h3>Heres your special game code: {this.props.gameId}.</h3>
         <p>Share this with your friends</p>
           <h3>Waiting Room</h3>
@@ -40,7 +37,7 @@ export class WaitingRoom extends React.Component {
           {this.props.isHost ? <button className="btn-rounded btn-outlined orange-btn" onClick={this.startGameButtonPressed}>
             Start Game
           </button> : null}
-        </div> : null }
+        </div>
 
       {this.props.gameState=="write" ?
         <WriteSupers
@@ -66,30 +63,24 @@ export class WaitingRoom extends React.Component {
 
   startGameButtonPressed(){
     // Change game state so other devices will start the game too
-    // TODO: This needs to change state at the Application level
-    this.setState({
-      startGame: true
-    })
+    this.props.changeGameState("write")
+
   }
 }
 
 WaitingRoom.propTypes = {
-  gameId: React.PropTypes.string.isRequired,
-  isHost: React.PropTypes.Bool
+  gameId: React.PropTypes.string.isRequired
 }
 
 export class JoinGame extends React.Component {
   constructor(props){
     super(props)
-    this.state = {
-      goToWaitingRoom: false
-    }
+
     this.onSubmit = this.onSubmit.bind(this)
   }
   render(){
     return(
-      <div>
-          {this.state.goToWaitingRoom ? <WaitingRoom players={players} gameId={this.props.gameId}/> : <div>
+          <div>
           <h3>Enter magic code to join game:</h3>
             <form onSubmit={this.onSubmit}>
               <label>
@@ -97,8 +88,7 @@ export class JoinGame extends React.Component {
               </label>
               <input type="submit" value="Join Game" />
             </form>
-          </div>}
-      </div>
+          </div>
       // Listen for server to tell us to start game
     )
   }
