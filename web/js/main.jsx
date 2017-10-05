@@ -149,9 +149,10 @@ class Application extends React.Component {
   }
 
   login(data){
-    // Send player name and gameId (only if joining)
-    console.log('Sending to server: ' + this.state.playerName + ' '+this.state.gameId)
-        // Testing code for adding a player to an existing code
+
+    console.log(this.state.gameId);
+    
+    // Testing code for adding a player to an existing code
     var name = 'Philip'
     var socket2 = new WebSocket(`ws://localhost:5000/ws?name=${name}&game=${this.state.gameId}`);
 
