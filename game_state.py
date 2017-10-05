@@ -45,12 +45,12 @@ class GameHandler(WebSocketHandler):
             game_id = self.get_argument(name='game', default=None)
 
             if game_id is None:
-                self.game_id = game_id = unicode(uuid4())
-                _game_map[self.game_id] = {}
+                game_id = unicode(uuid4())
+                _game_map[game_id] = set()
                 self.is_host = True
             try:
                 _game_map[game_id].add(self)
-                self.is_host = False
+                self.game_id = game_id
             except KeyError:
                 self.write_message(json.dumps({
                     'msg': None,
