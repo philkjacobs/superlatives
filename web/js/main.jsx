@@ -16,7 +16,8 @@ class Application extends React.Component {
       gameId:"",
       players:[],
       // This will either be "menu", "room", "wait", "write", "assign", "read"
-      gameState:"menu"
+      gameState:"menu",
+      socket:""
     }
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
@@ -138,14 +139,23 @@ class Application extends React.Component {
         gameId:response.data.game,
         players:response.data.players,
         gameState:"room",
-        showJoinScreen:false
+        showJoinScreen:false,
+        socket:socket
       })
     }.bind(this);
   }
 
   changeGameState(state){
     // Send message to server with new game state
-    console.log("Change state to write!")
+    var socket = this.state.socket;
+    var message = {"msg":"change_state", "data":{"state":state}}
+    console.log(message);
+    socket.send(JSON.stringify(message))
+
+    socket.onmessage = function(event){
+      console.log(event.data)
+    }
+
   }
 
   writeSuper(data){
