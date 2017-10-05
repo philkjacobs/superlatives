@@ -3,6 +3,18 @@ import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
 import * as Menu from './components/Menu.jsx';
 
+
+
+// // Show a connected message when the WebSocket is opened.
+// socket.onopen = function(event) {
+//   console.log('Connected to: ' + event.currentTarget.url);
+// };
+
+// // Handle any errors that occur.
+// socket.onerror = function(error) {
+//   console.log('WebSocket Error: ' + error.description);
+// };
+
 class Application extends React.Component {
   constructor(props){
     super(props);
@@ -54,6 +66,11 @@ class Application extends React.Component {
             onClick={this.joinGameButtonPressed}
             className="btn-rounded btn-outlined green-btn">Join Game
           </button>
+
+          <button
+            onClick={this.testButtonPressed}
+            className="btn-rounded btn-outlined green-btn">WEBSOCKET TEST
+          </button>
         </div>
 
         {this.state.showHostScreen ? <Menu.WaitingRoom
@@ -104,6 +121,20 @@ class Application extends React.Component {
     });
   }
 
+  testButtonPressed(){
+    // Playing with websockets
+    var name = 'Mathew'
+    var socket = new WebSocket(`ws://localhost:5000/ws?name=${name}`);
+
+    // Handle messages sent by the server.
+    socket.onmessage = function(event) {
+      var message = event.data;
+      console.log(message);
+    };
+    // var message = { "msg":"change_state", "data":{"state":"assign"}};
+    // socket.send(JSON.stringify(message));
+  }
+
   changeStatus(status, statusText){
     this.setState({
       statusText:statusText,
@@ -121,6 +152,14 @@ class Application extends React.Component {
   login(data){
     // Send player name and gameId (only if joining)
     console.log('Sending to server: ' + this.state.playerName + ' '+this.state.gameId)
+        // Testing code for adding a player to an existing code
+    var name = 'Philip'
+    var socket2 = new WebSocket(`ws://localhost:5000/ws?name=${name}&game=${this.state.gameId}`);
+
+    socket2.onmessage = function(event) {
+      var message = event.data;
+      console.log(message);
+    };
   }
 
   changeGameState(state){
