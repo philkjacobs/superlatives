@@ -1,7 +1,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Notifications, {notify} from 'react-notify-toast';
 import * as Menu from './components/Menu.jsx';
+import WriteSupers from './components/WriteSupers.jsx';
+import AssignSupers from './components/AssignSupers.jsx';
+import ReadSupers from './components/ReadSupers.jsx';
+import Notifications, {notify} from 'react-notify-toast';
 
 
 class Application extends React.Component {
@@ -66,11 +69,25 @@ class Application extends React.Component {
           players={this.state.players}
           isHost={this.state.isHost}
           gameId={this.state.gameId}
-          submitSuper={function(data){this.writeSuper(data)}.bind(this)}
-          assignSuper={function(data){this.assignSuper(data)}.bind(this)}
           changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
           gameState={this.state.gameState}
           changeGameState={function(state){this.changeGameState(state)}.bind(this)}/> : null}
+
+        {this.state.gameState=="write" ? <WriteSupers
+          players={this.state.players}
+          submitSuper={function(data){this.writeSuper(data)}.bind(this)}
+          changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
+          gameState={this.state.gameState}
+          now={Date.now()}/> : null }
+
+        {this.state.gameState=="assign" ? <AssignSupers
+          players={this.state.players}
+          changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
+          assignSuper={function(data){this.assignSuper(data)}.bind(this)} /> : null }
+
+        {this.state.gameState=="read" ? <ReadSupers
+          changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)} /> : null}
+      
       </div>
     )
   }
@@ -162,6 +179,14 @@ class Application extends React.Component {
   writeSuper(data){
     // Write super to server
     console.log("Add " + data + " to super list.")
+    var socket = this.state.socket;
+    var message = {"msg":"write_supers","data":{"super":data}}
+    console.log(message);
+    socket.send(JSON.stringify(message))
+
+    socket.onmessage = function(event){
+      console.log(event.data)
+    }
   }
 
   assignSuper(data){
