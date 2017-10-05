@@ -84,14 +84,14 @@ export class JoinGame extends React.Component {
     this.state = {
       goToWaitingRoom: false
     }
-    // this.onSubmit = this.onSubmit.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
   render(){
     return(
       <div>
           {this.state.goToWaitingRoom ? <WaitingRoom players={players} gameId={this.props.gameId}/> : <div>
           <h3>Enter magic code to join game:</h3>
-            <form onSubmit={this.props.onSubmit(this.props.gameId)}>
+            <form onSubmit={this.onSubmit}>
               <label>
                 <input type="text" value={this.props.gameId} onChange={this.props.onChange}/>
               </label>
@@ -101,6 +101,11 @@ export class JoinGame extends React.Component {
       </div>
       // Listen for server to tell us to start game
     )
+  }
+
+  onSubmit(e){
+    e.preventDefault();
+    this.props.onSubmit(this.props.gameId)
   }
 
 }
