@@ -95,7 +95,7 @@ class GameHandler(WebSocketHandler):
                         supers_to_assign = [all_supers[i::num_players] for i in xrange(num_players)]
                         for i, player in enumerate(_game_map[self.game_id]):
                             player.supers_assigned = supers_to_assign[i]
-                            self.send_message(message='assign_supers_list', data={
+                            player.send_message(message='assign_supers_list', data={
                                 'supers': supers_to_assign[i]
                             })
                     elif state == 'READ':

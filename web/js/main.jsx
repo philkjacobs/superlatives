@@ -6,6 +6,8 @@ import AssignSupers from './components/AssignSupers.jsx';
 import ReadSupers from './components/ReadSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 
+var socket=""
+
 
 class Application extends React.Component {
   constructor(props){
@@ -20,7 +22,7 @@ class Application extends React.Component {
       players:[],
       // This will either be "menu", "room", "wait", "write", "assign", "read"
       gameState:"menu",
-      socket:"",
+      socket:socket,
       supers:[]
     }
 
@@ -29,7 +31,6 @@ class Application extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleIdChange = this.handleIdChange.bind(this);
     this.testChangeStateToWrite = this.testChangeStateToWrite.bind(this);
-    this.testLogMessageEvent = this.testLogMessageEvent.bind(this);
 
   }
   render() {
@@ -71,14 +72,6 @@ class Application extends React.Component {
           </form>
         </div>
 
-        <div>
-          <form onSubmit={this.testLogMessageEvent}>
-            <label>
-              <input type="submit" value="TESTING: PRINT MESSAGE EVENT FROM SERVER"/>
-            </label>
-          </form>
-        </div>
-
         {this.state.showJoinScreen ? <Menu.JoinGame
           gameId={this.state.gameId}
           onChange={function(e){this.handleIdChange(e)}.bind(this)}
@@ -112,17 +105,6 @@ class Application extends React.Component {
       
       </div>
     )
-  }
-
-  testLogMessageEvent(e){
-    e.preventDefault();
-    var socket = this.state.socket
-    if(!socket){
-    } else {
-      socket.onmessage = function(event){
-        console.log(event.data)
-      }
-    }
   }
 
   testChangeStateToWrite(e){
@@ -178,8 +160,6 @@ class Application extends React.Component {
 
   login(type){
 
-    var socket
-
     switch(type){
       case 'host':
         socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`);
@@ -208,19 +188,28 @@ class Application extends React.Component {
 
   changeGameState(state){
     // Send message to server with new game state
-    var socket = this.state.socket;
+    // var socket = this.state.socket;
     var message = {"msg":"change_state", "data":{"state":state}, "error":""}
     socket.send(JSON.stringify(message))
 
     socket.onmessage = function(event){
       console.log(event.data)
+      if(state=="assign"){
+        var response = JSON.parse(event.data);
+        if(response.msg=="assign_supers_list"){
+          this.setState({
+            supers:response.data.supers
+          })
+          console.log("Supers is "+this.state.supers);
+        }
+      }
     }
 
   }
 
   writeSuper(data){
     // Write super to server
-    var socket = this.state.socket;
+    // var socket = this.state.socket;
     var message = {"msg":"write_supers","data":{"super":data}, "error":""}
     socket.send(JSON.stringify(message))
 
@@ -232,6 +221,22 @@ class Application extends React.Component {
   assignSuper(data){
     // Writer super object to server
     console.log("Assigned super to " +data)
+  }
+}
+
+// Server listener
+if(!socket){
+  console.log("No socket.");   
+} else {
+  console.log("Socket!");
+  socket.onmessage = function(event) {
+    var response = JSON.parse(event.data);
+    if(response.msg=="assign_supers_list"){
+      this.setState({
+        supers:response.data.supers
+      })
+      console.log("Supers is "+this.state.supers);
+    }
   }
 }
 
