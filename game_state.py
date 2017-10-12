@@ -14,7 +14,7 @@ _game_map = {}  # game_id -> set(websockets)
 
 
 GAME_STATES = (
-    'WRTIE',
+    'WRITE',
     'ASSIGN',
     'READ',
 )
