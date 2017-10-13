@@ -102,6 +102,7 @@ class Application extends React.Component {
           assignSuper={function(player, superText){this.assignSuper(player,superText)}.bind(this)} /> : null }
 
         {this.state.gameState=="read" ? <ReadSupers
+          supers={this.state.supers}
           changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)} /> : null}
       
       </div>
