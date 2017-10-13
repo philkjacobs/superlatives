@@ -40,7 +40,7 @@ export default class AssignSupers extends React.Component {
     return (
       <div>
         <Notifications />
-        <Superlative name={this.props.currentSuper}/>
+        <Superlative name={this.props.supers[0]}/>
         <h1>Assign this to:</h1>
         {this.props.players.map(function(player, index){
           return(
@@ -55,17 +55,21 @@ export default class AssignSupers extends React.Component {
 
   playerButtonClicked(player){
 
-    this.props.assignSuper(player)
-    
     // Save assignment to server
+    this.props.assignSuper(player,this.props.supers[0])
+    
     // If there are supers left, go to next super; otherwise go to Done screen.
-    this.props.supers.shift()
-
     if(this.props.supers.length>0){
-      this.props.currentSuper = this.props.supers[0].name
-      
-    } else {
-      this.props.changeStatus("wait", "You've assigned all supers! Waiting for your friends to finish...")
+      this.props.supers.shift()
+      console.log("Current supers array is " +this.props.supers)
     }
+
+    if(this.props.supers.length==0){
+      console.log("EMPTY!")
+      this.props.changeStatus("read", "You've assigned all supers! Waiting for your friends to finish...") 
+      this.props.changeGameState("read") 
+    }
+
+    this.forceUpdate()
   }
 }

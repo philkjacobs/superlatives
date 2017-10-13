@@ -97,9 +97,9 @@ class Application extends React.Component {
         {this.state.gameState=="assign" ? <AssignSupers
           players={this.state.players}
           supers={this.state.supers}
-          currentSuper={supers[0].name}
           changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
-          assignSuper={function(data){this.assignSuper(data)}.bind(this)} /> : null }
+          changeGameState={function(state){this.changeGameState(state)}.bind(this)}
+          assignSuper={function(player, superText){this.assignSuper(player,superText)}.bind(this)} /> : null }
 
         {this.state.gameState=="read" ? <ReadSupers
           changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)} /> : null}
@@ -189,28 +189,40 @@ class Application extends React.Component {
 
   changeGameState(state){
     // Send message to server with new game state
-    // var socket = this.state.socket;
+
+    this.setState({
+      gameState:state
+    })
+
     var message = {"msg":"change_state", "data":{"state":state}, "error":""}
     socket.send(JSON.stringify(message))
 
+    // Listen for any messages from the server after changing state
     socket.onmessage = function(event){
-      console.log(event.data)
-      if(state=="assign"){
+      if(state=="assign" || state=="read"){
         var response = JSON.parse(event.data);
+
+        // If we're in the assign stage, check if the server has returned a list of supers
         if(response.msg=="assign_supers_list"){
           this.setState({
             supers:response.data.supers
           })
-          console.log("Supers is "+this.state.supers);
+        }
+
+        // If we're in the read stage, check if the server has returned a list of supers
+        if(response.msg=="read_supers_list"){
+          this.setState({
+            supers:response.data.supers
+          })
+          console.log("Supers to be read are "+this.state.supers)
         }
       }
-    }
+    }.bind(this)
 
   }
 
   writeSuper(data){
     // Write super to server
-    // var socket = this.state.socket;
     var message = {"msg":"write_supers","data":{"super":data}, "error":""}
     socket.send(JSON.stringify(message))
 
@@ -219,24 +231,13 @@ class Application extends React.Component {
     }
   }
 
-  assignSuper(data){
-    // Writer super object to server
-    console.log("Assigned super to " +data)
-  }
-}
+  assignSuper(player,superText){
+    // Assign super to server  
+    var message = {"msg":"assign_super","data":{"name":player, "super":superText}, "error":""}
+    socket.send(JSON.stringify(message))
 
-// Server listener
-if(!socket){
-  console.log("No socket.");   
-} else {
-  console.log("Socket!");
-  socket.onmessage = function(event) {
-    var response = JSON.parse(event.data);
-    if(response.msg=="assign_supers_list"){
-      this.setState({
-        supers:response.data.supers
-      })
-      console.log("Supers is "+this.state.supers);
+    socket.onmessage = function(event){
+      console.log(event.data)
     }
   }
 }
