@@ -100,7 +100,7 @@ class GameHandler(WebSocketHandler):
                             })
                     elif state == 'READ':
                         for player in _game_map[self.game_id]:
-                            self.send_message(message='read_supers_list', data={
+                            player.send_message(message='read_supers_list', data={
                                 'supers': player.supers_received
                             })
 

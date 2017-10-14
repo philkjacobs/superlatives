@@ -40,7 +40,7 @@ class Application extends React.Component {
       <div>
         <Notifications />
         <h1>Welcome to Superlatives</h1>
-        <p>{this.state.statusText}</p>
+        {this.state.gameState=="wait" ? <p>{this.state.statusText}</p> : null}
         <div style={style}>
           <div>
             <form>
@@ -88,7 +88,6 @@ class Application extends React.Component {
         {this.state.gameState=="write" ? <WriteSupers
           players={this.state.players}
           submitSuper={function(data){this.writeSuper(data)}.bind(this)}
-          changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
           changeGameState={function(state){this.changeGameState(state)}.bind(this)}
           gameState={this.state.gameState}
           now={Date.now()}/> : null }
@@ -96,13 +95,12 @@ class Application extends React.Component {
         {this.state.gameState=="assign" ? <AssignSupers
           players={this.state.players}
           supers={this.state.supers}
-          changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
           changeGameState={function(state){this.changeGameState(state)}.bind(this)}
           assignSuper={function(player, superText){this.assignSuper(player,superText)}.bind(this)} /> : null }
 
         {this.state.gameState=="read" ? <ReadSupers
           supers={this.state.supers}
-          changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)} /> : null}
+          changeGameState={function(state){this.changeGameState(state)}.bind(this)} /> : null}
       
       </div>
     )
@@ -111,11 +109,6 @@ class Application extends React.Component {
   testChangeStateToWrite(e){
     e.preventDefault();
     this.changeGameState('write')
-
-    // Assuming the change is always successful, move to write page
-    this.setState({
-      gameState:"write"
-    })
   }
 
   handleNameChange(e){
@@ -190,9 +183,18 @@ class Application extends React.Component {
   changeGameState(state){
     // Send message to server with new game state
 
-    this.setState({
-      gameState:state
-    })
+    // If new state is assign, change gameState to "wait" until the server returns the assign_supers_list message. If new state is read, change gameState to "wait" until the server returns the read_supers_list message. 
+
+    if(state=="assign" || state=="read"){
+      this.setState({
+        gameState:"wait",
+        statusText:"Waiting for other players..."
+      })
+    } else {
+      this.setState({
+        gameState:state
+      })
+    }
 
     var message = {"msg":"change_state", "data":{"state":state}, "error":""}
     socket.send(JSON.stringify(message))
@@ -205,6 +207,7 @@ class Application extends React.Component {
         // If we're in the assign stage, check if the server has returned a list of supers
         if(response.msg=="assign_supers_list"){
           this.setState({
+            gameState: state,
             supers:response.data.supers
           })
         }
@@ -212,6 +215,7 @@ class Application extends React.Component {
         // If we're in the read stage, check if the server has returned a list of supers
         if(response.msg=="read_supers_list"){
           this.setState({
+            gameState: state,
             supers:response.data.supers
           })
           console.log("Supers to be read are "+this.state.supers)

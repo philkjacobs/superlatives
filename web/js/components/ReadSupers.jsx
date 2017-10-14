@@ -3,22 +3,6 @@ import * as ReactDOM from 'react-dom';
 import Superlative from './Superlative.jsx'
 import Notifications, {notify} from 'react-notify-toast';
 
-// Hard-coding supers for testing 
-var supers = [
-  {
-  "name":"Most likely to die in a freak accident"
-  },
-  {
-  "name":"Most loyal"
-  },
-  {
-  "name":"Best hair"
-  },
-  {
-  "name":"Most likely to become president"
-  }
-]
-
 export default class ReadSupers extends React.Component {
   constructor(props){
     super(props);
@@ -44,6 +28,6 @@ export default class ReadSupers extends React.Component {
   }
 
   newGameButtonPressed(){
-    this.props.changeStatus("menu", "")
+    this.props.changeGameState("menu")
   }
 }
