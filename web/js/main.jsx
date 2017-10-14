@@ -16,7 +16,6 @@ class Application extends React.Component {
       playerName:"",
       isHost:false,
       showJoinScreen:false,
-      showWaitingScreen:false,
       statusText:"",
       gameId:"",
       players:[],
@@ -94,7 +93,7 @@ class Application extends React.Component {
           now={Date.now()}/> : null }
 
         {this.state.gameState=="assign" ? <AssignSupers
-          players={this.state.players}
+          players={this.removePlayerNameFromPlayerList()}
           supers={this.state.supers}
           changeGameState={function(state){this.changeGameState(state)}.bind(this)}
           assignSuper={function(player, superText){this.assignSuper(player,superText)}.bind(this)} /> : null }
@@ -244,6 +243,18 @@ class Application extends React.Component {
     socket.onmessage = function(event){
       console.log(event.data)
     }
+  }
+
+  removePlayerNameFromPlayerList(){
+    var p = this.state.players
+    var n = this.state.playerName
+    var index = p.indexOf(n)
+
+    if (index !== -1) {
+      p.splice(index, 1);
+    }
+
+    return p
   }
 }
 
