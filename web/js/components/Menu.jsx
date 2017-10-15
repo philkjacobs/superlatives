@@ -23,15 +23,18 @@ export class WaitingRoom extends React.Component {
     return(
       <div>
       <div>
-        <h3>Heres your special game code: {this.props.gameId}.</h3>
-        <p>Share this with your friends</p>
+        <h2>Heres your special game code:</h2>
+        <h3>{this.props.gameId}</h3>
+        <br />
           <h3>Waiting Room</h3>
           {this.props.players.map(function(player){
               return (
                 <Player name={player} />
               );
           }.bind(this))}
-          {this.props.isHost ? <button className="btn-rounded btn-outlined orange-btn" onClick={this.startGameButtonPressed}>
+          <br />
+          <br />
+          {this.props.isHost ? <button className="btn-lg btn-outline-secondary" onClick={this.startGameButtonPressed}>
             Start Game
           </button> : null}
         </div>
@@ -62,10 +65,16 @@ export class JoinGame extends React.Component {
           <div>
           <h3>Enter magic code to join game:</h3>
             <form onSubmit={this.onSubmit}>
-              <label>
-                <input type="text" value={this.props.gameId} onChange={this.props.onChange}/>
+              <label style={{display:'block'}}>
+                <input  type="text"
+                        value={this.props.gameId}
+                        onChange={this.props.onChange}
+                        className="form-control"
+                        />
               </label>
-              <input type="submit" value="Join Game" />
+              <input  type="submit"
+                      value="Join Game"
+                      className="btn-lg btn-outline-secondary" />
             </form>
           </div>
       // Listen for server to tell us to start game

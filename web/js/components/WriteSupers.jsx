@@ -42,14 +42,22 @@ export default class WriteSupers extends React.Component {
       <div>
         <Timer now={this.props.now}/>
         <form onSubmit={this.onSubmit}>
-            <label>
-              <input type="text" value={this.state.super} onChange={this.handleChange}/>
+            <label style={{display:'block'}}>
+              <input  type="text"
+                      value={this.state.super}
+                      onChange={this.handleChange}
+                      className="form-control"/>
             </label>
-            <input type="submit" value="Add Super"/>
+            <input  type="submit"
+                    placeholder="Write super..."
+                    value="Add Super"
+                    className="btn-lg btn-outline-secondary"/>
           </form>
           <form onSubmit={this.moveToAssign}>
             <label>
-              <input type="submit" value="TESTING: Move to Assign stage"/>
+              <input  type="submit"
+                      value="TESTING: Move to Assign stage"
+                      className="btn btn-warning"/>
             </label>
           </form>
       </div>

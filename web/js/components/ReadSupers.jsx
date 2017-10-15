@@ -15,9 +15,9 @@ export default class ReadSupers extends React.Component {
     return (
       <div>
         <Notifications />
-        {this.props.supers.length==0 ? <div>That's it! <button onClick={this.newGameButtonPressed}>Back to menu</button></div> : <Superlative name={this.props.supers[0]}/>}
+        <p><b>Here are the superlatives that were assigned to you:</b></p>
+        {this.props.supers.length==0 ? <div>That's it! <br/><button onClick={this.newGameButtonPressed} className="btn-lg btn-outline-secondary">Back to menu</button></div> : <div><Superlative name={this.props.supers[0]}/>        <button onClick={this.nextButtonClicked} className="btn-lg btn-outline-secondary">Next superlative</button></div> }
         
-        <button onClick={this.nextButtonClicked}>Next superlative</button>
       </div>
     )
   }

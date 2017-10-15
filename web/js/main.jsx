@@ -36,16 +36,17 @@ class Application extends React.Component {
     if(this.state.gameState!="menu") var style = {display:'none'}
 
     return (
-      <div>
+      <div className="container">
         <Notifications />
-        <h1>Welcome to Superlatives</h1>
+        <h1>Superlatives</h1>
         {this.state.gameState=="wait" ? <p>{this.state.statusText}</p> : null}
         <div style={style}>
-          <div>
+          <div className="input-group-lg">
             <form>
-                <label>
+                <label style={{display:'block'}}>
                   <input
                     type="text"
+                    className="form-control"
                     placeholder="Enter name..."
                     value={this.state.playerName}
                     onChange={this.handleNameChange}/>
@@ -54,19 +55,22 @@ class Application extends React.Component {
           </div>
           <button
             onClick={this.hostGameButtonPressed}
-            className="btn-rounded btn-outlined orange-btn">Host Game
+            className="btn-lg btn-outline-secondary">Host Game
           </button>
           <button
             onClick={this.joinGameButtonPressed}
-            className="btn-rounded btn-outlined green-btn">Join Game
+            className="btn-lg btn-outline-secondary">Join Game
           </button>
 
         </div>
-
+        <br />
+        <br />
         <div>
           <form onSubmit={this.testChangeStateToWrite}>
             <label>
-              <input type="submit" value="TESTING: Change game state to WRITE"/>
+              <input  type="submit"
+                      value="TESTING: Change game state to WRITE"
+                      className="btn btn-warning"/>
             </label>
           </form>
         </div>
