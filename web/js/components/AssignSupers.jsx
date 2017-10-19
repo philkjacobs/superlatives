@@ -18,24 +18,37 @@ export default class AssignSupers extends React.Component {
   constructor(props){
     super(props);
 
+    this.state = {
+      showAssignScreen:false,
+    }
+
     this.playerButtonClicked = this.playerButtonClicked.bind(this)
 
   }
   render() {
     return (
       <div>
-        <Notifications />
-        <Superlative name={this.props.supers[0]}/>
-        <p><b>Assign this to:</b></p>
-        {this.props.players.map(function(player, index){
-          return(
-            <Player
-              name={player}
-              buttonClicked = {this.playerButtonClicked} />
-          );
-        }.bind(this))}
+      {this.state.showAssignScreen ?
+        <div><Notifications />
+          <Superlative name={this.props.supers[0]}/>
+          <p><b>Assign this to:</b></p>
+          {this.props.players.map(function(player, index){
+            return(
+              <Player
+                name={player}
+                buttonClicked = {this.playerButtonClicked} />
+            );
+          }.bind(this))}
+        </div> : 
+        <div>
+          <p><b>Loading supers for you to assign to others!</b></p>
+        </div>}
       </div>
     )
+  }
+
+  componentDidMount(){
+    setTimeout(function() { this.setState({showAssignScreen: true}); }.bind(this), 5000);
   }
 
   playerButtonClicked(player){

@@ -39,7 +39,7 @@ class Application extends React.Component {
       <div className="container">
         <Notifications />
         <h1>Superlatives</h1>
-        {this.state.gameState=="wait" ? <p>{this.state.statusText}</p> : null}
+        {this.state.gameState=="wait" ? <p><b>{this.state.statusText}</b></p> : null}
         <div style={style}>
           <div className="input-group-lg">
             <form>
