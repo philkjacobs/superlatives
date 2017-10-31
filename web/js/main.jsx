@@ -159,10 +159,10 @@ class Application extends React.Component {
 
     switch(type){
       case 'host':
-        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`);
+        socket = new WebSocket(`ws://172.21.5.204:5000/ws?name=${this.state.playerName}`);
         break;
       case 'join':
-        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
+        socket = new WebSocket(`ws://172.21.5.204:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
         break;
       default:
         console.log("Error: Incorrect type. Expected host or join.")

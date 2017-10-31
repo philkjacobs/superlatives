@@ -136,3 +136,7 @@ class GameHandler(WebSocketHandler):
 
     def on_close(self):
         _game_map[self.game_id].discard(self)
+
+    def check_origin(self,origin):
+        return True
+
