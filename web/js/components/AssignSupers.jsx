@@ -3,22 +3,6 @@ import * as ReactDOM from 'react-dom';
 import Superlative from './Superlative.jsx'
 import Notifications, {notify} from 'react-notify-toast';
 
-// Hard-coding supers for testing 
-var supers = [
-  {
-  "name":"Best cuticles"
-  },
-  {
-  "name":"Best smile"
-  },
-  {
-  "name":"Best hair"
-  },
-  {
-  "name":"Most likely to become president"
-  }
-]
-
 function Player(props){
   return(
     <div>
@@ -66,7 +50,7 @@ export default class AssignSupers extends React.Component {
 
     if(this.props.supers.length==0){
       console.log("EMPTY!")
-      this.props.changeStatus("read", "You've assigned all supers! Waiting for your friends to finish...") 
+      // this.props.changeStatus("read", "You've assigned all supers! Waiting for your friends to finish...") 
       this.props.changeGameState("read") 
     }
 
