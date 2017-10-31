@@ -2,7 +2,7 @@ import itertools
 import json
 import logging
 import random
-
+from enum import Enum
 from uuid import uuid4
 
 from tornado.gen import coroutine
@@ -13,11 +13,10 @@ from tornado.websocket import WebSocketHandler
 _game_map = {}  # game_id -> set(websockets)
 
 
-GAME_STATES = (
-    'WRITE',
-    'ASSIGN',
-    'READ',
-)
+class GameStates(Enum):
+    WRITE = 'WRITE'
+    ASSIGN = 'ASSIGN'
+    READ = 'READ'
 
 
 class GameHandler(WebSocketHandler):
@@ -52,20 +51,15 @@ class GameHandler(WebSocketHandler):
                 _game_map[game_id].add(self)
                 self.game_id = game_id
             except KeyError:
-                self.write_message(json.dumps({
-                    'msg': None,
-                    'data': None,
-                    'error': 'Game {} not found.'.format(game_id)
-                }))
+                send_message(self, error='Game {} not found.'.format(game_id))
             else:
-                self.broadcast_message(message='login', data={
+                broadcast_message(self, message='login', data={
                     'game':self.game_id,
                     'players':[player.name for player in _game_map[self.game_id]]
                 })
 
     @coroutine
     def on_message(self, message):
-        logging.error(message)
         raw = json.loads(message)
 
         # for now, if we receive an error, log it and quit.
@@ -78,15 +72,23 @@ class GameHandler(WebSocketHandler):
 
         if msg == 'change_state':
             try:
-                state = data['state'].upper()
-                assert state in GAME_STATES
-            except (KeyError, AttributeError, AssertionError):
-                self.send_message(error='Issues updating game state.')
+                state = GameStates(data['state'].upper())
+            except (KeyError, ValueError, TypeError):
+                logging.debug(data)
+                send_message(self, error='Issues updating game state.')
             else:
+                if state == GameStates.WRITE:
+                    if self.is_host:
+                        for player in _game_map[self.game_id]:
+                            player.game_state = GameStates.WRITE
+                            send_message(player, message='change_state', data={'state': GameStates.WRITE.value})
+                    else:
+                        send_message(self, error='Only the host can start the game.')
+
                 self.game_state = state
                 if all(player.game_state == state for player in _game_map[self.game_id]):
-                    self.broadcast_message(message=msg, data=data)
-                    if state == 'ASSIGN':
+                    broadcast_message(self, message=msg, data=data)
+                    if state == GameStates.ASSIGN:
                         all_supers = list(itertools.chain.from_iterable(
                             (players.supers_written for players in _game_map[self.game_id])
                         ))
@@ -95,44 +97,47 @@ class GameHandler(WebSocketHandler):
                         supers_to_assign = [all_supers[i::num_players] for i in xrange(num_players)]
                         for i, player in enumerate(_game_map[self.game_id]):
                             player.supers_assigned = supers_to_assign[i]
-                            self.send_message(message='assign_supers_list', data={
+                            send_message(player, message='assign_supers_list', data={
                                 'supers': supers_to_assign[i]
                             })
-                    elif state == 'READ':
+                    elif state == GameStates.READ:
                         for player in _game_map[self.game_id]:
-                            self.send_message(message='read_supers_list', data={
+                            send_message(player, message='read_supers_list', data={
                                 'supers': player.supers_received
                             })
 
         elif msg == 'write_supers':
-            if not self.game_state == 'WRITE':
-                self.send_message(error='Not a valid message in this game state.')
+            if not self.game_state == GameStates.WRITE:
+                send_message(self, error='Not a valid message in this game state.')
             else:
                 self.supers_written.append(data['super'])
         elif msg == 'assign_super':
-            if not self.game_state == 'ASSIGN':
-                self.send_message(error='Not a valid message in this game state.')
+            if not self.game_state == GameStates.ASSIGN:
+                send_message(self, error='Not a valid message in this game state.')
             else:
                 try:
                     recipient = next(player for player in _game_map[self.game_id]
                                      if player.name == data['name'])
                     recipient.supers_received.append(data['super'])
                 except KeyError:
-                    self.send_message(error='Issue assigning superlative.')
+                    send_message(self, error='Issue assigning superlative.')
         else:
             raise ValueError('WebSocket Message {} does not exist'.format(msg))
 
-    def send_message(self, message=None, data=None, error=None):
-        assert any(v is not None for v in (message, data, error))
-        self.write_message(json.dumps({
-            'msg': message,
-            'data': data,
-            'error': error,
-        }))
-
-    def broadcast_message(self, message=None, data=None, error=None):
-        for g in _game_map[self.game_id]:
-            g.send_message(message, data, error)
 
     def on_close(self):
         _game_map[self.game_id].discard(self)
+
+def send_message(socket, message=None, data=None, error=None):
+    assert any(v is not None for v in (message, data, error))
+    msg = json.dumps({
+        'msg': message,
+        'data': data,
+        'error': error,
+    })
+    logging.debug(msg)
+    socket.write_message(msg)
+
+def broadcast_message(socket, message=None, data=None, error=None):
+    for g in _game_map[socket.game_id]:
+        send_message(g, message, data, error)
