@@ -17,6 +17,7 @@ export default class WriteSupers extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+    this.moveToAssign = this.moveToAssign.bind(this)
   }
 
   handleChange(e){
@@ -31,15 +32,33 @@ export default class WriteSupers extends React.Component {
     this.props.submitSuper(this.state.super)
   }
 
+  moveToAssign(e){
+    e.preventDefault();
+    this.props.changeGameState("assign")
+  }
+
   render(){
     return(
       <div>
         <Timer now={this.props.now}/>
         <form onSubmit={this.onSubmit}>
-            <label>
-              <input type="text" value={this.state.super} onChange={this.handleChange}/>
+            <label style={{display:'block'}}>
+              <input  type="text"
+                      value={this.state.super}
+                      onChange={this.handleChange}
+                      className="form-control"/>
             </label>
-            <input type="submit" value="Add Super"/>
+            <input  type="submit"
+                    placeholder="Write super..."
+                    value="Add Super"
+                    className="btn-lg btn-outline-secondary"/>
+          </form>
+          <form onSubmit={this.moveToAssign}>
+            <label>
+              <input  type="submit"
+                      value="TESTING: Move to Assign stage"
+                      className="btn btn-warning"/>
+            </label>
           </form>
       </div>
     )

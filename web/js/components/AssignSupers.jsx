@@ -3,26 +3,11 @@ import * as ReactDOM from 'react-dom';
 import Superlative from './Superlative.jsx'
 import Notifications, {notify} from 'react-notify-toast';
 
-// Hard-coding supers for testing 
-var supers = [
-  {
-  "name":"Best cuticles"
-  },
-  {
-  "name":"Best smile"
-  },
-  {
-  "name":"Best hair"
-  },
-  {
-  "name":"Most likely to become president"
-  }
-]
-
 function Player(props){
   return(
     <div>
-      <button onClick={function(){props.buttonClicked();}}>
+      <button   onClick={function(player){props.buttonClicked(props.name);}}
+                className="btn btn-outline-primary">
       {props.name}
       </button>
     </div>
@@ -34,8 +19,7 @@ export default class AssignSupers extends React.Component {
     super(props);
 
     this.state = {
-      currentSuper:"",
-      supersList:[]
+      showAssignScreen:false,
     }
 
     this.playerButtonClicked = this.playerButtonClicked.bind(this)
@@ -44,41 +28,46 @@ export default class AssignSupers extends React.Component {
   render() {
     return (
       <div>
-        <Notifications />
-        <Superlative name={this.state.currentSuper}/>
-        <h1>Assign this to:</h1>
-        {this.props.players.map(function(player, index){
-          return(
-            <Player
-              name={player}
-              buttonClicked = {this.playerButtonClicked} />
-          );
-        }.bind(this))}
+      {this.state.showAssignScreen ?
+        <div><Notifications />
+          <Superlative name={this.props.supers[0]}/>
+          <p><b>Assign this to:</b></p>
+          {this.props.players.map(function(player, index){
+            return(
+              <Player
+                name={player}
+                buttonClicked = {this.playerButtonClicked} />
+            );
+          }.bind(this))}
+        </div> : 
+        <div>
+          <p><b>Loading supers for you to assign to others!</b></p>
+        </div>}
       </div>
     )
   }
 
-  // Load supers from server when the DOM is loaded
   componentDidMount(){
-    this.setState({
-      supersList:supers,
-      currentSuper:supers[0].name
-    })
+    setTimeout(function() { this.setState({showAssignScreen: true}); }.bind(this), 5000);
   }
 
-  playerButtonClicked(){
-    
-    // Save assignment to server
-    // If there are supers left, go to next super; otherwise go to Done screen.
-    this.state.supersList.shift()
+  playerButtonClicked(player){
 
-    if(this.state.supersList.length>0){
-      this.state.currentSuper = this.state.supersList[0].name
-      
-    } else {
-      this.props.changeStatus("wait", "You've assigned all supers! Waiting for your friends to finish...")
+    // Save assignment to server
+    this.props.assignSuper(player,this.props.supers[0])
+    
+    // If there are supers left, go to next super; otherwise go to Done screen.
+    if(this.props.supers.length>0){
+      this.props.supers.shift()
+      console.log("Current supers array is " +this.props.supers)
     }
 
-    this.setState(this.state)
+    if(this.props.supers.length==0){
+      console.log("EMPTY!")
+      // this.props.changeStatus("read", "You've assigned all supers! Waiting for your friends to finish...") 
+      this.props.changeGameState("read") 
+    }
+
+    this.forceUpdate()
   }
 }
