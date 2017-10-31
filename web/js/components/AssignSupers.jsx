@@ -6,7 +6,8 @@ import Notifications, {notify} from 'react-notify-toast';
 function Player(props){
   return(
     <div>
-      <button onClick={function(player){props.buttonClicked(props.name);}}>
+      <button   onClick={function(player){props.buttonClicked(props.name);}}
+                className="btn btn-outline-primary">
       {props.name}
       </button>
     </div>
@@ -25,7 +26,7 @@ export default class AssignSupers extends React.Component {
       <div>
         <Notifications />
         <Superlative name={this.props.supers[0]}/>
-        <h1>Assign this to:</h1>
+        <p><b>Assign this to:</b></p>
         {this.props.players.map(function(player, index){
           return(
             <Player
