@@ -34,6 +34,7 @@ class Application extends React.Component {
         <h1>Welcome to Superlatives</h1>
         <p>{this.state.statusText}</p>
         <div style={style}>
+
           <div>
             <form>
                 <label>
