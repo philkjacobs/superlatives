@@ -43,7 +43,6 @@ class Application extends React.Component {
                     placeholder="Enter name..."
                     value={this.state.playerName}
                     onChange={this.handleNameChange}/>
-
                 </label>
               </form>
           </div>
