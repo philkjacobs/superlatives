@@ -85,5 +85,4 @@ export class JoinGame extends React.Component {
     e.preventDefault();
     this.props.onSubmit(this.props.gameId)
   }
-
 }

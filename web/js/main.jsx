@@ -41,7 +41,6 @@ class Application extends React.Component {
         <h1>Superlatives</h1>
         {this.state.gameState=="wait" ? <p><b>{this.state.statusText}</b></p> : null}
         <div style={style}>
-
           <div>
             <form>
                 <label style={{display:'block'}}>
