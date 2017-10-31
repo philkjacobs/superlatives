@@ -28,6 +28,8 @@ class Application extends React.Component {
     this.joinGameButtonPressed = this.joinGameButtonPressed.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleIdChange = this.handleIdChange.bind(this);
+    this.testChangeStateToWrite = this.testChangeStateToWrite.bind(this);
+    this.testLogMessageEvent = this.testLogMessageEvent.bind(this);
 
   }
   render() {
@@ -59,6 +61,23 @@ class Application extends React.Component {
             onClick={this.joinGameButtonPressed}
             className="btn-rounded btn-outlined green-btn">Join Game
           </button>
+
+        </div>
+
+        <div>
+          <form onSubmit={this.testChangeStateToWrite}>
+            <label>
+              <input type="submit" value="TESTING: Change game state to WRITE"/>
+            </label>
+          </form>
+        </div>
+
+        <div>
+          <form onSubmit={this.testLogMessageEvent}>
+            <label>
+              <input type="submit" value="TESTING: PRINT MESSAGE EVENT FROM SERVER"/>
+            </label>
+          </form>
         </div>
 
         {this.state.showJoinScreen ? <Menu.JoinGame
@@ -78,6 +97,7 @@ class Application extends React.Component {
           players={this.state.players}
           submitSuper={function(data){this.writeSuper(data)}.bind(this)}
           changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
+          changeGameState={function(state){this.changeGameState(state)}.bind(this)}
           gameState={this.state.gameState}
           now={Date.now()}/> : null }
 
@@ -93,6 +113,27 @@ class Application extends React.Component {
       
       </div>
     )
+  }
+
+  testLogMessageEvent(e){
+    e.preventDefault();
+    var socket = this.state.socket
+    if(!socket){
+    } else {
+      socket.onmessage = function(event){
+        console.log(event.data)
+      }
+    }
+  }
+
+  testChangeStateToWrite(e){
+    e.preventDefault();
+    this.changeGameState('write')
+
+    // Assuming the change is always successful, move to write page
+    this.setState({
+      gameState:"write"
+    })
   }
 
   handleNameChange(e){
@@ -169,8 +210,7 @@ class Application extends React.Component {
   changeGameState(state){
     // Send message to server with new game state
     var socket = this.state.socket;
-    var message = {"msg":"change_state", "data":{"state":state}}
-    console.log(message);
+    var message = {"msg":"change_state", "data":{"state":state}, "error":""}
     socket.send(JSON.stringify(message))
 
     socket.onmessage = function(event){
@@ -181,10 +221,8 @@ class Application extends React.Component {
 
   writeSuper(data){
     // Write super to server
-    console.log("Add " + data + " to super list.")
     var socket = this.state.socket;
-    var message = {"msg":"write_supers","data":{"super":data}}
-    console.log(message);
+    var message = {"msg":"write_supers","data":{"super":data}, "error":""}
     socket.send(JSON.stringify(message))
 
     socket.onmessage = function(event){

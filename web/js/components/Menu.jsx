@@ -1,8 +1,5 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import WriteSupers from './WriteSupers.jsx';
-import AssignSupers from './AssignSupers.jsx';
-import ReadSupers from './ReadSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 
 export function Player(props){
@@ -38,24 +35,6 @@ export class WaitingRoom extends React.Component {
             Start Game
           </button> : null}
         </div>
-
-      {this.props.gameState=="write" ?
-        <WriteSupers
-          submitSuper={this.props.submitSuper}
-          changeStatus={this.props.changeStatus}
-          players={this.props.players}
-          gameState={this.props.gameState}
-          now={Date.now()}/> : null }
-
-      {this.props.gameState=="assign" ?
-        <AssignSupers
-          changeStatus={this.props.changeStatus}
-          players={this.props.players}
-          assignSuper={this.props.assignSuper}/> : null }
-
-      {this.props.gameState=="read" ?
-        <ReadSupers
-          changeStatus={this.props.changeStatus} /> : null }
 
       </div>
     )
