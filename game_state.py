@@ -119,6 +119,9 @@ class GameHandler(WebSocketHandler):
                     recipient = next(player for player in _game_map[self.game_id]
                                      if player.name == data['name'])
                     recipient.supers_received.append(data['super'])
+                    send_message(recipient, message='assign_super', data={
+                        'super': data['super']
+                    })
                 except KeyError:
                     send_message(self, error='Issue assigning superlative.')
         else:
