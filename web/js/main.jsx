@@ -19,7 +19,7 @@ class Application extends React.Component {
       isHost:false,
       showJoinScreen:false,
       statusText:"",
-      gameId: params.game !== undefined ? gameId.game : "",
+      gameId: params.game !== undefined ? params.game : "",
       players:[],
       // This will either be "menu", "room", "wait", "write", "assign", "read"
       gameState:"menu",
