@@ -5,18 +5,21 @@ import WriteSupers from './components/WriteSupers.jsx';
 import AssignSupers from './components/AssignSupers.jsx';
 import ReadSupers from './components/ReadSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
+import * as QueryString from 'query-string';
 
 var socket=""
 
 class Application extends React.Component {
   constructor(props){
     super(props);
+
+    const params = QueryString.parse(location.search);
     this.state = {
       playerName:"",
       isHost:false,
       showJoinScreen:false,
       statusText:"",
-      gameId:"",
+      gameId: params.game !== undefined ? gameId.game : "",
       players:[],
       // This will either be "menu", "room", "wait", "write", "assign", "read"
       gameState:"menu",
