@@ -43,12 +43,10 @@ class GlobalApplication(Application):
 def main():
     ioloop = IOLoop.instance()
     app = GlobalApplication()
-
     http_server = HTTPServer(app)
     http_server.listen(5000)
     logging.debug('Server is running on port 5000')
     ioloop.start()
-
 
 if __name__ == "__main__":
     main()
