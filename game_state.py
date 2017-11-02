@@ -27,7 +27,7 @@ class GameHandler(WebSocketHandler):
         self.game_id = None
         self.is_host = False
         self.game_state = None
-        self.supers_written = []
+        self.supers_written = set()
         self.supers_assigned = []
         self.supers_received = []
 
@@ -110,7 +110,18 @@ class GameHandler(WebSocketHandler):
             if not self.game_state == GameStates.WRITE:
                 send_message(self, error='Not a valid message in this game state.')
             else:
-                self.supers_written.append(data['super'])
+                self.supers_written.add(data['super'])
+        elif msg == 'edit_super':
+            if not self.game_state == GameStates.WRITE:
+                send_message(self, error='Not a valid message in this game state.')
+            else:
+                self.supers_written.remove(data['from'])
+                self.supers_written.add(data['to'])
+        elif msg == 'remove_super':
+            if not self.game_state == GameStates.WRITE:
+                send_message(self, error='Not a valid message in this game state.')
+            else:
+                self.supers_written.remove(data['super'])
         elif msg == 'assign_super':
             if not self.game_state == GameStates.ASSIGN:
                 send_message(self, error='Not a valid message in this game state.')
