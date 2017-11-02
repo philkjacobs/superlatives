@@ -3,57 +3,60 @@ import * as ReactDOM from 'react-dom';
 import Superlative from './Superlative.jsx'
 import Notifications, {notify} from 'react-notify-toast';
 
-// Hard-coding supers for testing 
-var supers = [
-  {
-  "name":"Most likely to die in a freak accident"
-  },
-  {
-  "name":"Most loyal"
-  },
-  {
-  "name":"Best hair"
-  },
-  {
-  "name":"Most likely to become president"
-  }
-]
-
 export default class ReadSupers extends React.Component {
   constructor(props){
     super(props);
 
     this.state = {
-      supersList:supers
+      showReadScreen:false,
     }
 
     this.nextButtonClicked = this.nextButtonClicked.bind(this)
-
+    this.newGameButtonPressed = this.newGameButtonPressed.bind(this)
   }
+
+  componentDidMount(){
+    setTimeout(function() { this.setState({showReadScreen: true}); }.bind(this), 5000);
+  }
+
   render() {
+
     return (
       <div>
-        <Notifications />
-        {this.state.supersList.length==0 ? notify.show('Thats it! Host a new game or join an existing one.', 'success') : null}
-        <Superlative name={this.state.supersList[0].name}/>
-        <button onClick={this.nextButtonClicked}>Next superlative</button>
+
+      {this.state.showReadScreen ?
+          <div>
+            <Notifications />
+            <p><b>Here are the superlatives that were assigned to you:</b></p>
+          
+            {this.props.supers.length==0 ? 
+            <div>That's it! <br/>
+              <button   onClick={this.newGameButtonPressed}
+                        className="btn-lg btn-outline-secondary">
+                  Back to menu
+              </button>
+            </div> : 
+            <div>
+              <Superlative name={this.props.supers[0]}/>
+              <button   onClick={this.nextButtonClicked} 
+                        className="btn-lg btn-outline-secondary">
+                        Next superlative
+              </button>
+            </div>}
+          </div>
+         : 
+        <div><p><b>Loading the supers that we're assigned to you!</b></p></div>
+      }
       </div>
     )
   }
 
-  // Load supers from server when the DOM is loaded
-  componentDidMount(){
-    this.setState({
-      supersList:supers,
-    })
+  nextButtonClicked(){ 
+    this.props.supers.shift()
+    this.forceUpdate()
   }
 
-  nextButtonClicked(){
-    
-    // Save assignment to server
-    // If there are supers left, go to next super; otherwise go to Done screen.
-    this.setState({
-      supersList:this.state.supersList.slice(1)      
-    })
+  newGameButtonPressed(){
+    this.props.changeGameState("menu")
   }
 }
