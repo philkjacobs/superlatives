@@ -84,26 +84,35 @@ class GameHandler(WebSocketHandler):
                             send_message(player, message='change_state', data={'state': GameStates.WRITE.value})
                     else:
                         send_message(self, error='Only the host can start the game.')
-
-                self.game_state = state
-                if all(player.game_state == state for player in _game_map[self.game_id]):
-                    broadcast_message(self, message=msg, data=data)
-                    if state == GameStates.ASSIGN:
-                        all_supers = list(itertools.chain.from_iterable(
-                            (players.supers_written for players in _game_map[self.game_id])
-                        ))
-                        random.shuffle(all_supers)
-                        num_players = len(_game_map[self.game_id])
-                        supers_to_assign = [all_supers[i::num_players] for i in xrange(num_players)]
-                        for i, player in enumerate(_game_map[self.game_id]):
-                            player.supers_assigned = supers_to_assign[i]
-                            send_message(player, message='assign_supers_list', data={
-                                'supers': supers_to_assign[i]
-                            })
-                    elif state == GameStates.READ:
-                        for player in _game_map[self.game_id]:
-                            send_message(player, message='read_supers_list', data={
-                                'supers': player.supers_received
+                else:
+                    self.game_state = state
+                    waiters = [player for player in _game_map[self.game_id]
+                               if player.game_state == state]
+                    if len(waiters) == len(_game_map[self.game_id]):
+                        broadcast_message(self, message=msg, data=data)
+                        if state == GameStates.ASSIGN:
+                            all_supers = list(itertools.chain.from_iterable(
+                                (players.supers_written for players in _game_map[self.game_id])
+                            ))
+                            random.shuffle(all_supers)
+                            num_players = len(_game_map[self.game_id])
+                            supers_to_assign = [all_supers[i::num_players] for i in xrange(num_players)]
+                            for i, player in enumerate(_game_map[self.game_id]):
+                                player.supers_assigned = supers_to_assign[i]
+                                send_message(player, message='assign_supers_list', data={
+                                    'supers': supers_to_assign[i]
+                                })
+                        elif state == GameStates.READ:
+                            for player in _game_map[self.game_id]:
+                                send_message(player, message='read_supers_list', data={
+                                    'supers': player.supers_received
+                                })
+                    else:
+                        slackers = [player.name for player in _game_map[self.game_id]
+                                    if player.game_state != state]
+                        for player in waiters:
+                            send_message(player, message='waiting_on', data={
+                                'players': slackers
                             })
 
         elif msg == 'write_supers':
