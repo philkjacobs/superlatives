@@ -21,6 +21,7 @@ class Application extends React.Component {
       statusText:"",
       gameId: params.game !== undefined ? params.game : "",
       players:[],
+      waitingOnPlayers:[],
       // This will either be "menu", "room", "wait", "write", "assign", "read"
       gameState:"menu",
       socket:socket,
@@ -41,7 +42,9 @@ class Application extends React.Component {
       <div className="container">
         <Notifications />
         <h1>Superlatives</h1>
-        {this.state.gameState=="wait" ? <p><b>{this.state.statusText}</b></p> : null}
+        {this.state.gameState=="wait" ? <p><b>Waiting on:{this.state.waitingOnPlayers.map(function(player){
+return(<div>{player}</div>)
+}.bind(this))}</b></p> : null}
         <div style={style}>
           <div>
             <form>
@@ -192,8 +195,7 @@ class Application extends React.Component {
 
     if(state=="assign" || state=="read"){
       this.setState({
-        gameState:"wait",
-        statusText:"Waiting for other players..."
+        gameState:"wait"
       })
     } else {
       this.setState({
@@ -224,6 +226,13 @@ class Application extends React.Component {
             supers:response.data.supers
           })
           console.log("Supers to be read are "+this.state.supers)
+        }
+        if(response.msg=="waiting_on"){
+          this.setState({
+            waitingOnPlayers:response.data.players
+          })
+          this.forceUpdate()
+          console.log("Slackers are "+this.state.waitingOnPlayers)
         }
       }
     }.bind(this)
