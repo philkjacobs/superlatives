@@ -127,7 +127,6 @@ class Application extends React.Component {
   }
 
   hostGameButtonPressed(){
-    console.log("WORKS!")
     this.login('host')
     this.setState({
       isHost: true,
@@ -136,7 +135,6 @@ class Application extends React.Component {
   }
 
   joinGameButtonPressed(){
-    console.log("ALSO WORKS!")
     this.setState({
       isHost: false,
       showJoinScreen: true
@@ -172,7 +170,6 @@ class Application extends React.Component {
 
     // Handle messages sent by the server.
     socket.onmessage = function(event) {
-      console.log("RECEIVED MESSAGE FROM SERVER")
       var response = JSON.parse(event.data);
       var message = response.msg;
 
@@ -235,7 +232,7 @@ class Application extends React.Component {
           })
           console.log("Supers to be read are "+this.state.supers)
         }
-    }
+      }
     }.bind(this)
   }
 
