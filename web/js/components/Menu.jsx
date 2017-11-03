@@ -10,7 +10,25 @@ export function Player(props){
   )
 }
 
+export class MenuScreen extends React.Component{
+  render(){
+    return(
+      <div>
+        <button
+           onClick={this.props.hostGameButtonPressed}
+          className="btn-lg btn-outline-secondary">Host Game
+        </button>
+        <button
+          onClick={this.props.joinGameButtonPressed}
+          className="btn-lg btn-outline-secondary">Join Game
+        </button>
+      </div>
+      )
+  }
+}
+
 export class WaitingRoom extends React.Component {
+
   constructor(props){
     super(props);
     this.state = {

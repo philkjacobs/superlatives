@@ -21,8 +21,8 @@ class Application extends React.Component {
       statusText:"",
       gameId: params.game !== undefined ? params.game : "",
       players:[],
-      // This will either be "menu", "room", "wait", "write", "assign", "read"
-      gameState:"menu",
+      // This will either be "name", "menu", "room", "wait", "write", "assign", "read"
+      gameState:"name",
       socket:socket,
       supers:[]
     }
@@ -31,18 +31,21 @@ class Application extends React.Component {
     this.joinGameButtonPressed = this.joinGameButtonPressed.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleIdChange = this.handleIdChange.bind(this);
-    this.testChangeStateToWrite = this.testChangeStateToWrite.bind(this);
+    this.continueButtonPressed = this.continueButtonPressed.bind(this);
+    this.changeGameState = this.changeGameState.bind(this);
 
   }
   render() {
-    if(this.state.gameState!="menu") var style = {display:'none'}
+    if(this.state.gameState!="name") var style = {display:'none'}
 
     return (
       <div className="container">
         <Notifications />
         <h1>Superlatives</h1>
+
         {this.state.gameState=="wait" ? <p><b>{this.state.statusText}</b></p> : null}
-        <div style={style}>
+
+        <div style={style} className="vt-center">
           <div>
             <form>
                 <label style={{display:'block'}}>
@@ -55,27 +58,21 @@ class Application extends React.Component {
                 </label>
               </form>
           </div>
+
           <button
-            onClick={this.hostGameButtonPressed}
-            className="btn-lg btn-outline-secondary">Host Game
-          </button>
-          <button
-            onClick={this.joinGameButtonPressed}
-            className="btn-lg btn-outline-secondary">Join Game
+            onClick={this.continueButtonPressed}
+            className="btn-lg btn-outline-secondary">Continue
           </button>
 
         </div>
         <br />
         <br />
-        <div>
-          <form onSubmit={this.testChangeStateToWrite}>
-            <label>
-              <input  type="submit"
-                      value="TESTING: Change game state to WRITE"
-                      className="btn btn-warning"/>
-            </label>
-          </form>
-        </div>
+
+
+        {this.state.gameState=="menu" ? <Menu.MenuScreen 
+          hostGameButtonPressed={this.hostGameButtonPressed}
+          joinGameButtonPressed={this.joinGameButtonPressed}/> : null}
+
 
         {this.state.showJoinScreen ? <Menu.JoinGame
           gameId={this.state.gameId}
@@ -111,11 +108,6 @@ class Application extends React.Component {
     )
   }
 
-  testChangeStateToWrite(e){
-    e.preventDefault();
-    this.changeGameState('write')
-  }
-
   handleNameChange(e){
     this.setState({
       playerName: e.target.value
@@ -128,7 +120,14 @@ class Application extends React.Component {
     });
   }
 
+  continueButtonPressed(){
+    this.setState({
+      gameState:"menu"
+    })
+  }
+
   hostGameButtonPressed(){
+    console.log("WORKS!")
     this.login('host')
     this.setState({
       isHost: true,
@@ -137,6 +136,7 @@ class Application extends React.Component {
   }
 
   joinGameButtonPressed(){
+    console.log("ALSO WORKS!")
     this.setState({
       isHost: false,
       showJoinScreen: true
@@ -172,16 +172,26 @@ class Application extends React.Component {
 
     // Handle messages sent by the server.
     socket.onmessage = function(event) {
+      console.log("RECEIVED MESSAGE FROM SERVER")
       var response = JSON.parse(event.data);
+      var message = response.msg;
 
-      // Assuming success, go to the waiting room
-      this.setState({
-        gameId:response.data.game,
-        players:response.data.players,
-        gameState:"room",
-        showJoinScreen:false,
-        socket:socket
-      })
+      if(message=='login'){
+        // Assuming success, go to the waiting room or update player list if already in waiting room
+        this.setState({
+          gameId:response.data.game,
+          players:response.data.players,
+          gameState:"room",
+          showJoinScreen:false,
+          socket:socket
+        })
+      }
+
+      if(message=="change_state"){
+        console.log("Changing game state to "+response.data.state);
+        this.changeGameState(response.data.state.toLowerCase());
+      }
+
     }.bind(this);
   }
 
@@ -225,7 +235,7 @@ class Application extends React.Component {
           })
           console.log("Supers to be read are "+this.state.supers)
         }
-      }
+    }
     }.bind(this)
   }
 
