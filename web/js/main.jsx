@@ -42,9 +42,9 @@ class Application extends React.Component {
       <div className="container">
         <Notifications />
         <h1>Superlatives</h1>
-        {this.state.gameState=="wait" ? <p><b>Waiting on:{this.state.waitingOnPlayers.map(function(player){
+        {this.state.gameState=="wait" ? <div><p><b>Waiting on{this.state.waitingOnPlayers.map(function(player){
 return(<div>{player}</div>)
-}.bind(this))}</b></p> : null}
+}.bind(this))}</b></p></div> : null}
         <div style={style}>
           <div>
             <form>
