@@ -176,15 +176,24 @@ return(<div>{player}</div>)
     // Handle messages sent by the server.
     socket.onmessage = function(event) {
       var response = JSON.parse(event.data);
+      var message = response.msg;
 
-      // Assuming success, go to the waiting room
-      this.setState({
-        gameId:response.data.game,
-        players:response.data.players,
-        gameState:"room",
-        showJoinScreen:false,
-        socket:socket
-      })
+      if(message=="login"){
+        // Assuming success, go to the waiting room
+        this.setState({
+          gameId:response.data.game,
+          players:response.data.players,
+          gameState:"room",
+          showJoinScreen:false,
+          socket:socket
+        })
+      }
+
+      if(message=="change_state"){
+         console.log("Changing game state to "+response.data.state);
+         this.changeGameState(response.data.state.toLowerCase());
+       }
+
     }.bind(this);
   }
 
@@ -210,6 +219,7 @@ return(<div>{player}</div>)
     socket.onmessage = function(event){
       if(state=="assign" || state=="read"){
         var response = JSON.parse(event.data);
+        console.log("Response from the server is "+response)
 
         // If we're in the assign stage, check if the server has returned a list of supers
         if(response.msg=="assign_supers_list"){
