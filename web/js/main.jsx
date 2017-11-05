@@ -39,34 +39,30 @@ class Application extends React.Component {
     if(this.state.gameState!="name") var style = {display:'none'}
 
     return (
-      <div className="container">
+      <div>
         <Notifications />
-        <h1>Superlatives</h1>
 
         {this.state.gameState=="wait" ? <p><b>{this.state.statusText}</b></p> : null}
 
-        <div style={style} className="vt-center">
-          <div>
+        <div style={style} className="vt-center input-group-lg">
+          <h2>Enter name to begin</h2>
             <form>
                 <label style={{display:'block'}}>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Enter name..."
+                    placeholder="e.g. Mathew"
                     value={this.state.playerName}
                     onChange={this.handleNameChange}/>
                 </label>
               </form>
-          </div>
 
           <button
             onClick={this.continueButtonPressed}
-            className="btn-lg btn-outline-secondary">Continue
+            className="action-button">Continue
           </button>
 
         </div>
-        <br />
-        <br />
 
 
         {this.state.gameState=="menu" ? <Menu.MenuScreen 
