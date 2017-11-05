@@ -33,6 +33,7 @@ class Application extends React.Component {
     this.handleIdChange = this.handleIdChange.bind(this);
     this.continueButtonPressed = this.continueButtonPressed.bind(this);
     this.changeGameState = this.changeGameState.bind(this);
+    this.onNameSubmit = this.onNameSubmit.bind(this);
 
   }
   render() {
@@ -46,7 +47,7 @@ class Application extends React.Component {
 
         <div style={style} className="vt-center input-group-lg">
           <h2>Enter name to begin</h2>
-            <form>
+            <form onSubmit={this.onNameSubmit}>
                 <label style={{display:'block'}}>
                   <input
                     type="text"
@@ -110,6 +111,15 @@ class Application extends React.Component {
     });
   }
 
+  onNameSubmit(e){
+    e.preventDefault();
+    document.activeElement.blur();
+    this.setState({
+      gameState:"menu"
+    })
+    this.continueButtonPressed();
+  }
+
   handleIdChange(e){
     this.setState({
       gameId: e.target.value
@@ -155,10 +165,10 @@ class Application extends React.Component {
 
     switch(type){
       case 'host':
-        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`);
+        socket = new WebSocket(`ws://192.168.1.64:5000/ws?name=${this.state.playerName}`);
         break;
       case 'join':
-        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
+        socket = new WebSocket(`ws://192.168.1.64:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
         break;
       default:
         console.log("Error: Incorrect type. Expected host or join.")
