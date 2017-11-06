@@ -14,18 +14,17 @@ export class MenuScreen extends React.Component{
   render(){
     return(
       <div className="container">       
-        <div className="row">
+
           <button
             onClick={this.props.hostGameButtonPressed}
             className="btn btn-primary menu-button">Host Game
           </button>
-        </div>
-        <div className="row">
+
           <button
             onClick={this.props.joinGameButtonPressed}
             className="btn btn-primary menu-button">Join Game
           </button>
-        </div>
+          
       </div>
       )
   }

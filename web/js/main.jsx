@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import ReactModal from 'react-modal';
 import * as Menu from './components/Menu.jsx';
 import WriteSupers from './components/WriteSupers.jsx';
 import AssignSupers from './components/AssignSupers.jsx';
@@ -65,16 +66,14 @@ class Application extends React.Component {
 
         </div>
 
-
         {this.state.gameState=="menu" ? <Menu.MenuScreen 
           hostGameButtonPressed={this.hostGameButtonPressed}
           joinGameButtonPressed={this.joinGameButtonPressed}/> : null}
 
-
-        {this.state.showJoinScreen ? <Menu.JoinGame
+        {this.state.showJoinScreen ? <div><ReactModal isOpen={true}><Menu.JoinGame
           gameId={this.state.gameId}
           onChange={function(e){this.handleIdChange(e)}.bind(this)}
-          onSubmit={function(data){this.login('join')}.bind(this)}/> : null}
+          onSubmit={function(data){this.login('join')}.bind(this)}/></ReactModal></div> : null}
 
         {this.state.gameState=="room" ? <Menu.WaitingRoom
           players={this.state.players}
@@ -165,10 +164,10 @@ class Application extends React.Component {
 
     switch(type){
       case 'host':
-        socket = new WebSocket(`ws://192.168.1.64:5000/ws?name=${this.state.playerName}`);
+        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`);
         break;
       case 'join':
-        socket = new WebSocket(`ws://192.168.1.64:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
+        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
         break;
       default:
         console.log("Error: Incorrect type. Expected host or join.")
