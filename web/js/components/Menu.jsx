@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
 
@@ -35,7 +36,8 @@ export class WaitingRoom extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      startGame: false
+      startGame: false,
+      copied:false
     }
     this.startGameButtonPressed = this.startGameButtonPressed.bind(this)
   }
@@ -47,6 +49,9 @@ export class WaitingRoom extends React.Component {
       <div>
         <div className="description">Share this game code with your friends:</div>
         <div className="player">{this.props.gameId}</div>
+        <CopyToClipboard text={this.props.gameId} onCopy={() => this.setState({copied: true})}>
+          {this.state.copied ? <button className="btn btn-primary">Copied!</button> : <button className="btn btn-primary">Copy</button>}
+        </CopyToClipboard>
         <div className="description">Waiting Room</div>
 
           {this.props.players.map(function(player){

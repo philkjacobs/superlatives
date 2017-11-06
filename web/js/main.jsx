@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import ReactModal from 'react-modal';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import * as Menu from './components/Menu.jsx';
 import WriteSupers from './components/WriteSupers.jsx';
 import AssignSupers from './components/AssignSupers.jsx';
