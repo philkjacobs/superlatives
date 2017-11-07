@@ -1,0 +1,55 @@
+.container {
+	font-family: 'Phosphate-solid';
+	margin: 0 auto;
+	text-align: center;
+	background-color: #615D5D;
+	height: 100vh;
+	color: white;
+	padding: 0px;
+}
+
+.vt-center {
+  padding-top: 35vh;
+}
+
+.input-group-lg{
+	padding-left:20px;
+	padding-right:20px;
+}
+
+.custom-modal{
+	background-color: #000000
+	color: #FFFFFF;
+}
+
+.action-button{
+	display: block;
+	position: absolute;
+	bottom: 0px;
+	left:0px;
+	background-color: #0DC839;
+	width:100%;
+	height: 15vh;
+	color: white;
+	font-size: 5vh;
+	border-radius: 0px;
+	border: 0px;
+}
+
+.menu-button{
+	height:50vh;
+	width: 100%;
+	font-size:10vw;
+}
+
+.player{
+	color:#FFA010;
+	font-size:11vw;
+}
+
+.description{
+	margin-top:3vh;
+	font-size: 7vw;
+	padding-left:20px;
+	padding-right:20px;
+}

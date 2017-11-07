@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import ReactModal from 'react-modal';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import Loader from './components/Loader.jsx';
 import * as Menu from './components/Menu.jsx';
 import WriteSupers from './components/WriteSupers.jsx';
 import AssignSupers from './components/AssignSupers.jsx';
@@ -130,9 +130,13 @@ return(<div>{player}</div>)
   }
 
   continueButtonPressed(){
-    this.setState({
-      gameState:"menu"
-    })
+    if(this.state.gameId==""){
+      this.setState({
+        gameState:"menu"
+      })
+    } else {
+      this.login('join')
+    }
   }
 
   hostGameButtonPressed(){

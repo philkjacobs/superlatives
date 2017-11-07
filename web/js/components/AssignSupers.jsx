@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import Loader from './Loader.jsx';
 import Superlative from './Superlative.jsx'
 import Notifications, {notify} from 'react-notify-toast';
 
@@ -45,7 +46,7 @@ export default class AssignSupers extends React.Component {
         </div></div>
          : 
         <div>
-          <p><b>Loading supers for you to assign to others!</b></p>
+          <Loader statusText="Loading supers for you to assign to others!" />
         </div>}
       </div>
     )

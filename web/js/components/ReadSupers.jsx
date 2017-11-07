@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import Loader from './Loader.jsx';
 import Superlative from './Superlative.jsx'
 import Notifications, {notify} from 'react-notify-toast';
 
@@ -27,25 +28,27 @@ export default class ReadSupers extends React.Component {
       {this.state.showReadScreen ?
           <div>
             <Notifications />
-            <p><b>Here are the superlatives that were assigned to you:</b></p>
-          
             {this.props.supers.length==0 ? 
-            <div>That's it! <br/>
+            <div>
+              <Loader statusText="That's it!" />
               <button   onClick={this.newGameButtonPressed}
-                        className="btn-lg btn-outline-secondary">
-                  Back to menu
+                        className="btn-lg action-button">
+                Back to menu
               </button>
             </div> : 
             <div>
-              <Superlative name={this.props.supers[0]} className="vt-center"/>
+              <div className="description">Here are the superlatives that were assigned to you:</div>
+              <Superlative name={this.props.supers[0]} className="vt-center player"/>
               <button   onClick={this.nextButtonClicked} 
-                        className="btn-lg btn-outline-secondary action-button">
+                        className="btn-lg action-button">
                         Next superlative
               </button>
             </div>}
           </div>
          : 
-        <div><p><b>Loading the supers that we're assigned to you!</b></p></div>
+        <div>
+          <Loader statusText="Loading supers that were assigned to you!" />
+        </div>
       }
       </div>
     )

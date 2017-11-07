@@ -49,7 +49,7 @@ export class WaitingRoom extends React.Component {
       <div>
         <div className="description">Share this game code with your friends:</div>
         <div className="player">{this.props.gameId}</div>
-        <CopyToClipboard text={this.props.gameId} onCopy={() => this.setState({copied: true})}>
+        <CopyToClipboard text={window.location.href+"?game="+this.props.gameId} onCopy={() => this.setState({copied: true})}>
           {this.state.copied ? <button className="btn btn-primary">Copied!</button> : <button className="btn btn-primary">Copy</button>}
         </CopyToClipboard>
         <div className="description">Waiting Room</div>
