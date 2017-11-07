@@ -37,9 +37,9 @@ export default class ReadSupers extends React.Component {
               </button>
             </div> : 
             <div>
-              <Superlative name={this.props.supers[0]}/>
+              <Superlative name={this.props.supers[0]} className="vt-center"/>
               <button   onClick={this.nextButtonClicked} 
-                        className="btn-lg btn-outline-secondary">
+                        className="btn-lg btn-outline-secondary action-button">
                         Next superlative
               </button>
             </div>}
