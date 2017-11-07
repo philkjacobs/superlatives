@@ -46,9 +46,9 @@ class Application extends React.Component {
       <div>
         <Notifications />
 
-        {this.state.gameState=="wait" ? <div><p><b>Waiting on{this.state.waitingOnPlayers.map(function(player){
-return(<div>{player}</div>)
-}.bind(this))}</b></p></div> : null}
+        {this.state.gameState=="wait" ? <div><div className="description">Waiting on</div>{this.state.waitingOnPlayers.map(function(player){
+return(<div className="player">{player}</div>)
+}.bind(this))}</div> : null}
 
         <div style={style} className="vt-center input-group-lg">
           <h2>Enter name to begin</h2>
