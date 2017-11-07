@@ -1,20 +1,43 @@
 import * as React from 'react';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import * as ReactDOM from 'react-dom';
 import Notifications, {notify} from 'react-notify-toast';
 
 export function Player(props){
   return(
-    <div>
+    <div className="player">
       {props.name}
     </div>
   )
 }
 
+export class MenuScreen extends React.Component{
+  render(){
+    return(
+      <div className="container">       
+
+          <button
+            onClick={this.props.hostGameButtonPressed}
+            className="btn btn-primary menu-button">Host Game
+          </button>
+
+          <button
+            onClick={this.props.joinGameButtonPressed}
+            className="btn btn-primary menu-button">Join Game
+          </button>
+          
+      </div>
+      )
+  }
+}
+
 export class WaitingRoom extends React.Component {
+
   constructor(props){
     super(props);
     this.state = {
-      startGame: false
+      startGame: false,
+      copied:false
     }
     this.startGameButtonPressed = this.startGameButtonPressed.bind(this)
   }
@@ -24,18 +47,19 @@ export class WaitingRoom extends React.Component {
       <div>
 
       <div>
-        <h2>Heres your special game code:</h2>
-        <h3>{this.props.gameId}</h3>
-        <br />
-          <h3>Waiting Room</h3>
+        <div className="description">Share this game code with your friends:</div>
+        <div className="player">{this.props.gameId}</div>
+        <CopyToClipboard text={window.location.href+"?game="+this.props.gameId} onCopy={() => this.setState({copied: true})}>
+          {this.state.copied ? <button className="btn btn-primary">Copied!</button> : <button className="btn btn-primary">Copy</button>}
+        </CopyToClipboard>
+        <div className="description">Waiting Room</div>
+
           {this.props.players.map(function(player){
               return (
                 <Player name={player} />
               );
           }.bind(this))}
-          <br />
-          <br />
-          {this.props.isHost ? <button className="btn-lg btn-outline-secondary" onClick={this.startGameButtonPressed}>
+          {this.props.isHost ? <button className="action-button" onClick={this.startGameButtonPressed}>
             Start Game
           </button> : null}
         </div>

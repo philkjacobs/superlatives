@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import Loader from './Loader.jsx';
 import Superlative from './Superlative.jsx'
 import Notifications, {notify} from 'react-notify-toast';
 
@@ -8,7 +9,7 @@ function Player(props){
   return(
     <div>
       <button   onClick={function(player){props.buttonClicked(props.name);}}
-                className="btn btn-outline-primary">
+                className="player">
       {props.name}
       </button>
     </div>
@@ -32,8 +33,9 @@ export default class AssignSupers extends React.Component {
 
       {this.state.showAssignScreen ?
         <div><Notifications />
-          <Superlative name={this.props.supers[0]}/>
-          <p><b>Assign this to:</b></p>
+        <div className="menu-item"><Superlative name={this.props.supers[0]}/></div>
+        <div className="menu-item"><div className="description">Assign this to:</div>
+          <p><b></b></p>
           {this.props.players.map(function(player, index){
             return(
               <Player
@@ -41,9 +43,10 @@ export default class AssignSupers extends React.Component {
                 buttonClicked = {this.playerButtonClicked} />
             );
           }.bind(this))}
-        </div> : 
+        </div></div>
+         : 
         <div>
-          <p><b>Loading supers for you to assign to others!</b></p>
+          <Loader statusText="Loading supers for you to assign to others!" />
         </div>}
       </div>
     )
