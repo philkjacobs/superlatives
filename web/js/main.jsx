@@ -44,7 +44,7 @@ class Application extends React.Component {
     return (
       <div>
         <Notifications />
-
+        
         {this.state.gameState=="wait" ? <Loader statusText={this.state.statusText} /> : null}
 
         <div style={style} className="vt-center input-group-lg">
