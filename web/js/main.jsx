@@ -23,6 +23,7 @@ class Application extends React.Component {
       statusText:"",
       gameId: params.game !== undefined ? params.game : "",
       players:[],
+      waitingOnPlayers:[],
       // This will either be "name", "menu", "room", "wait", "write", "assign", "read"
       gameState:"name",
       socket:socket,
@@ -45,7 +46,9 @@ class Application extends React.Component {
       <div>
         <Notifications />
 
-        {this.state.gameState=="wait" ? <p><b>{this.state.statusText}</b></p> : null}
+        {this.state.gameState=="wait" ? <div><p><b>Waiting on{this.state.waitingOnPlayers.map(function(player){
+return(<div>{player}</div>)
+}.bind(this))}</b></p></div> : null}
 
         <div style={style} className="vt-center input-group-lg">
           <h2>Enter name to begin</h2>
@@ -194,7 +197,6 @@ class Application extends React.Component {
         console.log("Changing game state to "+response.data.state);
         this.changeGameState(response.data.state.toLowerCase());
       }
-
     }.bind(this);
   }
 
@@ -205,8 +207,7 @@ class Application extends React.Component {
 
     if(state=="assign" || state=="read"){
       this.setState({
-        gameState:"wait",
-        statusText:"Waiting for other players..."
+        gameState:"wait"
       })
     } else {
       this.setState({
@@ -221,6 +222,7 @@ class Application extends React.Component {
     socket.onmessage = function(event){
       if(state=="assign" || state=="read"){
         var response = JSON.parse(event.data);
+        console.log("Response from the server is "+response)
 
         // If we're in the assign stage, check if the server has returned a list of supers
         if(response.msg=="assign_supers_list"){
@@ -237,6 +239,13 @@ class Application extends React.Component {
             supers:response.data.supers
           })
           console.log("Supers to be read are "+this.state.supers)
+        }
+        if(response.msg=="waiting_on"){
+          this.setState({
+            waitingOnPlayers:response.data.players
+          })
+          this.forceUpdate()
+          console.log("Slackers are "+this.state.waitingOnPlayers)
         }
       }
     }.bind(this)
