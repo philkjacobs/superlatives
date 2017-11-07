@@ -1,5 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import ReactModal from 'react-modal';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import * as Menu from './components/Menu.jsx';
 import WriteSupers from './components/WriteSupers.jsx';
 import AssignSupers from './components/AssignSupers.jsx';
@@ -22,8 +24,8 @@ class Application extends React.Component {
       gameId: params.game !== undefined ? params.game : "",
       players:[],
       waitingOnPlayers:[],
-      // This will either be "menu", "room", "wait", "write", "assign", "read"
-      gameState:"menu",
+      // This will either be "name", "menu", "room", "wait", "write", "assign", "read"
+      gameState:"name",
       socket:socket,
       supers:[]
     }
@@ -32,58 +34,50 @@ class Application extends React.Component {
     this.joinGameButtonPressed = this.joinGameButtonPressed.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleIdChange = this.handleIdChange.bind(this);
-    this.testChangeStateToWrite = this.testChangeStateToWrite.bind(this);
+    this.continueButtonPressed = this.continueButtonPressed.bind(this);
+    this.changeGameState = this.changeGameState.bind(this);
+    this.onNameSubmit = this.onNameSubmit.bind(this);
 
   }
   render() {
-    if(this.state.gameState!="menu") var style = {display:'none'}
+    if(this.state.gameState!="name") var style = {display:'none'}
 
     return (
-      <div className="container">
+      <div>
         <Notifications />
-        <h1>Superlatives</h1>
+
         {this.state.gameState=="wait" ? <div><p><b>Waiting on{this.state.waitingOnPlayers.map(function(player){
 return(<div>{player}</div>)
 }.bind(this))}</b></p></div> : null}
-        <div style={style}>
-          <div>
-            <form>
+
+        <div style={style} className="vt-center input-group-lg">
+          <h2>Enter name to begin</h2>
+            <form onSubmit={this.onNameSubmit}>
                 <label style={{display:'block'}}>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Enter name..."
+                    placeholder="e.g. Mathew"
                     value={this.state.playerName}
                     onChange={this.handleNameChange}/>
                 </label>
               </form>
-          </div>
+
           <button
-            onClick={this.hostGameButtonPressed}
-            className="btn-lg btn-outline-secondary">Host Game
-          </button>
-          <button
-            onClick={this.joinGameButtonPressed}
-            className="btn-lg btn-outline-secondary">Join Game
+            onClick={this.continueButtonPressed}
+            className="action-button">Continue
           </button>
 
         </div>
-        <br />
-        <br />
-        <div>
-          <form onSubmit={this.testChangeStateToWrite}>
-            <label>
-              <input  type="submit"
-                      value="TESTING: Change game state to WRITE"
-                      className="btn btn-warning"/>
-            </label>
-          </form>
-        </div>
 
-        {this.state.showJoinScreen ? <Menu.JoinGame
+        {this.state.gameState=="menu" ? <Menu.MenuScreen 
+          hostGameButtonPressed={this.hostGameButtonPressed}
+          joinGameButtonPressed={this.joinGameButtonPressed}/> : null}
+
+        {this.state.showJoinScreen ? <div><ReactModal isOpen={true}><Menu.JoinGame
           gameId={this.state.gameId}
           onChange={function(e){this.handleIdChange(e)}.bind(this)}
-          onSubmit={function(data){this.login('join')}.bind(this)}/> : null}
+          onSubmit={function(data){this.login('join')}.bind(this)}/></ReactModal></div> : null}
 
         {this.state.gameState=="room" ? <Menu.WaitingRoom
           players={this.state.players}
@@ -114,21 +108,31 @@ return(<div>{player}</div>)
     )
   }
 
-  testChangeStateToWrite(e){
-    e.preventDefault();
-    this.changeGameState('write')
-  }
-
   handleNameChange(e){
     this.setState({
       playerName: e.target.value
     });
   }
 
+  onNameSubmit(e){
+    e.preventDefault();
+    document.activeElement.blur();
+    this.setState({
+      gameState:"menu"
+    })
+    this.continueButtonPressed();
+  }
+
   handleIdChange(e){
     this.setState({
       gameId: e.target.value
     });
+  }
+
+  continueButtonPressed(){
+    this.setState({
+      gameState:"menu"
+    })
   }
 
   hostGameButtonPressed(){
@@ -178,8 +182,8 @@ return(<div>{player}</div>)
       var response = JSON.parse(event.data);
       var message = response.msg;
 
-      if(message=="login"){
-        // Assuming success, go to the waiting room
+      if(message=='login'){
+        // Assuming success, go to the waiting room or update player list if already in waiting room
         this.setState({
           gameId:response.data.game,
           players:response.data.players,
@@ -190,10 +194,9 @@ return(<div>{player}</div>)
       }
 
       if(message=="change_state"){
-         console.log("Changing game state to "+response.data.state);
-         this.changeGameState(response.data.state.toLowerCase());
-       }
-
+        console.log("Changing game state to "+response.data.state);
+        this.changeGameState(response.data.state.toLowerCase());
+      }
     }.bind(this);
   }
 

@@ -41,7 +41,7 @@ export default class WriteSupers extends React.Component {
     return(
       <div>
         <Timer now={this.props.now}/>
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.onSubmit} className="input-group-lg vt-center">
 
             <label style={{display:'block'}}>
               <input  type="text"
@@ -52,7 +52,7 @@ export default class WriteSupers extends React.Component {
             <input  type="submit"
                     placeholder="Write super..."
                     value="Add Super"
-                    className="btn-lg btn-outline-secondary"/>
+                    className="btn-lg btn-outline-secondary action-button"/>
           </form>
           <form onSubmit={this.moveToAssign}>
             <label>
