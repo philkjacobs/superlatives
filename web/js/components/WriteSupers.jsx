@@ -70,15 +70,16 @@ export default class WriteSupers extends React.Component {
                     value="Add Super"
                     className="btn-lg btn-outline-secondary action-button"/>
           </form>
-          <form onSubmit={this.showSubmitModal}>
+          {this.props.isHost ? <div><form onSubmit={this.showSubmitModal}>
             <label>
               <input  type="submit"
                       value="Continue to next stage"
                       className="btn btn-warning"/>
             </label>
-          </form>
+          </form></div> : null}
+          
           {this.state.showSubmitModal ? <div><ReactModal isOpen={true} onRequestClose={this.closeModal}>
-            <h2>Continuing to the next stage will give everyone fifteen more seconds and then automatically move them to the next round.</h2>
+            <h2>Continuing to the next stage will automatically move everyone to the next round.</h2>
               <div>
                 <br />
                 <button className="btn btn-primary btn-lg btn-block" onClick={this.moveToAssign}>Continue to next stage</button>

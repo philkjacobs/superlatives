@@ -37,6 +37,7 @@ class Application extends React.Component {
     this.continueButtonPressed = this.continueButtonPressed.bind(this);
     this.changeGameState = this.changeGameState.bind(this);
     this.onNameSubmit = this.onNameSubmit.bind(this);
+    this.listenForServerMessages = this.listenForServerMessages.bind(this);
 
   }
   render() {
@@ -88,6 +89,7 @@ return(<div className="player">{player}</div>)
           changeGameState={function(state){this.changeGameState(state)}.bind(this)}/> : null}
 
         {this.state.gameState=="write" ? <WriteSupers
+          isHost={this.state.isHost}
           players={this.state.players}
           submitSuper={function(data){this.writeSuper(data)}.bind(this)}
           changeGameState={function(state){this.changeGameState(state)}.bind(this)}
@@ -172,36 +174,17 @@ return(<div className="player">{player}</div>)
 
     switch(type){
       case 'host':
-        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`);
+        socket = new WebSocket(`ws://192.168.1.64:5000/ws?name=${this.state.playerName}`);
         break;
       case 'join':
-        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
+        socket = new WebSocket(`ws://192.168.1.64:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
         break;
       default:
         console.log("Error: Incorrect type. Expected host or join.")
     }
 
     // Handle messages sent by the server.
-    socket.onmessage = function(event) {
-      var response = JSON.parse(event.data);
-      var message = response.msg;
-
-      if(message=='login'){
-        // Assuming success, go to the waiting room or update player list if already in waiting room
-        this.setState({
-          gameId:response.data.game,
-          players:response.data.players,
-          gameState:"room",
-          showJoinScreen:false,
-          socket:socket
-        })
-      }
-
-      if(message=="change_state"){
-        console.log("Changing game state to "+response.data.state);
-        this.changeGameState(response.data.state.toLowerCase());
-      }
-    }.bind(this);
+    this.listenForServerMessages()
   }
 
   changeGameState(state){
@@ -209,7 +192,9 @@ return(<div className="player">{player}</div>)
 
     // If new state is assign, change gameState to "wait" until the server returns the assign_supers_list message. If new state is read, change gameState to "wait" until the server returns the read_supers_list message. 
 
-    if(state=="assign" || state=="read"){
+    var message;
+
+    if(state=="read" || state=="assign"){
       this.setState({
         gameState:"wait"
       })
@@ -219,40 +204,14 @@ return(<div className="player">{player}</div>)
       })
     }
 
-    var message = {"msg":"change_state", "data":{"state":state}, "error":""}
-    socket.send(JSON.stringify(message))
-
-    // Listen for any messages from the server after changing state
-    socket.onmessage = function(event){
-      if(state=="assign" || state=="read"){
-        var response = JSON.parse(event.data);
-        console.log("Response from the server is "+response)
-
-        // If we're in the assign stage, check if the server has returned a list of supers
-        if(response.msg=="assign_supers_list"){
-          this.setState({
-            gameState: state,
-            supers:response.data.supers
-          })
-        }
-
-        // If we're in the read stage, check if the server has returned a list of supers
-        if(response.msg=="read_supers_list"){
-          this.setState({
-            gameState: state,
-            supers:response.data.supers
-          })
-          console.log("Supers to be read are "+this.state.supers)
-        }
-        if(response.msg=="waiting_on"){
-          this.setState({
-            waitingOnPlayers:response.data.players
-          })
-          this.forceUpdate()
-          console.log("Slackers are "+this.state.waitingOnPlayers)
-        }
-      }
-    }.bind(this)
+    if(state=="assign"){
+      message = {"msg":"change_state", "data":{"state":state, "force":1}, "error":""}
+      socket.send(JSON.stringify(message))
+    } else {
+      message = {"msg":"change_state", "data":{"state":state}, "error":""}
+      socket.send(JSON.stringify(message))
+      this.listenForServerMessages()
+    }
   }
 
   writeSuper(data){
@@ -260,9 +219,7 @@ return(<div className="player">{player}</div>)
     var message = {"msg":"write_supers","data":{"super":data}, "error":""}
     socket.send(JSON.stringify(message))
 
-    socket.onmessage = function(event){
-      console.log(event.data)
-    }
+    this.listenForServerMessages()
   }
 
   assignSuper(player,superText){
@@ -270,9 +227,7 @@ return(<div className="player">{player}</div>)
     var message = {"msg":"assign_super","data":{"name":player, "super":superText}, "error":""}
     socket.send(JSON.stringify(message))
 
-    socket.onmessage = function(event){
-      console.log(event.data)
-    }
+    this.listenForServerMessages()
   }
 
   removePlayerNameFromPlayerList(){
@@ -285,6 +240,63 @@ return(<div className="player">{player}</div>)
     }
 
     return p
+  }
+
+  listenForServerMessages(){
+    // Listen for any messages from the server after changing state
+    socket.onmessage = function(event){
+      var response = JSON.parse(event.data);
+
+      if(response.msg=='login'){
+        // Assuming success, go to the waiting room or update player list if already in waiting room
+        this.setState({
+          gameId:response.data.game,
+          players:response.data.players,
+          gameState:"room",
+          showJoinScreen:false,
+          socket:socket
+        })
+      }
+
+      if(response.msg=="change_state"){
+        var state = response.data.state.toLowerCase()
+
+        if(state=="read" || state=="assign"){
+          this.setState({
+            gameState:"wait"
+          })
+        } else {
+          this.setState({
+            gameState:state
+          })
+        }
+      }
+
+      // If we're in the assign stage, check if the server has returned a list of supers
+      if(response.msg=="assign_supers_list"){
+        this.setState({
+          gameState: "assign",
+          supers:response.data.supers
+        })
+      }
+
+      // If we're in the read stage, check if the server has returned a list of supers
+      if(response.msg=="read_supers_list"){
+        this.setState({
+          gameState: "read",
+          supers:response.data.supers
+        })
+        console.log("Supers to be read are "+this.state.supers)
+      }
+
+      if(response.msg=="waiting_on"){
+        this.setState({
+          waitingOnPlayers:response.data.players
+        })
+        this.forceUpdate()
+        console.log("Slackers are "+this.state.waitingOnPlayers)
+      }
+    }.bind(this)
   }
 }
 

@@ -21,6 +21,9 @@ class GameStates(Enum):
 
 class GameHandler(WebSocketHandler):
 
+    def check_origin(self, origin):
+        return True     
+
     def __init__(self, application, request, **kwargs):
         super(GameHandler, self).__init__(application, request, **kwargs)
         self.name = None
