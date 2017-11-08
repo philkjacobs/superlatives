@@ -84,6 +84,10 @@ class GameHandler(WebSocketHandler):
                             send_message(player, message='change_state', data={'state': GameStates.WRITE.value})
                     else:
                         send_message(self, error='Only the host can start the game.')
+                elif state == GameStates.ASSIGN and self.is_host and data.get('force', False):
+                    for player in _game_map[self.game_id]:
+                        player.game_state = GameStates.ASSIGN
+                        send_message(player, message='change_state', data={'state': GameStates.ASSIGN.value})
                 else:
                     self.game_state = state
                     waiters = [player for player in _game_map[self.game_id]
