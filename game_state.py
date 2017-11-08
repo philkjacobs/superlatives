@@ -88,6 +88,7 @@ class GameHandler(WebSocketHandler):
                     for player in _game_map[self.game_id]:
                         player.game_state = GameStates.ASSIGN
                         send_message(player, message='change_state', data={'state': GameStates.ASSIGN.value})
+                        self.send_assigned_supers()
                 else:
                     self.game_state = state
                     waiters = [player for player in _game_map[self.game_id]
@@ -95,22 +96,9 @@ class GameHandler(WebSocketHandler):
                     if len(waiters) == len(_game_map[self.game_id]):
                         broadcast_message(self, message=msg, data=data)
                         if state == GameStates.ASSIGN:
-                            all_supers = list(itertools.chain.from_iterable(
-                                (players.supers_written for players in _game_map[self.game_id])
-                            ))
-                            random.shuffle(all_supers)
-                            num_players = len(_game_map[self.game_id])
-                            supers_to_assign = [all_supers[i::num_players] for i in xrange(num_players)]
-                            for i, player in enumerate(_game_map[self.game_id]):
-                                player.supers_assigned = supers_to_assign[i]
-                                send_message(player, message='assign_supers_list', data={
-                                    'supers': supers_to_assign[i]
-                                })
+                            self.send_assigned_supers()
                         elif state == GameStates.READ:
-                            for player in _game_map[self.game_id]:
-                                send_message(player, message='read_supers_list', data={
-                                    'supers': player.supers_received
-                                })
+                            self.send_received_supers()
                     else:
                         slackers = [player.name for player in _game_map[self.game_id]
                                     if player.game_state != state]
@@ -154,6 +142,25 @@ class GameHandler(WebSocketHandler):
 
     def on_close(self):
         _game_map[self.game_id].discard(self)
+
+    def send_assigned_supers(self):
+        all_supers = list(itertools.chain.from_iterable(
+            (players.supers_written for players in _game_map[self.game_id])
+        ))
+        random.shuffle(all_supers)
+        num_players = len(_game_map[self.game_id])
+        supers_to_assign = [all_supers[i::num_players] for i in xrange(num_players)]
+        for i, player in enumerate(_game_map[self.game_id]):
+            player.supers_assigned = supers_to_assign[i]
+            send_message(player, message='assign_supers_list', data={
+                'supers': supers_to_assign[i]
+            })
+
+    def send_received_supers(self):
+        for player in _game_map[self.game_id]:
+            send_message(player, message='read_supers_list', data={
+                'supers': player.supers_received
+            })
 
 def send_message(socket, message=None, data=None, error=None):
     assert any(v is not None for v in (message, data, error))
