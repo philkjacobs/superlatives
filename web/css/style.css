@@ -1,11 +1,18 @@
+body{
+	background-color: #615D5D;
+}
+
 .container {
 	font-family: 'Phosphate-solid';
 	margin: 0 auto;
 	text-align: center;
-	background-color: #615D5D;
 	height: 100vh;
 	color: white;
 	padding: 0px;
+}
+
+.toast-notification{
+	font-family: 'Open Sans';
 }
 
 .vt-center {
@@ -50,6 +57,6 @@
 .description{
 	margin-top:3vh;
 	font-size: 7vw;
-	padding-left:20px;
-	padding-right:20px;
+	padding-left:40px;
+	padding-right:40px;
 }
