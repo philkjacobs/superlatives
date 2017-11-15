@@ -3,7 +3,7 @@ body{
 }
 
 .container {
-	font-family: 'Phosphate-solid';
+	font-family: 'Barlow', sans-serif;
 	margin: 0 auto;
 	text-align: center;
 	height: 100vh;
@@ -11,9 +11,9 @@ body{
 	padding: 0px;
 }
 
-.toast-notification{
-	font-family: 'Open Sans';
-}
+/*.toast-notification{
+	font-family: 'Barlow';
+}*/
 
 .vt-center {
   padding-top: 35vh;
