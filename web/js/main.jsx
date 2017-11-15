@@ -289,6 +289,10 @@ return(<div className="player">{player}</div>)
           gameState: "read",
           supers:response.data.supers
         })
+        socket.close()
+        socket.onclose = function(event){
+          console.log("Socket closed!");
+        };
         console.log("Supers to be read are "+this.state.supers)
       }
 
