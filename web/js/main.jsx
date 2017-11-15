@@ -292,6 +292,12 @@ return(<div className="player">{player}</div>)
         console.log("Supers to be read are "+this.state.supers)
       }
 
+      // If a super is assigned to the user, console log
+      if(response.msg=="assign_super"){
+        let superWrittenToastColor = { background: '#000000', text: "#FFFFFF" };
+        notify.show("Someone assigned you a phrase!","success",2000,superWrittenToastColor)
+      }      
+
       if(response.msg=="waiting_on"){
         this.setState({
           waitingOnPlayers:response.data.players
