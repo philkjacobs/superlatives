@@ -31,7 +31,7 @@ body{
 
 .action-button{
 	display: block;
-	position: absolute;
+	position: fixed;
 	bottom: 0px;
 	left:0px;
 	background-color: #0DC839;
@@ -52,6 +52,14 @@ body{
 .player{
 	color:#FFA010;
 	font-size:11vw;
+}
+
+.player-list{
+	position: absolute;
+	display: block;
+	width: 100%;
+	overflow-y: auto;
+	padding-bottom: 15vh;
 }
 
 .description{

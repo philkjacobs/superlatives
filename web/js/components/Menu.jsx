@@ -52,12 +52,13 @@ export class WaitingRoom extends React.Component {
           {this.state.copied ? <button className="btn btn-primary">Copied!</button> : <button className="btn btn-primary">Copy game link</button>}
         </CopyToClipboard>
         <div className="description">Waiting Room</div>
-
+        <div className="player-list">
           {this.props.players.map(function(player){
               return (
                 <Player name={player} />
               );
           }.bind(this))}
+          </div>
           {this.props.isHost ? <button className="action-button" onClick={this.startGameButtonPressed}>
             Start Game
           </button> : null}
