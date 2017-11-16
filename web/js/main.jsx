@@ -87,7 +87,8 @@ return(<div className="player">{player}</div>)
           gameId={this.state.gameId}
           changeStatus={function(state, statusText){this.changeStatus(state,statusText)}.bind(this)}
           gameState={this.state.gameState}
-          changeGameState={function(state){this.changeGameState(state)}.bind(this)}/> : null}
+          changeGameState={function(state){this.changeGameState(state)}.bind(this)}
+          TOAST_TIMEOUT={TOAST_TIMEOUT}/> : null}
 
         {this.state.gameState=="write" ? <WriteSupers
           isHost={this.state.isHost}
