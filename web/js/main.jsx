@@ -9,7 +9,6 @@ import ReadSupers from './components/ReadSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 import * as QueryString from 'query-string';
 
-var socket=""
 const TOAST_TIMEOUT = 2000;
 
 class Application extends React.Component {
@@ -27,7 +26,7 @@ class Application extends React.Component {
       waitingOnPlayers:[],
       // This will either be "name", "menu", "room", "wait", "write", "assign", "read"
       gameState:"name",
-      socket:socket,
+      socket:null,
       supers:[]
     }
 
@@ -175,10 +174,14 @@ return(<div className="player">{player}</div>)
 
     switch(type){
       case 'host':
-        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`);
+        this.setState({
+          socket: new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`)
+        })
         break;
       case 'join':
-        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
+        this.setState({
+          socket: new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`)
+        })
         break;
       default:
         console.log("Error: Incorrect type. Expected host or join.")
@@ -207,10 +210,10 @@ return(<div className="player">{player}</div>)
 
     if(state=="assign"){
       message = {"msg":"change_state", "data":{"state":state, "force":1}, "error":""}
-      socket.send(JSON.stringify(message))
+      this.state.socket.send(JSON.stringify(message))
     } else {
       message = {"msg":"change_state", "data":{"state":state}, "error":""}
-      socket.send(JSON.stringify(message))
+      this.state.socket.send(JSON.stringify(message))
       this.listenForServerMessages()
     }
   }
@@ -218,7 +221,7 @@ return(<div className="player">{player}</div>)
   writeSuper(data){
     // Write super to server
     var message = {"msg":"write_supers","data":{"super":data}, "error":""}
-    socket.send(JSON.stringify(message))
+    this.state.socket.send(JSON.stringify(message))
 
     notify.show("Added! Keep writing...","success",TOAST_TIMEOUT)
 
@@ -228,7 +231,7 @@ return(<div className="player">{player}</div>)
   assignSuper(player,superText){
     // Assign super to server  
     var message = {"msg":"assign_super","data":{"name":player, "super":superText}, "error":""}
-    socket.send(JSON.stringify(message))
+    this.state.socket.send(JSON.stringify(message))
 
     this.listenForServerMessages()
   }
@@ -247,7 +250,7 @@ return(<div className="player">{player}</div>)
 
   listenForServerMessages(){
     // Listen for any messages from the server after changing state
-    socket.onmessage = function(event){
+    this.state.socket.onmessage = function(event){
       var response = JSON.parse(event.data);
 
       if(response.msg=='login'){
@@ -257,7 +260,6 @@ return(<div className="player">{player}</div>)
           players:response.data.players,
           gameState:"room",
           showJoinScreen:false,
-          socket:socket
         })
       }
 
@@ -267,10 +269,6 @@ return(<div className="player">{player}</div>)
         if(state=="read" || state=="assign"){
           this.setState({
             gameState:"wait"
-          })
-        } else {
-          this.setState({
-            gameState:state
           })
         }
       }
@@ -289,8 +287,8 @@ return(<div className="player">{player}</div>)
           gameState: "read",
           supers:response.data.supers
         })
-        socket.close()
-        socket.onclose = function(event){
+        this.state.socket.close()
+        this.state.socket.onclose = function(event){
           console.log("Socket closed!");
         };
         console.log("Supers to be read are "+this.state.supers)
@@ -305,7 +303,6 @@ return(<div className="player">{player}</div>)
         this.setState({
           waitingOnPlayers:response.data.players
         })
-        this.forceUpdate()
         console.log("Slackers are "+this.state.waitingOnPlayers)
       }
     }.bind(this)
