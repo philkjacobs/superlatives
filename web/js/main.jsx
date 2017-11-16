@@ -233,16 +233,14 @@ return(<div className="player">{player}</div>)
     this.listenForServerMessages()
   }
 
-  removePlayerNameFromPlayerList(){
-    var p = this.state.players
-    var n = this.state.playerName
-    var index = p.indexOf(n)
-
-    if (index !== -1) {
-      p.splice(index, 1);
-    }
-
-    return p
+   removePlayerNameFromPlayerList(){
+    const {
+      players,
+      playerName,
+    } = this.state;
+    return players.filter((p) => {
+      return p !== playerName
+    })
   }
 
   listenForServerMessages(){
