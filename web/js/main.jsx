@@ -10,6 +10,7 @@ import Notifications, {notify} from 'react-notify-toast';
 import * as QueryString from 'query-string';
 
 var socket=""
+const TOAST_TIMEOUT = 2000;
 
 class Application extends React.Component {
   constructor(props){
@@ -219,8 +220,7 @@ return(<div className="player">{player}</div>)
     var message = {"msg":"write_supers","data":{"super":data}, "error":""}
     socket.send(JSON.stringify(message))
 
-    let superWrittenToastColor = { background: '#000000', text: "#FFFFFF" };
-    notify.show("Added! Keep writing...","success",200000,superWrittenToastColor)
+    notify.show("Added! Keep writing...","success",TOAST_TIMEOUT)
 
     this.listenForServerMessages()
   }
@@ -298,8 +298,7 @@ return(<div className="player">{player}</div>)
 
       // If a super is assigned to the user, console log
       if(response.msg=="assign_super"){
-        let superWrittenToastColor = { background: '#000000', text: "#FFFFFF" };
-        notify.show("Someone assigned you a phrase!","success",2000,superWrittenToastColor)
+        notify.show("Someone assigned you a phrase!","success",TOAST_TIMEOUT)
       }      
 
       if(response.msg=="waiting_on"){
