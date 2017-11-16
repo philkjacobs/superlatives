@@ -47,18 +47,18 @@ export class WaitingRoom extends React.Component {
       <div>
 
       <div>
-        <div className="description">Share this game code with your friends:</div>
-        <div className="player">{this.props.gameId}</div>
+        <div className="description">You're in.<br /><br />Invite friends to the game by copying the game link<br/></div>
         <CopyToClipboard text={window.location.href+"?game="+this.props.gameId} onCopy={() => this.setState({copied: true})}>
-          {this.state.copied ? <button className="btn btn-primary">Copied!</button> : <button className="btn btn-primary">Copy</button>}
+          {this.state.copied ? <button className="btn btn-primary">Copied!</button> : <button className="btn btn-primary">Copy game link</button>}
         </CopyToClipboard>
         <div className="description">Waiting Room</div>
-
+        <div className="player-list">
           {this.props.players.map(function(player){
               return (
                 <Player name={player} />
               );
           }.bind(this))}
+          </div>
           {this.props.isHost ? <button className="action-button" onClick={this.startGameButtonPressed}>
             Start Game
           </button> : null}

@@ -10,6 +10,7 @@ import Notifications, {notify} from 'react-notify-toast';
 import * as QueryString from 'query-string';
 
 var socket=""
+const TOAST_TIMEOUT = 2000;
 
 class Application extends React.Component {
   constructor(props){
@@ -174,10 +175,10 @@ return(<div className="player">{player}</div>)
 
     switch(type){
       case 'host':
-        socket = new WebSocket(`ws://172.21.5.204:5000/ws?name=${this.state.playerName}`);
+        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`);
         break;
       case 'join':
-        socket = new WebSocket(`ws://172.21.5.204:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
+        socket = new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`);
         break;
       default:
         console.log("Error: Incorrect type. Expected host or join.")
@@ -218,6 +219,8 @@ return(<div className="player">{player}</div>)
     // Write super to server
     var message = {"msg":"write_supers","data":{"super":data}, "error":""}
     socket.send(JSON.stringify(message))
+
+    notify.show("Added! Keep writing...","success",TOAST_TIMEOUT)
 
     this.listenForServerMessages()
   }
@@ -286,8 +289,17 @@ return(<div className="player">{player}</div>)
           gameState: "read",
           supers:response.data.supers
         })
+        socket.close()
+        socket.onclose = function(event){
+          console.log("Socket closed!");
+        };
         console.log("Supers to be read are "+this.state.supers)
       }
+
+      // If a super is assigned to the user, console log
+      if(response.msg=="assign_super"){
+        notify.show("Someone assigned you a phrase!","success",TOAST_TIMEOUT)
+      }      
 
       if(response.msg=="waiting_on"){
         this.setState({

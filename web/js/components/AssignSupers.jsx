@@ -69,8 +69,6 @@ export default class AssignSupers extends React.Component {
     }
 
     if(this.props.supers.length==0){
-      console.log("EMPTY!")
-      // this.props.changeStatus("read", "You've assigned all supers! Waiting for your friends to finish...") 
       this.props.changeGameState("read") 
     }
 
