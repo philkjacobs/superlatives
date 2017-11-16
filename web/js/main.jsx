@@ -220,7 +220,7 @@ return(<div className="player">{player}</div>)
     socket.send(JSON.stringify(message))
 
     let superWrittenToastColor = { background: '#000000', text: "#FFFFFF" };
-    notify.show("Added! Keep writing...","success",2000,superWrittenToastColor)
+    notify.show("Added! Keep writing...","success",200000,superWrittenToastColor)
 
     this.listenForServerMessages()
   }

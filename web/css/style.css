@@ -3,7 +3,7 @@ body{
 }
 
 .container {
-	font-family: 'Barlow', sans-serif;
+	font-family: 'Phosphate-solid';
 	margin: 0 auto;
 	text-align: center;
 	height: 100vh;
@@ -11,9 +11,10 @@ body{
 	padding: 0px;
 }
 
-/*.toast-notification{
-	font-family: 'Barlow';
-}*/
+.toast-notification{
+	font-family: 'Open Sans';
+	width:100% !important;
+}
 
 .vt-center {
   padding-top: 35vh;
@@ -31,7 +32,7 @@ body{
 
 .action-button{
 	display: block;
-	position: fixed;
+	position: absolute;
 	bottom: 0px;
 	left:0px;
 	background-color: #0DC839;
@@ -40,7 +41,7 @@ body{
 	color: white;
 	font-size: 5vh;
 	border-radius: 0px;
-	border: 0px;
+	border: 0px;//
 }
 
 .menu-button{
@@ -52,14 +53,6 @@ body{
 .player{
 	color:#FFA010;
 	font-size:11vw;
-}
-
-.player-list{
-	position: absolute;
-	display: block;
-	width: 100%;
-	overflow-y: auto;
-	padding-bottom: 15vh;
 }
 
 .description{
