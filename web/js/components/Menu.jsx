@@ -5,7 +5,7 @@ import Notifications, {notify} from 'react-notify-toast';
 
 export function Player(props){
   return(
-    <div className="player">
+    <div className="player" id="waitingroom">
       {props.name}
     </div>
   )
@@ -14,16 +14,16 @@ export function Player(props){
 export class MenuScreen extends React.Component{
   render(){
     return(
-      <div className="container">       
+      <div className="container vt-center">       
 
           <button
             onClick={this.props.hostGameButtonPressed}
-            className="btn btn-primary menu-button">Host Game
+            className="player" id="menu">Host Game
           </button>
 
           <button
             onClick={this.props.joinGameButtonPressed}
-            className="btn btn-primary menu-button">Join Game
+            className="player" id="menu">Join Game
           </button>
           
       </div>
@@ -47,11 +47,11 @@ export class WaitingRoom extends React.Component {
     return(
       <div>
         <div>
-          <div className="description">You're in.<br /><br />Invite friends to the game by copying the game link<br/></div>
+          <h1>You're in!</h1><div className="description">Invite friends to the game by copying the game link<br/></div>
           <CopyToClipboard text={window.location.href+"?game="+this.props.gameId} onCopy={this.onCopy}>
-            <button className="btn btn-primary">Copy game link</button>
+            <button className="player">Copy game link</button>
           </CopyToClipboard>
-          <div className="description">Waiting Room</div>
+          <h1>Waiting Room</h1>
           <div className="player-list">
             {this.props.players.map(function(player){
                 return (

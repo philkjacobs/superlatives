@@ -1,9 +1,15 @@
 body{
-	background-color: #615D5D;
+	background-color: #2F3A3A;
+	font-family: Barlow-Medium;
+}
+
+h1{
+	font-family: Barlow-Bold;
+	margin-top: 40px;
+	font-size: 40px;
 }
 
 .container {
-	font-family: 'Phosphate-solid';
 	margin: 0 auto;
 	text-align: center;
 	height: 100vh;
@@ -12,7 +18,6 @@ body{
 }
 
 .toast-notification{
-	font-family: 'Open Sans';
 	width:100% !important;
 }
 
@@ -35,29 +40,48 @@ body{
 	position: absolute;
 	bottom: 0px;
 	left:0px;
-	background-color: #0DC839;
-	width:100%;
+	width: 100%;
 	height: 15vh;
-	color: white;
-	font-size: 5vh;
+	background-color: #FFFFFF;
+	color: #2F3A3A;
+	font-size: 2.5em;
 	border-radius: 0px;
 	border: 0px;//
 }
 
-.menu-button{
-	height:50vh;
-	width: 100%;
-	font-size:10vw;
+#menu.player{
+	margin-bottom: 10px;
+	font-size: 1.8em;
 }
 
 .player{
-	color:#FFA010;
-	font-size:11vw;
+	display: block;
+	position: relative;
+	bottom: 0px;
+	left:0px;
+	background-color: #FFFFFF;
+	color: #2F3A3A;
+	margin: 0 auto;
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	font-size: 1.3em;
+	border-radius: 60px;
+	border: 0px;//
+}
+
+#waitingroom.player{
+	background-color:#2F3A3A;
+	color:white;
+	font-size: 30px;
 }
 
 .description{
 	margin-top:3vh;
-	font-size: 7vw;
+	margin-bottom: 10px;
+	font-size: 30px;
 	padding-left:40px;
 	padding-right:40px;
 }
+

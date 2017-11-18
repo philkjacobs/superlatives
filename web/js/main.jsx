@@ -53,13 +53,12 @@ return(<div className="player">{player}</div>)
 }.bind(this))}</div> : null}
 
         <div style={style} className="vt-center input-group-lg">
-          <h2>Enter name to begin</h2>
             <form onSubmit={this.onNameSubmit}>
                 <label style={{display:'block'}}>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="e.g. Mathew"
+                    placeholder="Enter name"
                     value={this.state.playerName}
                     onChange={this.handleNameChange}/>
                 </label>
@@ -67,7 +66,7 @@ return(<div className="player">{player}</div>)
 
           <button
             onClick={this.continueButtonPressed}
-            className="action-button">Continue
+            className="player">Continue
           </button>
 
         </div>
