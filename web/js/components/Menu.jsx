@@ -35,35 +35,34 @@ export class WaitingRoom extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {
-      startGame: false,
-      copied:false
-    }
     this.startGameButtonPressed = this.startGameButtonPressed.bind(this)
+    this.onCopy = this.onCopy.bind(this)
+  }
+
+  onCopy(){
+    notify.show("Copied to clipboard!","success",this.props.TOAST_TIMEOUT)
   }
 
   render(){
     return(
       <div>
-
-      <div>
-        <div className="description">You're in.<br /><br />Invite friends to the game by copying the game link<br/></div>
-        <CopyToClipboard text={window.location.href+"?game="+this.props.gameId} onCopy={() => this.setState({copied: true})}>
-          {this.state.copied ? <button className="btn btn-primary">Copied!</button> : <button className="btn btn-primary">Copy game link</button>}
-        </CopyToClipboard>
-        <div className="description">Waiting Room</div>
-        <div className="player-list">
-          {this.props.players.map(function(player){
-              return (
-                <Player name={player} />
-              );
-          }.bind(this))}
+        <div>
+          <div className="description">You're in.<br /><br />Invite friends to the game by copying the game link<br/></div>
+          <CopyToClipboard text={window.location.href+"?game="+this.props.gameId} onCopy={this.onCopy}>
+            <button className="btn btn-primary">Copy game link</button>
+          </CopyToClipboard>
+          <div className="description">Waiting Room</div>
+          <div className="player-list">
+            {this.props.players.map(function(player){
+                return (
+                  <Player name={player} />
+                );
+            }.bind(this))}
+            </div>
+            {this.props.isHost ? <button className="action-button" onClick={this.startGameButtonPressed}>
+              Start Game
+            </button> : null}
           </div>
-          {this.props.isHost ? <button className="action-button" onClick={this.startGameButtonPressed}>
-            Start Game
-          </button> : null}
-        </div>
-
       </div>
     )
   }
