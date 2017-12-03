@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import * as ReactDOM from 'react-dom';
+import * as QueryString from 'query-string';
 import Notifications, {notify} from 'react-notify-toast';
 import ReactModal from 'react-modal';
 import {MODAL_STYLE} from './ModalStyle.jsx';
@@ -80,11 +80,12 @@ export class WaitingRoom extends React.Component {
     this.toggleModal = this.toggleModal.bind(this)
   }
 
+
+
   render(){
     return(
       <div>
         <div>
-
           {this.state.showModal ? <ShareGameModal gameId={this.props.gameId}
                                                   isOpen={this.state.showModal}
                                                   toggleModal={function(){this.toggleModal()}.bind(this)}/> : null}
@@ -106,6 +107,7 @@ export class WaitingRoom extends React.Component {
                 Start Game
                 </button>
               </div> : null}
+
           </div>
       </div>
     )
