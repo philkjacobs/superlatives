@@ -12,6 +12,7 @@ import * as QueryString from 'query-string';
 
 
 const TOAST_TIMEOUT = 1500;
+const REFRESH_TIMER = 20000;
 
 
 class Application extends React.Component {
@@ -43,6 +44,7 @@ class Application extends React.Component {
     this.listenForServerMessages = this.listenForServerMessages.bind(this);
 
   }
+
   render() {
     if(this.state.gameState!="name") var style = {display:'none'}
 
@@ -112,6 +114,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
       
       </div>
     )
+  }
+
+  componentDidMount(){
+    setInterval(this.ping, REFRESH_TIMER);
   }
 
   handleNameChange(e){
@@ -212,6 +218,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
       this.state.socket.send(JSON.stringify(message))
       this.listenForServerMessages()
     }
+  }
+
+  ping(){
+    this.state.socket.send(JSON.stringify("msg":"ping","data":null,"error":null))
   }
 
   writeSuper(data){
