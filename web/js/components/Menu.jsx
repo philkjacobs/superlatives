@@ -15,9 +15,9 @@ export function Player(props){
 
 export class ShareGameModal extends React.Component{
     constructor(props){
-    super(props);
-    this.onCopy = this.onCopy.bind(this)
-  }
+      super(props);
+      this.onCopy = this.onCopy.bind(this)
+    }
   render(){
     return(
     <ReactModal isOpen={this.props.isOpen} style={MODAL_STYLE}>
