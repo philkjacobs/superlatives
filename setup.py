@@ -44,8 +44,9 @@ def main():
     ioloop = IOLoop.instance()
     app = GlobalApplication()
     http_server = HTTPServer(app)
-    http_server.listen(5000)
-    logging.debug('Server is running on port 5000')
+    port = int(os.environ.get("PORT", 5000))
+    http_server.listen(port)
+    logging.debug('Server is running on port {port}'.format(port=port))
     ioloop.start()
 
 if __name__ == "__main__":
