@@ -20,6 +20,6 @@ export const MODAL_STYLE = {
     borderRadius               : '4px',
     outline                    : 'none',
     padding                    : '20px',
-    color                      : 'white'
+    color                      : 'white',
   }
 };

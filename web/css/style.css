@@ -100,12 +100,24 @@ h1{
 	padding-right:40px;
 }
 
-.ReactModal__Content--after-open{
-	font-family: Barlow;
-	left: 10px;
-	right: 10px;
-	/*top: 30vh !important;
-	height: 30vh !important;*/
+/*Small screens*/
+@media only screen and (max-width: 768px){
+	.ReactModal__Content--after-open{
+		font-family: Barlow;
+		left: 10px;
+		right: 10px;
+		/*top: 30vh !important;
+		height: 30vh !important;*/
+	}
+}
+
+/*Desktop full width*/
+@media only screen and (min-width: 768px) {
+	.ReactModal__Content--after-open{
+		font-family: Barlow;
+		width: 30em;
+		margin: 0 auto;
+	}
 }
 
 .modal-custom-header{
