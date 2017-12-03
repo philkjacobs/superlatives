@@ -32,7 +32,7 @@ export class ShareGameModal extends React.Component{
             <li>
               Sharing a direct game link (faster) 
               Your friends can join by tapping the link
-              <CopyToClipboard text={window.location.href+"?game="+this.props.gameId} onCopy={this.onCopy}>
+              <CopyToClipboard text={window.location.origin+"?game="+this.props.gameId} onCopy={this.onCopy}>
                 <button className="custom-button">Copy game link</button>
               </CopyToClipboard>
             </li>
