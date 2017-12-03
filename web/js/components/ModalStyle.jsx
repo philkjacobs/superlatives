@@ -37,8 +37,8 @@ export const MOVE_TO_ASSIGN_MODAL_STYLE = {
   content : {
     position                   : 'absolute',
     top                        : '24vh',
-    left                       : '0px',
-    right                      : '0px',
+    left                       : '10px',
+    right                      : '10px',
     height                     : '16em',
     bottom                     : '40px',
     border                     : '1px solid #ccc',

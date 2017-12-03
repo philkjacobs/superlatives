@@ -111,7 +111,7 @@ export default class WriteSupers extends React.Component {
             <h2>Move everyone to the next stage?</h2>
               <div>
                 <br />
-                <button className="btn btn-primary btn-lg btn-block" onClick={this.moveToAssign}>Yes, continue to next stage.</button>
+                <button className="btn btn-primary btn-lg btn-block" onClick={this.moveToAssign}>Yes, continue to next stage</button>
                 <button className="btn btn-danger btn-lg btn-block" onClick={this.closeModal}>No, stay in current stage</button>
               </div>
           </ReactModal></div> : null}
