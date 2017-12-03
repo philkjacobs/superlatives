@@ -14,15 +14,19 @@ export function Player(props){
 }
 
 export class ShareGameModal extends React.Component{
-    constructor(props){
-      super(props);
-      this.onCopy = this.onCopy.bind(this)
-    }
+  constructor(props){
+    super(props);
+    this.onCopy = this.onCopy.bind(this)
+  }
+
   render(){
     return(
-    <ReactModal isOpen={this.props.isOpen} style={MODAL_STYLE}>
+    <ReactModal isOpen={this.props.isOpen}
+                style={MODAL_STYLE}
+                shouldCloseOnOverlayClick={true}
+                onRequestClose={this.props.toggleModal.bind(this)}>
       <div className="modal-custom-header">
-        <h1>You're in!</h1><div className="description">Invite friends to this game by:</div>
+        <div className="description">Invite friends to this game by:</div>
           <ol>
             <li>
               Sharing a direct game link (faster)
@@ -40,7 +44,7 @@ export class ShareGameModal extends React.Component{
         <div className="subtitle hide-modal"><button onClick={this.props.toggleModal.bind(this)}>Tap to hide</button></div>            
       </div>
     </ReactModal>
-  )
+    )
   }
 
   onCopy(){
@@ -79,7 +83,9 @@ export class WaitingRoom extends React.Component {
     this.toggleModal = this.toggleModal.bind(this)
   }
 
-
+  componentDidMount(){
+    notify.show("You're in!", "success", this.props.TOAST_TIMEOUT*2)
+  }
 
   render(){
     return(

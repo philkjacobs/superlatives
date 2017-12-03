@@ -9,7 +9,7 @@ export const MODAL_STYLE = {
   },
   content : {
     position                   : 'absolute',
-    top                        : '40px',
+    top                        : '17vh',
     left                       : '10px',
     right                      : '10px',
     bottom                     : '40px',
@@ -19,8 +19,9 @@ export const MODAL_STYLE = {
     WebkitOverflowScrolling    : 'touch',
     borderRadius               : '4px',
     outline                    : 'none',
-    padding                    : '0px',
+    padding                    : '7px',
     color                      : 'white',
+    height                     : '26em'
   }
 };
 

@@ -103,7 +103,11 @@ export default class WriteSupers extends React.Component {
           </form>
           
           
-          {this.state.showSubmitModal ? <div className="moveToAssign"><ReactModal isOpen={true} onRequestClose={this.closeModal} style={MOVE_TO_ASSIGN_MODAL_STYLE}>
+          {this.state.showSubmitModal ? <div className="moveToAssign">
+          <ReactModal isOpen={true}
+                      onRequestClose={this.closeModal}
+                      style={MOVE_TO_ASSIGN_MODAL_STYLE}
+                      shouldCloseOnOverlayClick={true}>
             <h2>Move everyone to the next stage?</h2>
               <div>
                 <br />

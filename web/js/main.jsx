@@ -80,7 +80,9 @@ return(<div className="custom-button waitingroom">{player}</div>)
           hostGameButtonPressed={this.hostGameButtonPressed}
           joinGameButtonPressed={this.joinGameButtonPressed}/> : null}
 
-        {this.state.showJoinScreen ? <div><ReactModal isOpen={true} style={MODAL_STYLE}><Menu.JoinGame
+        {this.state.showJoinScreen ? <div><ReactModal isOpen={true}
+                                                      style={MODAL_STYLE}
+                                                      shouldCloseOnOverlayClick={true}><Menu.JoinGame
           gameId={this.state.gameId}
           onChange={function(e){this.handleIdChange(e)}.bind(this)}
           onSubmit={function(data){this.login('join')}.bind(this)}/>
