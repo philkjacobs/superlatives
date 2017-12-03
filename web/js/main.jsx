@@ -176,23 +176,15 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
   login(type){
 
-    switch(type){
-      case 'host':
-        this.setState({
-          socket: new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`)
-        })
-        break;
-      case 'join':
-        this.setState({
-          socket: new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`)
-        })
-        break;
-      default:
-        console.log("Error: Incorrect type. Expected host or join.")
-    }
+    const socket = type==='host' ? `wss://${location.host}/ws?name=${this.state.playerName}` : `wss://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}`
 
-    // Handle messages sent by the server.
-    this.listenForServerMessages()
+    const webSocket = new WebSocket(socket)
+
+    this.setState({
+      socket: webSocket
+    }, () => {
+      this.listenForServerMessages();
+    })
   }
 
   changeGameState(state){
