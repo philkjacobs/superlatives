@@ -49,11 +49,11 @@ h1{
 	transform: translateX(-50%);
 }
 
-#second-button.action-button{
+.second-button{
 	bottom:80px;
 }
 
-#menu.custom-button{
+.menu{
 	margin-bottom: 10px;
 	font-size: 1.8em;
 }
@@ -79,11 +79,11 @@ h1{
 	margin-bottom: 15vh;
 }
 
-#player.custom-button{
+.player{
 	margin-bottom: 15px;
 }
 
-#waitingroom.custom-button{
+.waitingroom{
 	background-color:#2F3A3A;
 	color:white;
 	font-size: 30px;

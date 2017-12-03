@@ -7,7 +7,7 @@ import {MODAL_STYLE} from './ModalStyle.jsx';
 
 export function Player(props){
   return(
-    <div className="custom-button" id="waitingroom">
+    <div className="custom-button waitingroom">
       {props.name}
     </div>
   )
@@ -56,12 +56,12 @@ export class MenuScreen extends React.Component{
 
           <button
             onClick={this.props.hostGameButtonPressed}
-            className="custom-button" id="menu">Host Game
+            className="custom-button menu">Host Game
           </button>
 
           <button
             onClick={this.props.joinGameButtonPressed}
-            className="custom-button" id="menu">Join Game
+            className="custom-button menu">Join Game
           </button>
           
       </div>
@@ -99,7 +99,7 @@ export class WaitingRoom extends React.Component {
             </div>
             {this.props.isHost ? 
               <div>
-                <button className="action-button" id="second-button" onClick={this.toggleModal}>
+                <button className="action-button second-button" onClick={this.toggleModal}>
                 Share Game
                 </button>
                 <button className="action-button" onClick={this.startGameButtonPressed}>

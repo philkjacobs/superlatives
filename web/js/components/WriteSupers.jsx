@@ -93,8 +93,8 @@ export default class WriteSupers extends React.Component {
                     /> : <div><input  type="submit"
                     placeholder="Write super..."
                     value="Add Super"
-                    className="btn-lg btn-outline-secondary action-button"
-                    id="second-button"/>
+                    className="btn-lg btn-outline-secondary action-button second-button"
+                    />
 
                     {this.props.isHost ? <div><form onSubmit={this.showSubmitModal}>
                     <label>
