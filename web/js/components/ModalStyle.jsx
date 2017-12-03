@@ -19,7 +19,7 @@ export const MODAL_STYLE = {
     WebkitOverflowScrolling    : 'touch',
     borderRadius               : '4px',
     outline                    : 'none',
-    padding                    : '20px',
+    padding                    : '0px',
     color                      : 'white',
   }
 };
