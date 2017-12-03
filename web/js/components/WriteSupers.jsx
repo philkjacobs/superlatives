@@ -6,13 +6,12 @@ import AssignSupers from './AssignSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 import Timer from './Timer.jsx';
 
-var now;
-
 export default class WriteSupers extends React.Component {
 
   constructor(props){
     super(props)
     this.state = {
+      now:Date.now(),
       super: "",
       showSubmitModal:false,
       didTimerRunOut:false
@@ -24,10 +23,6 @@ export default class WriteSupers extends React.Component {
     this.showSubmitModal = this.showSubmitModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
     this.stopTimer = this.stopTimer.bind(this)
-  }
-
-  componentDidMount(){
-    now = Date.now();
   }
 
   handleChange(e){
@@ -77,7 +72,7 @@ export default class WriteSupers extends React.Component {
 
     return(
       <div>
-        <Timer now={now} didTimerRunOut={function(){this.stopTimer()}.bind(this)} />
+        <Timer now={this.state.now} didTimerRunOut={function(){this.stopTimer()}.bind(this)} />
         <form onSubmit={this.onSubmit} className="input-group-lg vt-center">
 
             <label style={{display:'block'}}>
