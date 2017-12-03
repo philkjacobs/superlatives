@@ -9,7 +9,7 @@ function Player(props){
   return(
     <div>
       <button   onClick={function(player){props.buttonClicked(props.name);}}
-                className="player">
+                className="custom-button player">
       {props.name}
       </button>
     </div>

@@ -33,15 +33,16 @@ export default class ReadSupers extends React.Component {
               <Loader statusText="That's it!" />
               <button   onClick={this.newGameButtonPressed}
                         className="btn-lg action-button">
-                Back to menu
+                Go to menu
               </button>
             </div> : 
             <div>
-              <div className="description">Here are the superlatives that were assigned to you:</div>
+              <div className="description">Here's what your friends assigned you</div>
               <Superlative name={this.props.supers[0]} className="vt-center player"/>
+              <div className="subtitle">Wait for everyone to read one before going to the next.</div>
               <button   onClick={this.nextButtonClicked} 
                         className="btn-lg action-button">
-                        Next superlative
+                        Next
               </button>
             </div>}
           </div>

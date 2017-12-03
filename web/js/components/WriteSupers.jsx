@@ -6,15 +6,15 @@ import AssignSupers from './AssignSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 import Timer from './Timer.jsx';
 
-var now = Date.now()
-
 export default class WriteSupers extends React.Component {
 
   constructor(props){
     super(props)
     this.state = {
+      now:Date.now(),
       super: "",
-      showSubmitModal:false
+      showSubmitModal:false,
+      didTimerRunOut:false
     };
 
     this.handleChange = this.handleChange.bind(this)
@@ -22,6 +22,7 @@ export default class WriteSupers extends React.Component {
     this.moveToAssign = this.moveToAssign.bind(this)
     this.showSubmitModal = this.showSubmitModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
+    this.stopTimer = this.stopTimer.bind(this)
   }
 
   handleChange(e){
@@ -32,8 +33,15 @@ export default class WriteSupers extends React.Component {
 
   onSubmit(e){
     e.preventDefault();
-    this.setState({super:""})
-    this.props.submitSuper(this.state.super)
+
+    if(this.state.didTimerRunOut==true){
+      // Timer run out. Move to next stage.
+      this.showSubmitModal(e);
+    } else {
+      // Timer still running. Submit super to server.
+      this.setState({super:""})
+      this.props.submitSuper(this.state.super)
+    }
   }
 
   moveToAssign(e){
@@ -54,9 +62,17 @@ export default class WriteSupers extends React.Component {
     })
   }
 
+  stopTimer(){
+    this.setState({
+      didTimerRunOut: true
+    })
+  }
+
   render(){
+
     return(
       <div>
+        <Timer now={this.state.now} didTimerRunOut={function(){this.stopTimer()}.bind(this)} />
         <form onSubmit={this.onSubmit} className="input-group-lg vt-center">
 
             <label style={{display:'block'}}>
@@ -65,18 +81,26 @@ export default class WriteSupers extends React.Component {
                       onChange={this.handleChange}
                       className="form-control"/>
             </label>
-            <input  type="submit"
+            {this.state.didTimerRunOut ? <input  type="submit"
+                    placeholder="Continue"
+                    value="Continue"
+                    className="btn-lg btn-outline-secondary action-button bottom-button"
+                    /> : <div><input  type="submit"
                     placeholder="Write super..."
                     value="Add Super"
-                    className="btn-lg btn-outline-secondary action-button"/>
+                    className="btn-lg btn-outline-secondary action-button top-button"
+                    />
+
+                    {this.props.isHost ? <div><form onSubmit={this.showSubmitModal}>
+                    <label>
+                      <input  type="submit"
+                              value="Stop timer and continue"
+                              className="btn btn-warning action-button bottom-button"/>
+                    </label>
+                    </form></div> : null}</div>
+                  }    
           </form>
-          {this.props.isHost ? <div><form onSubmit={this.showSubmitModal}>
-            <label>
-              <input  type="submit"
-                      value="Continue to next stage"
-                      className="btn btn-warning"/>
-            </label>
-          </form></div> : null}
+          
           
           {this.state.showSubmitModal ? <div><ReactModal isOpen={true} onRequestClose={this.closeModal}>
             <h2>Continuing to the next stage will automatically move everyone to the next round.</h2>
