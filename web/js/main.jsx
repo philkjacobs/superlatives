@@ -264,6 +264,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
           this.setState({
             gameState:"wait"
           })
+        } else {
+          this.setState({
+            gameState:state
+          })
         }
       }
 
