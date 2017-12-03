@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import ReactModal from 'react-modal';
+import {MODAL_STYLE} from './components/ModalStyle.jsx';
 import Loader from './components/Loader.jsx';
 import * as Menu from './components/Menu.jsx';
 import WriteSupers from './components/WriteSupers.jsx';
@@ -10,7 +11,7 @@ import Notifications, {notify} from 'react-notify-toast';
 import * as QueryString from 'query-string';
 
 var socket=""
-const TOAST_TIMEOUT = 2000;
+const TOAST_TIMEOUT = 1500;
 
 class Application extends React.Component {
   constructor(props){
@@ -48,8 +49,8 @@ class Application extends React.Component {
       <div>
         <Notifications />
 
-        {this.state.gameState=="wait" ? <div><div className="description">Waiting on</div>{this.state.waitingOnPlayers.map(function(player){
-return(<div className="player">{player}</div>)
+        {this.state.gameState=="wait" ? <div><h1>Waiting on</h1>{this.state.waitingOnPlayers.map(function(player){
+return(<div className="custom-button" id="waitingroom">{player}</div>)
 }.bind(this))}</div> : null}
 
         <div style={style} className="vt-center input-group-lg">
@@ -66,7 +67,7 @@ return(<div className="player">{player}</div>)
 
           <button
             onClick={this.continueButtonPressed}
-            className="player">Continue
+            className="custom-button">Continue
           </button>
 
         </div>
@@ -75,10 +76,11 @@ return(<div className="player">{player}</div>)
           hostGameButtonPressed={this.hostGameButtonPressed}
           joinGameButtonPressed={this.joinGameButtonPressed}/> : null}
 
-        {this.state.showJoinScreen ? <div><ReactModal isOpen={true}><Menu.JoinGame
+        {this.state.showJoinScreen ? <div><ReactModal isOpen={true} style={MODAL_STYLE}><Menu.JoinGame
           gameId={this.state.gameId}
           onChange={function(e){this.handleIdChange(e)}.bind(this)}
-          onSubmit={function(data){this.login('join')}.bind(this)}/></ReactModal></div> : null}
+          onSubmit={function(data){this.login('join')}.bind(this)}/>
+                      </ReactModal></div> : null}
 
         {this.state.gameState=="room" ? <Menu.WaitingRoom
           players={this.state.players}

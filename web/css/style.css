@@ -31,30 +31,34 @@ h1{
 }
 
 .custom-modal{
-	background-color: #000000
+	background: #2F3A3A;
 	color: #FFFFFF;
 }
 
 .action-button{
 	display: block;
-	position: absolute;
-	bottom: 0px;
-	left:0px;
-	width: 100%;
-	height: 15vh;
+	position: fixed;
+	bottom: 25px;
+	left:50%;
 	background-color: #FFFFFF;
 	color: #2F3A3A;
-	font-size: 2.5em;
-	border-radius: 0px;
-	border: 0px;//
+	font-size: 1.4em;
+	border-radius: 60px;
+	border: 0px;
+	padding: 0.3em 1.5em;
+	transform: translateX(-50%);
 }
 
-#menu.player{
+#second-button.action-button{
+	bottom:80px;
+}
+
+#menu.custom-button{
 	margin-bottom: 10px;
 	font-size: 1.8em;
 }
 
-.player{
+.custom-button{
 	display: block;
 	position: relative;
 	bottom: 0px;
@@ -71,7 +75,15 @@ h1{
 	border: 0px;//
 }
 
-#waitingroom.player{
+.player-list{
+	margin-bottom: 15vh;
+}
+
+#player.custom-button{
+	margin-bottom: 15px;
+}
+
+#waitingroom.custom-button{
 	background-color:#2F3A3A;
 	color:white;
 	font-size: 30px;
@@ -80,8 +92,46 @@ h1{
 .description{
 	margin-top:3vh;
 	margin-bottom: 10px;
-	font-size: 30px;
+	font-size: 1.5em;
 	padding-left:40px;
 	padding-right:40px;
 }
 
+.ReactModal__Content--after-open{
+	font-family: Barlow;
+	left: 10px;
+	right: 10px;
+	/*top: 30vh !important;
+	height: 30vh !important;*/
+}
+
+.modal-custom-header{
+	text-align: center;
+	margin-bottom: 10px;
+	font-size: 1.2em;
+}
+
+.subtitle{
+	display: block;
+	position: fixed;
+	width: 60%;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 5em;
+	font-size: 17px;
+	color: rgba(255,255,255,0.33);
+}
+
+ol{
+	text-align: left;
+	list-style: upper-alpha;
+}
+
+li{
+	margin-bottom: 20px;
+}
+
+.shareModalGameId{
+	font-size: 25px;
+	margin-top: 7px;
+}
