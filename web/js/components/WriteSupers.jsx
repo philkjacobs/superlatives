@@ -89,18 +89,18 @@ export default class WriteSupers extends React.Component {
             {this.state.didTimerRunOut ? <input  type="submit"
                     placeholder="Continue"
                     value="Continue"
-                    className="btn-lg btn-outline-secondary action-button"
+                    className="btn-lg btn-outline-secondary action-button bottom-button"
                     /> : <div><input  type="submit"
                     placeholder="Write super..."
                     value="Add Super"
-                    className="btn-lg btn-outline-secondary action-button second-button"
+                    className="btn-lg btn-outline-secondary action-button top-button"
                     />
 
                     {this.props.isHost ? <div><form onSubmit={this.showSubmitModal}>
                     <label>
                       <input  type="submit"
                               value="Stop timer and continue"
-                              className="btn btn-warning action-button"/>
+                              className="btn btn-warning action-button bottom-button"/>
                     </label>
                     </form></div> : null}</div>
                   }    

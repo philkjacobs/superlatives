@@ -99,10 +99,10 @@ export class WaitingRoom extends React.Component {
             </div>
             {this.props.isHost ? 
               <div>
-                <button className="action-button second-button" onClick={this.toggleModal}>
+                <button className="action-button top-button" onClick={this.toggleModal}>
                 Share Game
                 </button>
-                <button className="action-button" onClick={this.startGameButtonPressed}>
+                <button className="action-button bottom-button" onClick={this.startGameButtonPressed}>
                 Start Game
                 </button>
               </div> : null}

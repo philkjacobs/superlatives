@@ -38,7 +38,6 @@ h1{
 .action-button{
 	display: block;
 	position: fixed;
-	bottom: 25px;
 	left:50%;
 	background-color: #FFFFFF;
 	color: #2F3A3A;
@@ -49,8 +48,12 @@ h1{
 	transform: translateX(-50%);
 }
 
-.second-button{
+.top-button{
 	bottom:80px;
+}
+
+.bottom-button{
+	bottom:25px;
 }
 
 .menu{
