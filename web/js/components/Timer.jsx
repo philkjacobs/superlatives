@@ -5,7 +5,7 @@ var TimerExample = React.createClass({
     getInitialState: function(){
         return { 
           elapsed: 0,
-          timeLimit:5,
+          timeLimit:180,
           timerText:""
         };
     },
