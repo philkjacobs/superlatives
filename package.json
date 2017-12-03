@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npm run clean && webpack",
     "clean": "rm -rf web/static/*",
-    "test": "echo \"No tests for now\""
+    "test": "echo \"No tests for now\"",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,8 @@
     "react-dom": "15.6.1",
     "react-modal": "3.1.0",
     "react-notify-toast": "^0.3.2",
-    "style-loader": "^0.18.2"
+    "style-loader": "^0.18.2",
+    "webpack": "3.9.1"
   },
   "author": "Mathew Antony and Philip Jacobs",
   "license": "MIT",
