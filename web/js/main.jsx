@@ -42,6 +42,7 @@ class Application extends React.Component {
     this.changeGameState = this.changeGameState.bind(this);
     this.onNameSubmit = this.onNameSubmit.bind(this);
     this.listenForServerMessages = this.listenForServerMessages.bind(this);
+    this.ping = this.ping.bind(this);
 
   }
 
