@@ -119,12 +119,7 @@ export class WaitingRoom extends React.Component {
   }
 
   toggleModal(){
-    if(this.state.showModal){
-      this.setState({showModal:false})
-    } else {
-      this.setState({showModal:true})
-    }
-  }
+    this.setState({showModal:!this.state.showModal}
 }
 
 WaitingRoom.propTypes = {
