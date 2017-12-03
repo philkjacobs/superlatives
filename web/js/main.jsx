@@ -221,7 +221,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   ping(){
-    this.state.socket.send(JSON.stringify("msg":"ping","data":null,"error":null))
+    console.log("PING!")
+    this.state.socket.send(JSON.stringify({"msg":"ping","data":null,"error":null)})
   }
 
   writeSuper(data){
