@@ -179,12 +179,12 @@ return(<div className="custom-button waitingroom">{player}</div>)
     switch(type){
       case 'host':
         this.setState({
-          socket: new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}`)
+          socket: new WebSocket(`ws://${location.host}/ws?name=${this.state.playerName}`)
         })
         break;
       case 'join':
         this.setState({
-          socket: new WebSocket(`ws://localhost:5000/ws?name=${this.state.playerName}&game=${this.state.gameId}`)
+          socket: new WebSocket(`ws://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}`)
         })
         break;
       default:
