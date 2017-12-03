@@ -4,6 +4,7 @@ import ReactModal from 'react-modal';
 import Superlative from './Superlative.jsx'
 import AssignSupers from './AssignSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
+import {MOVE_TO_ASSIGN_MODAL_STYLE} from './ModalStyle.jsx';
 import Timer from './Timer.jsx';
 
 export default class WriteSupers extends React.Component {
@@ -102,12 +103,12 @@ export default class WriteSupers extends React.Component {
           </form>
           
           
-          {this.state.showSubmitModal ? <div><ReactModal isOpen={true} onRequestClose={this.closeModal}>
-            <h2>Continuing to the next stage will automatically move everyone to the next round.</h2>
+          {this.state.showSubmitModal ? <div className="moveToAssign"><ReactModal isOpen={true} onRequestClose={this.closeModal} style={MOVE_TO_ASSIGN_MODAL_STYLE}>
+            <h2>Move everyone to the next stage?</h2>
               <div>
                 <br />
-                <button className="btn btn-primary btn-lg btn-block" onClick={this.moveToAssign}>Continue to next stage</button>
-                <button className="btn btn-danger btn-lg btn-block" onClick={this.closeModal}>Stay in current stage</button>
+                <button className="btn btn-primary btn-lg btn-block" onClick={this.moveToAssign}>Yes, continue to next stage.</button>
+                <button className="btn btn-danger btn-lg btn-block" onClick={this.closeModal}>No, stay in current stage</button>
               </div>
           </ReactModal></div> : null}
       </div>
