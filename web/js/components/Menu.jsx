@@ -14,34 +14,37 @@ export function Player(props){
 }
 
 export class ShareGameModal extends React.Component{
-    constructor(props){
-      super(props);
-      this.onCopy = this.onCopy.bind(this)
-    }
+  constructor(props){
+    super(props);
+    this.onCopy = this.onCopy.bind(this)
+  }
+
   render(){
     return(
-    <ReactModal isOpen={this.props.isOpen} style={MODAL_STYLE}>
+    <ReactModal isOpen={this.props.isOpen}
+                style={MODAL_STYLE}
+                shouldCloseOnOverlayClick={true}
+                onRequestClose={this.props.toggleModal.bind(this)}>
       <div className="modal-custom-header">
-        <h1>You're in!</h1><div className="description">Invite friends to this game by:</div>
+        <div className="description">Invite friends to this game by:</div>
           <ol>
+            <li>
+              Sharing a direct game link (faster)
+              <CopyToClipboard text={window.location.origin+"?game="+this.props.gameId} onCopy={this.onCopy}>
+                <button className="custom-button modal">Copy game link</button>
+              </CopyToClipboard>
+            </li>
             <li>
               Sharing this game code
               <div className="shareModalGameId">A123-B456-C789-D321</div>
-              Your friends can join by going to superlatives.com > Join game
-            </li>
-            <li>
-              Sharing a direct game link (faster) 
-              Your friends can join by tapping the link
-              <CopyToClipboard text={window.location.origin+"?game="+this.props.gameId} onCopy={this.onCopy}>
-                <button className="custom-button">Copy game link</button>
-              </CopyToClipboard>
+              superlatives.com > Join game > Enter game code
             </li>
           </ol>
           
-        <div className="subtitle"><button onClick={this.props.toggleModal.bind(this)}>Tap to hide</button></div>            
+        <div className="subtitle hide-modal"><button onClick={this.props.toggleModal.bind(this)}>Tap to hide</button></div>            
       </div>
     </ReactModal>
-  )
+    )
   }
 
   onCopy(){
@@ -80,7 +83,9 @@ export class WaitingRoom extends React.Component {
     this.toggleModal = this.toggleModal.bind(this)
   }
 
-
+  componentDidMount(){
+    notify.show("You're in!", "success", this.props.TOAST_TIMEOUT*2)
+  }
 
   render(){
     return(

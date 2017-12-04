@@ -57,7 +57,7 @@ h1{
 	bottom:25px;
 }
 
-.menu{
+.menu.custom-button{
 	margin-bottom: 10px;
 	font-size: 1.8em;
 }
@@ -65,11 +65,11 @@ h1{
 .custom-button{
 	display: block;
 	position: relative;
+	margin: 0 auto;
 	bottom: 0px;
 	left:0px;
 	background-color: #FFFFFF;
 	color: #2F3A3A;
-	margin: 0 auto;
 	padding-left: 30px;
 	padding-right: 30px;
 	padding-bottom: 5px;
@@ -77,6 +77,10 @@ h1{
 	font-size: 1.3em;
 	border-radius: 60px;
 	border: 0px;//
+}
+
+.modal.custom-button{
+	margin: 0;
 }
 
 .player-list{
@@ -101,12 +105,24 @@ h1{
 	padding-right:40px;
 }
 
-.ReactModal__Content--after-open{
-	font-family: Barlow;
-	left: 10px;
-	right: 10px;
-	/*top: 30vh !important;
-	height: 30vh !important;*/
+/*Small screens*/
+@media only screen and (max-width: 768px){
+	.ReactModal__Content--after-open{
+		font-family: Barlow;
+		left: 10px;
+		right: 10px;
+		/*top: 30vh !important;
+		height: 30vh !important;*/
+	}
+}
+
+/*Desktop full width*/
+@media only screen and (min-width: 768px) {
+	.ReactModal__Content--after-open{
+		font-family: Barlow;
+		width: 30em;
+		margin: 0 auto;
+	}
 }
 
 .modal-custom-header{
@@ -115,7 +131,7 @@ h1{
 	font-size: 1.2em;
 }
 
-.subtitle{
+.subtitle.next-super{
 	display: block;
 	position: fixed;
 	width: 60%;
@@ -123,6 +139,13 @@ h1{
 	transform: translateX(-50%);
 	bottom: 5em;
 	font-size: 17px;
+	color: rgba(255,255,255,0.33);
+}
+
+.subtitle.hide-modal{
+	display: block;
+	position: relative;
+	bottom: 0.8em;
 	color: rgba(255,255,255,0.33);
 }
 
