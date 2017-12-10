@@ -148,8 +148,8 @@ h1{
 .subtitle.hide-modal{
 	display: block;
 	position: relative;
-	bottom: 0.8em;
-	color: rgba(255,255,255,0.33);
+	color: rgba(255,255,255,0.3);
+	margin: 0 auto;
 }
 
 ol{

@@ -36,12 +36,12 @@ export class ShareGameModal extends React.Component{
             </li>
             <li>
               Sharing this game code
-              <div className="shareModalGameId">A123-B456-C789-D321</div>
+              <div className="shareModalGameId">XXXX-XXXX-XXXX-XXXX</div>
               superlatives.com > Join game > Enter game code
             </li>
           </ol>
           
-        <div className="subtitle hide-modal"><button onClick={this.props.toggleModal.bind(this)}>Tap to hide</button></div>            
+        <button className="subtitle hide-modal" onClick={this.props.toggleModal.bind(this)}>Tap to hide</button>
       </div>
     </ReactModal>
     )
@@ -91,7 +91,7 @@ export class WaitingRoom extends React.Component {
     return(
       <div>
         <div>
-          {this.state.showModal ? <ShareGameModal gameId={this.props.gameId}
+          {this.props.isHost ? <ShareGameModal gameId={this.props.gameId}
                                                   isOpen={this.state.showModal}
                                                   toggleModal={function(){this.toggleModal()}.bind(this)}/> : null}
           
