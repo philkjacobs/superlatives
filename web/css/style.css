@@ -1,10 +1,12 @@
 body{
 	background-color: #2F3A3A;
-	font-family: Barlow-Medium;
+	font-family: Barlow;
+	font-weight: 500;
 }
 
 h1{
-	font-family: Barlow-Bold;
+	font-family: Barlow;
+	font-weight: 700;
 	margin-top: 40px;
 	font-size: 40px;
 }
@@ -109,6 +111,7 @@ h1{
 @media only screen and (max-width: 768px){
 	.ReactModal__Content--after-open{
 		font-family: Barlow;
+		font-weight: 500;
 		left: 10px;
 		right: 10px;
 		/*top: 30vh !important;
@@ -120,6 +123,7 @@ h1{
 @media only screen and (min-width: 768px) {
 	.ReactModal__Content--after-open{
 		font-family: Barlow;
+		font-weight: 500;
 		width: 30em;
 		margin: 0 auto;
 	}
