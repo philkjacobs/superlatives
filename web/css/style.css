@@ -48,6 +48,10 @@ h1{
 	transform: translateX(-50%);
 }
 
+.action-button.read-next-super{
+	bottom: 1em;
+}
+
 .top-button{
 	bottom:80px;
 }

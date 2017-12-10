@@ -41,7 +41,7 @@ export default class ReadSupers extends React.Component {
               <Superlative name={this.props.supers[0]} className="vt-center player"/>
               <div className="subtitle next-super">Wait for everyone to read one before going to the next.</div>
               <button   onClick={this.nextButtonClicked} 
-                        className="btn-lg action-button">
+                        className="btn-lg action-button read-next-super">
                         Next
               </button>
             </div>}
