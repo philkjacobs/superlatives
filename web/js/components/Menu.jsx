@@ -84,7 +84,7 @@ export class WaitingRoom extends React.Component {
   }
 
   componentDidMount(){
-    notify.show("You're in!", "success", this.props.TOAST_TIMEOUT*2)
+    notify.show("You're in!", "success", this.props.TOAST_TIMEOUT)
   }
 
   render(){
