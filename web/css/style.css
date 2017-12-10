@@ -54,6 +54,10 @@ h1{
 	bottom: 1em;
 }
 
+.action-button.waiting-room{
+	width: 8.5em;
+}
+
 .top-button{
 	bottom:80px;
 }
