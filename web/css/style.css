@@ -15,7 +15,6 @@ h1{
 	height: 100vh;
 	color: white;
 	padding: 0px;
-	width: 30em;
 }
 
 .toast-notification{
@@ -122,6 +121,10 @@ h1{
 		font-family: Barlow;
 		width: 30em;
 		margin: 0 auto;
+	}
+
+	.container {
+	width: 30em;
 	}
 }
 
