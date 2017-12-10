@@ -32,7 +32,7 @@ export default class ReadSupers extends React.Component {
             <div>
               <Loader statusText="That's it!" />
               <button   onClick={this.newGameButtonPressed}
-                        className="btn-lg action-button">
+                        className="btn-lg action-button fixed-width">
                 Go to menu
               </button>
             </div> : 
