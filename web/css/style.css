@@ -15,7 +15,6 @@ h1{
 	height: 100vh;
 	color: white;
 	padding: 0px;
-	width: 30em;
 }
 
 .toast-notification{
@@ -47,6 +46,10 @@ h1{
 	border: 0px;
 	padding: 0.3em 1.5em;
 	transform: translateX(-50%);
+}
+
+.action-button.read-next-super{
+	bottom: 1em;
 }
 
 .top-button{
@@ -123,6 +126,10 @@ h1{
 		width: 30em;
 		margin: 0 auto;
 	}
+
+	.container {
+	width: 30em;
+	}
 }
 
 .modal-custom-header{
@@ -145,8 +152,8 @@ h1{
 .subtitle.hide-modal{
 	display: block;
 	position: relative;
-	bottom: 0.8em;
-	color: rgba(255,255,255,0.33);
+	color: rgba(255,255,255,0.3);
+	margin: 0 auto;
 }
 
 ol{

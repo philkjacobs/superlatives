@@ -37,7 +37,7 @@ export default class WriteSupers extends React.Component {
 
     if(this.state.didTimerRunOut==true){
       // Timer run out. Move to next stage.
-      this.showSubmitModal(e);
+      this.moveToAssign(e);
     } else {
       // Timer still running. Submit super to server.
       this.setState({super:""})
