@@ -11,7 +11,7 @@ import Notifications, {notify} from 'react-notify-toast';
 import * as QueryString from 'query-string';
 
 
-const TOAST_TIMEOUT = 1500;
+export const TOAST_TIMEOUT = 1500;
 const REFRESH_TIMER = 20000;
 
 
@@ -185,7 +185,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
   login(type){
 
-    const socket = type==='host' ? `wss://${location.host}/ws?name=${this.state.playerName}` : `wss://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}`
+    const socket = type==='host' ? `ws://${location.host}/ws?name=${this.state.playerName}` : `ws://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}`
 
     const webSocket = new WebSocket(socket)
 

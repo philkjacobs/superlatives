@@ -6,6 +6,7 @@ import AssignSupers from './AssignSupers.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 import {MOVE_TO_ASSIGN_MODAL_STYLE} from './ModalStyle.jsx';
 import Timer from './Timer.jsx';
+import {TOAST_TIMEOUT} from '../main.jsx';
 
 export default class WriteSupers extends React.Component {
 
@@ -24,6 +25,10 @@ export default class WriteSupers extends React.Component {
     this.showSubmitModal = this.showSubmitModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
     this.stopTimer = this.stopTimer.bind(this)
+  }
+
+  componentDidMount(){
+    notify.show("The game has started!","success",TOAST_TIMEOUT*50)
   }
 
   handleChange(e){
