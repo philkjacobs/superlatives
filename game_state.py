@@ -37,12 +37,10 @@ class GameHandler(WebSocketHandler):
     def open(self):
         try:
             self.name = self.get_argument(name='name')
+            if not self.name.strip():
+                raise MissingArgumentError(arg_name='name')
         except MissingArgumentError:
-            self.write_message(json.dumps({
-                'msg': None,
-                'data': None,
-                'error': 'Please tell us your name.'
-            }))
+            send_message(self, error='Please tell us your name.')
         else:
             game_id = self.get_argument(name='game', default=None)
 
@@ -51,10 +49,15 @@ class GameHandler(WebSocketHandler):
                 _game_map[game_id] = set()
                 self.is_host = True
             try:
+                current_names = {player.name for player in _game_map[game_id]}
+                if self.name in current_names:
+                    raise ValueError('That name is already taken.')
                 _game_map[game_id].add(self)
                 self.game_id = game_id
             except KeyError:
                 send_message(self, error='Game {} not found.'.format(game_id))
+            except ValueError as e:
+                send_message(self, error=str(e))
             else:
                 broadcast_message(self, message='login', data={
                     'game':self.game_id,
