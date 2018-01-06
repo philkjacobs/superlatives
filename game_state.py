@@ -2,9 +2,9 @@ import itertools
 import json
 import logging
 import random
-from enum import Enum
-from uuid import uuid4
+import string
 
+from enum import Enum
 from tornado.gen import coroutine
 from tornado.web import MissingArgumentError
 from tornado.websocket import WebSocketHandler
@@ -47,7 +47,14 @@ class GameHandler(WebSocketHandler):
             game_id = self.get_argument(name='game', default=None)
 
             if game_id is None:
-                game_id = unicode(uuid4())
+                # if enough games are active this can loop infinitely
+                # but 36^4 = 1.6million which means that is not a
+                # realistic scenario in any near-term timeframe
+                while game_id not in _game_map[game_id]:
+                    game_id = u''.join(
+                        random.choice(string.ascii_uppercase + string.digits)
+                        for _ in xrange(4)
+                    )
                 _game_map[game_id] = set()
                 self.is_host = True
             try:
