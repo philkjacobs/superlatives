@@ -137,25 +137,26 @@ WaitingRoom.propTypes = {
 export class JoinGame extends React.Component {
   constructor(props){
     super(props)
-
     this.onSubmit = this.onSubmit.bind(this)
   }
+
   render(){
     return(
           <div>
-          <div className="modal-custom-header">Enter game link</div>
+          <div className="description join">Enter game code</div>
             <form onSubmit={this.onSubmit}>
               <label style={{display:'block'}}>
                 <input  type="text"
                         value={this.props.gameId}
                         onChange={this.props.onChange}
-                        className="form-control"
+                        className="form-control joinModalGameId"
                         />
               </label>
               <input  type="submit"
-                      value="Join Game"
-                      className="btn-lg btn-outline-secondary" />
-              <button className="btn-lg btn-outline-danger" onClick={this.closeModal}>Cancel</button>
+                      value="Join"
+                      className="custom-button join" />
+              
+              <button className="custom-button join" onClick={this.props.closeModal.bind(this)}>Cancel</button>
             </form>
           </div>
       // Listen for server to tell us to start game

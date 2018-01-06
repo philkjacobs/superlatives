@@ -21,7 +21,7 @@ export const MODAL_STYLE = {
     outline                    : 'none',
     padding                    : '7px',
     color                      : 'white',
-    height                     : '26em'
+    // height                     : '26em'
   }
 };
 
