@@ -28,7 +28,7 @@ export default class WriteSupers extends React.Component {
   }
 
   componentDidMount(){
-    notify.show("The game has started!","success",TOAST_TIMEOUT*50)
+    notify.show("The game has started!","success",TOAST_TIMEOUT)
   }
 
   handleChange(e){
