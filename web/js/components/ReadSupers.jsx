@@ -73,16 +73,14 @@ export default class ReadSupers extends React.Component {
     if(this.state.position==this.props.supers.length-1){
       this.setState({showMenuOptions:true})
     } else {
-      var newPosition = this.state.position + 1
-      this.setState({position:newPosition})
+      this.setState({position:this.state.position + 1})
     }
   }
 
   previousButtonClicked(){
     if(this.state.position==0){
     } else {
-      var newPosition = this.state.position - 1
-      this.setState({position:newPosition})
+      this.setState({position:this.state.position - 1})
     }
   }    
 
