@@ -66,12 +66,18 @@ export default class AssignSupers extends React.Component {
     if(this.props.supers.length>0){
       this.props.supers.shift()
       console.log("Current supers array is " +this.props.supers)
-    }
-
-    if(this.props.supers.length==0){
+      this.shuffleArray(this.props.players)
+    } else {
       this.props.changeGameState("read") 
     }
 
     this.forceUpdate()
+  }
+
+  shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
   }
 }
