@@ -50,10 +50,6 @@ h1{
 	transform: translateX(-50%);
 }
 
-.action-button.read-next-super{
-	bottom: 1em;
-}
-
 .action-button.fixed-width{
 	width: 8.5em;
 }
@@ -88,6 +84,39 @@ h1{
 	border: 0px;//
 }
 
+.read-nav-button{
+	position: fixed;
+	background: #FFFFFF;
+	border-radius: 60px;
+	font-family: Barlow-Medium;
+	font-size: 1.5em;
+	color: #2F3A3A;
+	width: 40vw;
+	bottom: 0.6em;
+}
+
+.read-nav-button.previous-button{
+	left: 9%;
+}
+
+.read-nav-button.next-button{
+	right:9%;
+}
+
+.end-game-button{
+	display: block;
+	width: 8.5em;
+	margin-top: 0;
+	margin-bottom: 0.5em;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #FFFFFF;
+	color: #2F3A3A;
+	font-size: 1.4em;
+	border-radius: 60px;
+	border: 0px;
+}
+
 .modal.custom-button{
 	margin: 0;
 }
@@ -112,6 +141,18 @@ h1{
 	font-size: 1.5em;
 	padding-left:40px;
 	padding-right:40px;
+}
+
+.superlative{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-left: 1em;
+	padding-right: 1em;
+	height: 57%;
+	overflow: scroll;
+	font-size:2.5em;
+	font-weight: 700;
 }
 
 /*Small screens*/
@@ -149,10 +190,10 @@ h1{
 .subtitle.next-super{
 	display: block;
 	position: fixed;
-	width: 60%;
+	width: 80%;
 	left: 50%;
 	transform: translateX(-50%);
-	bottom: 5em;
+	bottom: 4.5em;
 	font-size: 17px;
 	color: rgba(255,255,255,0.33);
 }
