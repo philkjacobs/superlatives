@@ -44,6 +44,7 @@ h1{
 	background-color: #FFFFFF;
 	color: #2F3A3A;
 	font-size: 1.4em;
+	font-weight: 500;
 	border-radius: 60px;
 	border: 0px;
 	padding: 0.3em 1.5em;
@@ -68,6 +69,7 @@ h1{
 }
 
 .custom-button{
+	font-weight: 500;
 	display: block;
 	position: relative;
 	margin: 0 auto;
@@ -143,6 +145,13 @@ h1{
 	padding-right:40px;
 }
 
+.description.share-modal{
+	font-weight: 400;
+	font-size: 1.4em;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+}
+
 .superlative{
 	display: flex;
 	align-items: center;
@@ -205,16 +214,17 @@ h1{
 	margin: 0 auto;
 }
 
-ol{
+.share-text{
+	margin-left: 2em;
+	margin-top: 1em;
+	font-weight: 400;
 	text-align: left;
-	list-style: upper-alpha;
 }
 
-li{
-	margin-bottom: 20px;
+ol{
+	padding-left: 0;
 }
 
 .shareModalGameId{
-	font-size: 25px;
-	margin-top: 7px;
+	font-size: 3em;
 }
