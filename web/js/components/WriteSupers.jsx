@@ -92,8 +92,8 @@ export default class WriteSupers extends React.Component {
                     value="Continue"
                     className="btn-lg btn-outline-secondary action-button bottom-button"
                     /> : <div><input  type="submit"
-                    placeholder="Write super..."
-                    value="Add Super"
+                    placeholder="Write award..."
+                    value="Add Award"
                     className="btn-lg btn-outline-secondary action-button top-button"
                     />
 
