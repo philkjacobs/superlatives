@@ -116,17 +116,23 @@ class GameHandler(WebSocketHandler):
         elif msg == 'write_supers':
             if not self.game_state == GameStates.WRITE:
                 send_message(self, error='Not a valid message in this game state.')
+            elif not data['super'].strip():
+                send_message(self, error='Please enter a non-empty value')
             else:
                 self.supers_written.add(data['super'])
         elif msg == 'edit_super':
             if not self.game_state == GameStates.WRITE:
                 send_message(self, error='Not a valid message in this game state.')
+            elif not data['to'].strip() or not data['from'].strip():
+                send_message(self, error='Please enter a non-empty value')
             else:
                 self.supers_written.remove(data['from'])
                 self.supers_written.add(data['to'])
         elif msg == 'remove_super':
             if not self.game_state == GameStates.WRITE:
                 send_message(self, error='Not a valid message in this game state.')
+            elif not data['super'].strip():
+                send_message(self, error='Please enter a non-empty value')
             else:
                 self.supers_written.remove(data['super'])
         elif msg == 'assign_super':
