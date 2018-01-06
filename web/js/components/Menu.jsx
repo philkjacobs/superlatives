@@ -36,7 +36,7 @@ export class ShareGameModal extends React.Component{
             </li>
             <li>
               Sharing this game code
-              <div className="shareModalGameId">XXXX-XXXX-XXXX-XXXX</div>
+              <div className="shareModalGameId">{this.props.gameId}</div>
               superlatives.com > Join game > Enter game code
             </li>
           </ol>
