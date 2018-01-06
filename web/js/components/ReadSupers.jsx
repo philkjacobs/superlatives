@@ -62,7 +62,7 @@ export default class ReadSupers extends React.Component {
           </div>
          : 
         <div>
-          <Loader statusText="Loading supers that were assigned to you!" />
+          <Loader statusText="Loading awards that were assigned to you!" />
         </div>
       }
       </div>

@@ -46,7 +46,7 @@ export default class AssignSupers extends React.Component {
         </div></div>
          : 
         <div>
-          <Loader statusText="Loading supers for you to assign to others!" />
+          <Loader statusText="Loading awards for you to assign to others!" />
         </div>}
       </div>
     )
