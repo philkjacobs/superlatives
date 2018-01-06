@@ -48,7 +48,7 @@ class GameHandler(WebSocketHandler):
                 # if enough games are active this can loop infinitely
                 # but 36^4 = 1.6million which means that is not a
                 # realistic scenario in any near-term timeframe
-                while game_id is None or game_id in _game_map[game_id]:
+                while game_id is None or game_id in _game_map:
                     game_id = u''.join(
                         random.choice(string.ascii_uppercase + string.digits)
                         for _ in xrange(4)
