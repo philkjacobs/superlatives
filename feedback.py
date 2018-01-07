@@ -9,7 +9,7 @@ class FeedbackHandler(RequestHandler):
         api_key = os.environ.get('MAILGUN_KEY')
         if api_key:
             resp = requests.post(
-                "https://api.mailgun.net/v3/mathewantony.com",
+                "https://api.mailgun.net/v3/mathewantony.com/messages",
                 auth=("api", api_key),
                 data={"from": "Superlatives Feedback <postmaster@mathewantony.com>",
                       "to": ["superlatives-feedback@googlegroups.com"],
