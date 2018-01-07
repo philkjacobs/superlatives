@@ -57,7 +57,7 @@ class GameHandler(WebSocketHandler):
                 self.is_host = True
             try:
                 if len(self.name) > MAX_NAME_LENGTH:
-                    raise ValueError('Names must be at most {} characters long.', MAX_NAME_LENGTH)
+                    raise ValueError('Your name must be less than {} characters long.', MAX_NAME_LENGTH)
                 current_names = {player.name for player in _game_map[game_id]}
                 if self.name in current_names:
                     raise ValueError('That name is already taken.')
