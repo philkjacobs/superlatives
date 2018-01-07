@@ -61,7 +61,7 @@ class GameHandler(WebSocketHandler):
                 current_names = {player.name for player in _game_map[game_id]}
                 if self.name in current_names:
                     raise ValueError('That name is already taken.')
-                arbitrary_player = next(iter(_game_map[game_id]))
+                arbitrary_player = next(iter(_game_map[game_id]), None)
                 if arbitrary_player and arbitrary_player.game_state is not None:
                     raise ValueError('This game is already in progress.')
                 _game_map[game_id].add(self)
