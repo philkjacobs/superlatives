@@ -1,4 +1,7 @@
+const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
+
 
 module.exports = {
     entry: ["./web/js/main.jsx"],
@@ -13,12 +16,16 @@ module.exports = {
                 test: /\.jsx$/,
                 exclude: /node_modules/,
                 loader: "babel-loader",
-                query:
-                {
-                    presets:['react']
+                query: {
+                    presets: ['react']
                 }
             }
         ]
 
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            IS_PROD: JSON.stringify(!fs.existsSync(path.join(__dirname, ".IS_DEV")))
+        })
+    ]
 };

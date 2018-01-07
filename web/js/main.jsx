@@ -189,9 +189,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   login(type){
-
-    const socket = type==='host' ? `wss://${location.host}/ws?name=${this.state.playerName}` : `wss://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}`
-
+    const socketType = IS_PROD ? 'wss' : 'ws';
+    const socket = type==='host' ? `${socketType}://${location.host}/ws?name=${this.state.playerName}` : `${socketType}://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}`;
     const webSocket = new WebSocket(socket)
 
     this.setState({
