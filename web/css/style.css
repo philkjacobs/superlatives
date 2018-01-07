@@ -120,7 +120,11 @@ h1{
 }
 
 .modal.custom-button{
-	margin: 0;
+	margin: 0 auto;
+	margin-top: 0.7em;
+	margin-bottom: 1em;
+	font-size: 0.9em;
+	font-weight: 400;
 }
 
 .player-list{
@@ -171,8 +175,9 @@ h1{
 		font-weight: 500;
 		left: 10px;
 		right: 10px;
-		/*top: 30vh !important;
-		height: 30vh !important;*/
+		/*top: 30vh !important;*/
+		height: auto !important;
+		bottom: auto !important;
 	}
 }
 
@@ -215,10 +220,8 @@ h1{
 }
 
 .share-text{
-	margin-left: 2em;
-	margin-top: 1em;
 	font-weight: 400;
-	text-align: left;
+	font-size: 0.8em;
 }
 
 ol{

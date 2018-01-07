@@ -29,13 +29,11 @@ export class ShareGameModal extends React.Component{
         <div className="description share-modal">Share this game code with your friends:</div>
         <div className="shareModalGameId">{this.props.gameId}</div>
         <div className="share-text">
-        Your friends can join by:
-        <ol>
-          <li>Going to super-latives.herokuapp.com</li>
-          <li>Selecing "Join Game"</li>
-          <li>Entering this code</li>
-        </ol>
+        <i>OR</i>
         </div>
+        <CopyToClipboard text={window.location.origin+"?game="+this.props.gameId} onCopy={this.onCopy}>
+          <button className="custom-button modal">Copy game link</button>
+        </CopyToClipboard>
           
         <button className="subtitle hide-modal" onClick={this.props.toggleModal.bind(this)}>Tap to hide</button>
       </div>
