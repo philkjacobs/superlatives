@@ -31,8 +31,9 @@ class Application extends React.Component {
       // This will either be "name", "menu", "room", "wait", "write", "assign", "read"
       gameState:"name",
       socket:null,
-      supers:[]
-    }
+      supers:[],
+      pingInterval: null,
+    };
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
     this.joinGameButtonPressed = this.joinGameButtonPressed.bind(this);
@@ -120,7 +121,11 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   componentDidMount(){
-    setInterval(this.ping, REFRESH_TIMER);
+    this.setState({pingInterval: setInterval(this.ping, REFRESH_TIMER)});
+  }
+
+  componentWillUnmount() {
+    this.stopPing()
   }
 
   handleNameChange(e){
@@ -228,6 +233,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
     this.state.socket.send(JSON.stringify({"msg":"ping","data":null,"error":null}))
   }
 
+  stopPing() {
+    this.state.pingInterval && clearInterval(this.state.pingInterval);
+  }
+
   writeSuper(data){
     // Write super to server
     var message = {"msg":"write_supers","data":{"super":data}, "error":""}
@@ -299,7 +308,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
           gameState: "read",
           supers:response.data.supers
         })
-        this.state.socket.close()
+        this.stopPing();
+        this.state.socket.close();
         this.state.socket.onclose = function(event){
           console.log("Socket closed!");
         };
