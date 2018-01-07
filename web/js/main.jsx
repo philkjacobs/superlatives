@@ -32,8 +32,9 @@ class Application extends React.Component {
       // This will either be "name", "menu", "room", "wait", "write", "assign", "read"
       gameState:"name",
       socket:null,
-      supers:[]
-    }
+      supers:[],
+      pingInterval: null,
+    };
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
     this.joinGameButtonPressed = this.joinGameButtonPressed.bind(this);
@@ -124,7 +125,11 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   componentDidMount(){
-    setInterval(this.ping, REFRESH_TIMER);
+    this.setState({pingInterval: setInterval(this.ping, REFRESH_TIMER)});
+  }
+
+  componentWillUnmount() {
+    this.stopPing()
   }
 
   handleNameChange(e){
@@ -192,9 +197,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   login(type){
-
-    const socket = type==='host' ? `ws://${location.host}/ws?name=${this.state.playerName}` : `ws://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId.toUpperCase()}`
-
+    const socketType = IS_PROD ? 'wss' : 'ws';
+    const socket = type==='host' ? `${socketType}://${location.host}/ws?name=${this.state.playerName}` : `${socketType}://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}`;
     const webSocket = new WebSocket(socket)
 
     this.setState({
@@ -234,6 +238,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
   ping(){
     console.log("PING!")
     this.state.socket.send(JSON.stringify({"msg":"ping","data":null,"error":null}))
+  }
+
+  stopPing() {
+    this.state.pingInterval && clearInterval(this.state.pingInterval);
   }
 
   writeSuper(data){
@@ -307,7 +315,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
           gameState: "read",
           supers:response.data.supers
         })
-        this.state.socket.close()
+        this.stopPing();
+        this.state.socket.close();
         this.state.socket.onclose = function(event){
           console.log("Socket closed!");
         };

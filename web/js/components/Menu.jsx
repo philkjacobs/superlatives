@@ -26,20 +26,14 @@ export class ShareGameModal extends React.Component{
                 shouldCloseOnOverlayClick={true}
                 onRequestClose={this.props.toggleModal.bind(this)}>
       <div className="modal-custom-header">
-        <div className="description">Invite friends to this game by:</div>
-          <ol>
-            <li>
-              Sharing a direct game link (faster)
-              <CopyToClipboard text={window.location.origin+"?game="+this.props.gameId} onCopy={this.onCopy}>
-                <button className="custom-button modal">Copy game link</button>
-              </CopyToClipboard>
-            </li>
-            <li>
-              Sharing this game code
-              <div className="shareModalGameId">{this.props.gameId}</div>
-              superlatives.com > Join game > Enter game code
-            </li>
-          </ol>
+        <div className="description share-modal">Share this game code with your friends:</div>
+        <div className="shareModalGameId">{this.props.gameId}</div>
+        <div className="share-text">
+        <i>OR</i>
+        </div>
+        <CopyToClipboard text={window.location.origin+"?game="+this.props.gameId} onCopy={this.onCopy}>
+          <button className="custom-button modal">Copy game link</button>
+        </CopyToClipboard>
           
         <button className="subtitle hide-modal" onClick={this.props.toggleModal.bind(this)}>Tap to hide</button>
       </div>
