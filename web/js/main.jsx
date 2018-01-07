@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import ReactModal from 'react-modal';
 import {MODAL_STYLE} from './components/ModalStyle.jsx';
+import {MOVE_TO_ASSIGN_MODAL_STYLE} from './components/ModalStyle.jsx';
 import Loader from './components/Loader.jsx';
 import * as Menu from './components/Menu.jsx';
 import WriteSupers from './components/WriteSupers.jsx';
@@ -43,6 +44,7 @@ class Application extends React.Component {
     this.changeGameState = this.changeGameState.bind(this);
     this.onNameSubmit = this.onNameSubmit.bind(this);
     this.listenForServerMessages = this.listenForServerMessages.bind(this);
+    this.closeJoinModal = this.closeJoinModal.bind(this);
     this.ping = this.ping.bind(this);
 
   }
@@ -82,11 +84,13 @@ return(<div className="custom-button waitingroom">{player}</div>)
           joinGameButtonPressed={this.joinGameButtonPressed}/> : null}
 
         {this.state.showJoinScreen ? <div><ReactModal isOpen={true}
-                                                      style={MODAL_STYLE}
+                                                      onRequestClose={this.closeJoinModal}
+                                                      style={MOVE_TO_ASSIGN_MODAL_STYLE}
                                                       shouldCloseOnOverlayClick={true}><Menu.JoinGame
           gameId={this.state.gameId}
           onChange={function(e){this.handleIdChange(e)}.bind(this)}
-          onSubmit={function(data){this.login('join')}.bind(this)}/>
+          onSubmit={function(data){this.login('join')}.bind(this)}
+          closeModal={this.closeJoinModal}/>
                       </ReactModal></div> : null}
 
         {this.state.gameState=="room" ? <Menu.WaitingRoom
@@ -186,6 +190,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
         showJoinScreen: false
       });
     }
+  }
+
+  closeJoinModal(){
+    this.setState({showJoinScreen:false})
   }
 
   login(type){

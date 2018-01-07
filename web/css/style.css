@@ -68,6 +68,14 @@ h1{
 	font-size: 1.8em;
 }
 
+.join.custom-button{
+	margin-bottom: 10px;
+	font-size: 1.5em;
+	width: 5em;
+	padding-left: 0;
+	padding-right: 0;
+}
+
 .custom-button{
 	font-weight: 500;
 	display: block;
@@ -149,6 +157,12 @@ h1{
 	padding-right:40px;
 }
 
+.description.join{
+	padding-left: 0;
+	padding-right: 0;
+	margin-top: 0;
+	text-align: center;
+
 .description.share-modal{
 	font-weight: 400;
 	font-size: 1.4em;
@@ -229,4 +243,10 @@ ol{
 
 .shareModalGameId{
 	font-size: 3em;
+}
+
+.joinModalGameId{
+	text-align: center;
+	text-transform:uppercase;
+	font-size: 2.5em;
 }
