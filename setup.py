@@ -11,6 +11,7 @@ from tornado.web import (
     RequestHandler,
 )
 from game_state import GameHandler
+from feedback import FeedbackHandler
 
 # Configuring logging to show debug statements with a certain format
 logging.basicConfig(level=logging.DEBUG,
@@ -33,6 +34,7 @@ class GlobalApplication(Application):
             [
                 (r"/", MainHandler),
                 (r"/ws", GameHandler),
+                (r"/feedback", FeedbackHandler),
                 (r"/(.*)", CustomStaticFileHandler, {'path': ""}),
             ],
             debug=True,
