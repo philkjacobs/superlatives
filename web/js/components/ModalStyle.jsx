@@ -9,10 +9,9 @@ export const MODAL_STYLE = {
   },
   content : {
     position                   : 'absolute',
-    top                        : '17vh',
+    top                        : '24vh',
     left                       : '10px',
     right                      : '10px',
-    bottom                     : '40px',
     border                     : '1px solid #ccc',
     background                 : '#2F3A3A',
     overflow                   : 'auto',
@@ -20,8 +19,7 @@ export const MODAL_STYLE = {
     borderRadius               : '4px',
     outline                    : 'none',
     padding                    : '7px',
-    color                      : 'white',
-    height                     : '26em'
+    color                      : 'white'
   }
 };
 
