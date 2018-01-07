@@ -277,6 +277,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
     this.state.socket.onmessage = function(event){
       var response = JSON.parse(event.data);
 
+      if(response.error){
+        notify.show(response.error,"error",TOAST_TIMEOUT)
+      }
+
       if(response.msg=='login'){
         // Assuming success, go to the waiting room or update player list if already in waiting room
         this.setState({
