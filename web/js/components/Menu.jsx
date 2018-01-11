@@ -34,8 +34,6 @@ export class ShareGameModal extends React.Component{
         <CopyToClipboard text={window.location.origin+"?game="+this.props.gameId} onCopy={this.onCopy}>
           <button className="custom-button modal">Copy game link</button>
         </CopyToClipboard>
-          
-        <button className="subtitle hide-modal" onClick={this.props.toggleModal.bind(this)}>Tap to hide</button>
       </div>
     </ReactModal>
     )
