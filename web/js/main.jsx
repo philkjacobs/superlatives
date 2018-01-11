@@ -329,7 +329,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
       // If a super is assigned to the user, console log
       if(response.msg=="assign_super"){
-        notify.show("Someone assigned you a phrase!","success",TOAST_TIMEOUT)
+        notify.show("Someone assigned you an award!","success",TOAST_TIMEOUT)
       }      
 
       if(response.msg=="waiting_on"){
