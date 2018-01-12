@@ -42,7 +42,6 @@ class Application extends React.Component {
     this.handleIdChange = this.handleIdChange.bind(this);
     this.continueButtonPressed = this.continueButtonPressed.bind(this);
     this.changeGameState = this.changeGameState.bind(this);
-    this.onNameSubmit = this.onNameSubmit.bind(this);
     this.listenForServerMessages = this.listenForServerMessages.bind(this);
     this.closeJoinModal = this.closeJoinModal.bind(this);
     this.ping = this.ping.bind(this);
@@ -61,7 +60,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 }.bind(this))}</div> : null}
 
         <div style={style} className="vt-center input-group-lg">
-            <form onSubmit={this.onNameSubmit}>
+            <form>
                 <label style={{display:'block'}}>
                   <input
                     type="text"
@@ -138,15 +137,6 @@ return(<div className="custom-button waitingroom">{player}</div>)
     });
   }
 
-  onNameSubmit(e){
-    e.preventDefault();
-    document.activeElement.blur();
-    this.setState({
-      gameState:"menu"
-    })
-    this.continueButtonPressed();
-  }
-
   handleIdChange(e){
     this.setState({
       gameId: e.target.value
@@ -154,12 +144,17 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   continueButtonPressed(){
-    if(this.state.gameId==""){
-      this.setState({
-        gameState:"menu"
-      })
+    // Check for no name
+    if(this.state.playerName==""){
+      notify.show("Please enter a name.","error",TOAST_TIMEOUT)
     } else {
+      if(this.state.gameId==""){
+        this.setState({
+          gameState:"menu"
+        })
+      } else {
       this.login('join')
+      }
     }
   }
 
