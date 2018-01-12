@@ -8,6 +8,7 @@ import * as Menu from './components/Menu.jsx';
 import WriteSupers from './components/WriteSupers.jsx';
 import AssignSupers from './components/AssignSupers.jsx';
 import ReadSupers from './components/ReadSupers.jsx';
+import FeedbackModal from './components/FeedbackModal.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 import * as QueryString from 'query-string';
 
@@ -25,6 +26,7 @@ class Application extends React.Component {
       playerName:"",
       isHost:false,
       showJoinScreen:false,
+      showOptionsModal:false,
       statusText:"",
       gameId: params.game !== undefined ? params.game : "",
       players:[],
@@ -34,10 +36,16 @@ class Application extends React.Component {
       socket:null,
       supers:[],
       pingInterval: null,
+      showOnboarding: false,
+      showFeedbackModal: false,
+      feedbackMessage:""
     };
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
     this.joinGameButtonPressed = this.joinGameButtonPressed.bind(this);
+    this.optionsButtonPressed = this.optionsButtonPressed.bind(this);
+    this.submitFeedbackButtonPressed = this.submitFeedbackButtonPressed.bind(this);
+    this.showOnboardingButtonPressed = this.showOnboardingButtonPressed.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleIdChange = this.handleIdChange.bind(this);
     this.continueButtonPressed = this.continueButtonPressed.bind(this);
@@ -45,6 +53,9 @@ class Application extends React.Component {
     this.onNameSubmit = this.onNameSubmit.bind(this);
     this.listenForServerMessages = this.listenForServerMessages.bind(this);
     this.closeJoinModal = this.closeJoinModal.bind(this);
+    this.closeOptionsModal = this.closeOptionsModal.bind(this);
+    this.closeFeedbackModal = this.closeFeedbackModal.bind(this);
+    this.sendFeedbackToServer = this.sendFeedbackToServer.bind(this);
     this.ping = this.ping.bind(this);
 
   }
@@ -93,6 +104,27 @@ return(<div className="custom-button waitingroom">{player}</div>)
           closeModal={this.closeJoinModal}/>
                       </ReactModal></div> : null}
 
+        {this.state.showOptionsModal ? <div><ReactModal isOpen={true}
+                                                      onRequestClose={this.closeOptionsModal}
+                                                      style={MOVE_TO_ASSIGN_MODAL_STYLE}
+                                                      shouldCloseOnOverlayClick={true}>
+                                                      <button className="custom-button modal"
+                                                              onClick={this.submitFeedbackButtonPressed}>Submit feedback</button>
+                                                      <button className="custom-button modal"
+                                                              onClick={this.showOnboardingButtonPressed}>Learn the game</button>
+                      </ReactModal></div> : null}
+
+        {this.state.showFeedbackModal ? <div><ReactModal isOpen={true}
+                                                      onRequestClose={this.closeFeedbackModal}
+                                                      style={MOVE_TO_ASSIGN_MODAL_STYLE}
+                                                      shouldCloseOnOverlayClick={true}>
+                                                      <FeedbackModal
+          feedbackMessage={this.state.feedbackMessage}
+          onChange={function(e){this.handleFeedbackTextChange(e)}.bind(this)}
+          onSubmit={function(data){this.sendFeedbackToServer(data)}.bind(this)} />
+                                                      
+                      </ReactModal></div> : null}
+
         {this.state.gameState=="room" ? <Menu.WaitingRoom
           players={this.state.players}
           isHost={this.state.isHost}
@@ -119,7 +151,14 @@ return(<div className="custom-button waitingroom">{player}</div>)
         {this.state.gameState=="read" ? <ReadSupers
           supers={this.state.supers}
           changeGameState={function(state){this.changeGameState(state)}.bind(this)} /> : null}
-      
+
+          
+          <button className="help-box"
+            onClick={this.optionsButtonPressed}>
+            <div className="help-box">?
+            </div>
+          </button>
+          
       </div>
     )
   }
@@ -153,6 +192,12 @@ return(<div className="custom-button waitingroom">{player}</div>)
     });
   }
 
+  handleFeedbackTextChange(e){
+    this.setState({
+      feedbackMessage:e.target.value
+    });
+  }
+
   continueButtonPressed(){
     if(this.state.gameId==""){
       this.setState({
@@ -178,6 +223,19 @@ return(<div className="custom-button waitingroom">{player}</div>)
     });
   }
 
+  optionsButtonPressed(){
+    this.setState({
+      showOptionsModal:true
+    });
+  }
+
+  submitFeedbackButtonPressed(){
+    this.setState({
+      showOptionsModal: false,
+      showFeedbackModal:true
+    })
+  }
+
   changeStatus(status, statusText){
     this.setState({
       statusText:statusText,
@@ -194,6 +252,23 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
   closeJoinModal(){
     this.setState({showJoinScreen:false})
+  }
+
+  closeOptionsModal(){
+    this.setState({showOptionsModal:false})
+  }
+
+  closeFeedbackModal(){
+    this.setState({
+      showFeedbackModal:false,
+      feedbackMessage:""
+    });
+  }
+
+  showOnboardingButtonPressed(){
+    this.setState({showOnboarding:true})
+    // We don't have onboarding for now so just show toast
+    notify.show("Coming soon...","success",TOAST_TIMEOUT);
   }
 
   login(type){
@@ -339,6 +414,29 @@ return(<div className="custom-button waitingroom">{player}</div>)
         console.log("Slackers are "+this.state.waitingOnPlayers)
       }
     }.bind(this)
+  }
+
+  sendFeedbackToServer(message){
+    console.log("BUTTON CLICKED!")
+    var url = "https://super-latives.herokuapp.com/feedback";
+    var params = "feedback="+message;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    console.log(xhr)
+    console.log(params)
+
+    xhr.onreadystatechange = function () {
+      if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        console.log(xhr.responseText);
+      } else {
+        notify.show("Error sending feedback.","error",TOAST_TIMEOUT)
+      }
+    };
+
+    //Send the proper header information along with the request
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.send(params);
   }
 }
 
