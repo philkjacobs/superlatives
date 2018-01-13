@@ -159,7 +159,7 @@ class GameHandler(WebSocketHandler):
                         'super': data['super']
                     })
                 except KeyError:
-                    send_message(self, error='Issue assigning award.')
+                    send_message(self, error='Issue assigning superlative.')
         elif msg == 'ping':
             send_message(self, message='pong')
         else:
