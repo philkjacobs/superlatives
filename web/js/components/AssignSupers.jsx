@@ -61,14 +61,14 @@ export default class AssignSupers extends React.Component {
 
     // Save assignment to server
     this.props.assignSuper(player,this.props.supers[0])
+    this.props.supers.shift()
     
     // If there are supers left, go to next super; otherwise go to Done screen.
     if(this.props.supers.length>0){
-      this.props.supers.shift()
       console.log("Current supers array is " +this.props.supers)
       this.shuffleArray(this.props.players)
     } else {
-      this.props.changeGameState("read") 
+      this.props.changeGameState("read")
     }
 
     this.forceUpdate()
