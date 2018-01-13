@@ -5,7 +5,6 @@ import random
 import string
 
 from enum import Enum
-from tornado.gen import coroutine
 from tornado.web import MissingArgumentError
 from tornado.websocket import WebSocketHandler
 MAX_NAME_LENGTH = 22
@@ -51,10 +50,13 @@ class GameHandler(WebSocketHandler):
                 while game_id is None or game_id in _game_map:
                     game_id = u''.join(
                         random.choice(string.ascii_uppercase + string.digits)
-                        for _ in xrange(4)
+                        for _ in range(4)
                     )
                 _game_map[game_id] = set()
                 self.is_host = True
+            else:
+                # treat all user-typed game_ids as case insensitive
+                game_id = game_id.upper()
             try:
                 if len(self.name) > MAX_NAME_LENGTH:
                     raise ValueError('Please restart with a shorter name.')
@@ -64,6 +66,7 @@ class GameHandler(WebSocketHandler):
                 arbitrary_player = next(iter(_game_map[game_id]), None)
                 if arbitrary_player and arbitrary_player.game_state is not None:
                     raise ValueError('This game is already in progress.')
+
                 _game_map[game_id].add(self)
                 self.game_id = game_id
             except KeyError:
@@ -76,8 +79,7 @@ class GameHandler(WebSocketHandler):
                     'players':[player.name for player in _game_map[self.game_id]]
                 })
 
-    @coroutine
-    def on_message(self, message):
+    async def on_message(self, message):
         raw = json.loads(message)
 
         # for now, if we receive an error, log it and quit.
@@ -175,7 +177,7 @@ class GameHandler(WebSocketHandler):
         ))
         random.shuffle(all_supers)
         num_players = len(_game_map[self.game_id])
-        supers_to_assign = [all_supers[i::num_players] for i in xrange(num_players)]
+        supers_to_assign = [all_supers[i::num_players] for i in range(num_players)]
         for i, player in enumerate(_game_map[self.game_id]):
             player.supers_assigned = supers_to_assign[i]
             send_message(player, message='assign_supers_list', data={
