@@ -34,6 +34,7 @@ class Application extends React.Component {
       socket:null,
       supers:[],
       pingInterval: null,
+      showSuperWrittenToast:false
     };
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
@@ -46,6 +47,7 @@ class Application extends React.Component {
     this.listenForServerMessages = this.listenForServerMessages.bind(this);
     this.closeJoinModal = this.closeJoinModal.bind(this);
     this.ping = this.ping.bind(this);
+    this.showSuperWrittenToast = this.showSuperWrittenToast.bind(this);
 
   }
 
@@ -78,6 +80,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
           </button>
 
         </div>
+
+        {this.state.showSuperWrittenToast ? <div className="added-toast">Added! Keep writing...</div> : null}
 
         {this.state.gameState=="menu" ? <Menu.MenuScreen 
           hostGameButtonPressed={this.hostGameButtonPressed}
@@ -249,8 +253,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
     var message = {"msg":"write_supers","data":{"super":data}, "error":""}
     this.state.socket.send(JSON.stringify(message))
 
-    notify.show("Added! Keep writing...","success",TOAST_TIMEOUT)
-
+    this.showSuperWrittenToast()
     this.listenForServerMessages()
   }
 
@@ -270,6 +273,13 @@ return(<div className="custom-button waitingroom">{player}</div>)
     return players.filter((p) => {
       return p !== playerName
     })
+  }
+
+  showSuperWrittenToast(){
+    console.log("SHOW TOAST!")
+    this.setState({showSuperWrittenToast:true})
+
+    setTimeout(function() { this.setState({showSuperWrittenToast: false}); }.bind(this), 1000);
   }
 
   listenForServerMessages(){
