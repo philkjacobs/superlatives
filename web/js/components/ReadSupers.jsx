@@ -51,11 +51,11 @@ export default class ReadSupers extends React.Component {
               <div className="subtitle read-count">{this.state.position+1}/{this.props.supers.length}</div>
               <div className="subtitle next-super">Wait for everyone to read one before going to the next.</div>
               <button   onClick={this.previousButtonClicked} 
-                        className="action-button bottom-button">
+                        className="btn-lg read-nav-button previous-button">
                         Previous
               </button>
               <button   onClick={this.nextButtonClicked} 
-                        className="action-button top-button">
+                        className="btn-lg read-nav-button next-button">
                         Next
               </button>
             </div>}
