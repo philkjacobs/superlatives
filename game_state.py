@@ -55,6 +55,9 @@ class GameHandler(WebSocketHandler):
                     )
                 _game_map[game_id] = set()
                 self.is_host = True
+            else:
+                # treat all user-typed game_ids as case insensitive
+                game_id = game_id.upper()
             try:
                 if len(self.name) > MAX_NAME_LENGTH:
                     raise ValueError('Please restart with a shorter name.')
@@ -64,6 +67,7 @@ class GameHandler(WebSocketHandler):
                 arbitrary_player = next(iter(_game_map[game_id]), None)
                 if arbitrary_player and arbitrary_player.game_state is not None:
                     raise ValueError('This game is already in progress.')
+
                 _game_map[game_id].add(self)
                 self.game_id = game_id
             except KeyError:
