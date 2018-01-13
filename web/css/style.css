@@ -51,11 +51,6 @@ h1{
 	width: 9.7em;
 	padding: 0.3em 1.5em;
 }
-/*
-.action-button.fixed-width{
-	width: 8.5em;
-	padding: 0.3em 1.5em;
-}*/
 
 .top-button{
 	bottom:80px;
@@ -174,13 +169,11 @@ h1{
 }
 
 .superlative{
-	display: flex;
 	align-items: center;
 	justify-content: center;
 	padding-left: 1em;
 	padding-right: 1em;
 	height: 42%;
-	overflow: scroll;
 	font-size:2.5em;
 	font-weight: 700;
 }
@@ -212,6 +205,11 @@ h1{
 		height: 34px;
 		width: 34px;
 		line-height: 34px;
+	}
+
+	.superlative{
+	display: flex;
+	overflow: scroll;
 	}
 }
 
