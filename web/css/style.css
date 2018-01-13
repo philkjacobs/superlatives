@@ -238,6 +238,13 @@ h1{
 	font-size: 0.8em;
 }
 
+.added-toast{
+	position: fixed;
+	top:35vh;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
 ol{
 	padding-left: 0;
 }
