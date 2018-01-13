@@ -58,6 +58,7 @@ class Application extends React.Component {
     this.sendFeedbackToServer = this.sendFeedbackToServer.bind(this);
     this.ping = this.ping.bind(this);
     this.showSuperWrittenToast = this.showSuperWrittenToast.bind(this);
+    this.onNameSubmit = this.onNameSubmit.bind(this);
 
   }
 
@@ -73,7 +74,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 }.bind(this))}</div> : null}
 
         <div style={style} className="vt-center input-group-lg">
-            <form>
+            <form onSubmit={this.onNameSubmit}>
                 <label style={{display:'block'}}>
                   <input
                     type="text"
@@ -191,6 +192,13 @@ return(<div className="custom-button waitingroom">{player}</div>)
       feedbackMessage:e.target.value
     });
   }
+
+  onNameSubmit(e){     
+    e.preventDefault();       
+    document.activeElement.blur();               
+    this.continueButtonPressed();     
+  }
+
 
   continueButtonPressed(){
     // Check for no name
