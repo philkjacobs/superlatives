@@ -100,8 +100,8 @@ export default class WriteSupers extends React.Component {
                     {this.props.isHost ? <div><form onSubmit={this.showSubmitModal}>
                     <label>
                       <input  type="submit"
-                              value="Stop timer and continue"
-                              className="btn btn-warning action-button bottom-button"/>
+                              value="Stop timer"
+                              className="action-button bottom-button fixed-width"/>
                     </label>
                     </form></div> : null}</div>
                   }    
