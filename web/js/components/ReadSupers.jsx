@@ -36,11 +36,11 @@ export default class ReadSupers extends React.Component {
             <div>
               <Loader statusText="That's it!" />
               <button   onClick={this.backToAwardsButtonPressed}
-                        className="btn-lg end-game-button">
+                        className="action-button top-button">
                 Back to awards
               </button>
               <button   onClick={this.newGameButtonPressed}
-                        className="btn-lg end-game-button">
+                        className="action-button bottom-button">
                 Go to menu
               </button>
               
@@ -48,14 +48,14 @@ export default class ReadSupers extends React.Component {
             <div>
               <div className="description">Here's what your friends assigned you:</div>
               <div className="superlative">{this.props.supers[this.state.position]}</div>
-              <div className="read-count">{this.state.position+1}/{this.props.supers.length}</div>
+              <div className="subtitle read-count">{this.state.position+1}/{this.props.supers.length}</div>
               <div className="subtitle next-super">Wait for everyone to read one before going to the next.</div>
               <button   onClick={this.previousButtonClicked} 
-                        className="btn-lg read-nav-button previous-button">
+                        className="action-button bottom-button">
                         Previous
               </button>
               <button   onClick={this.nextButtonClicked} 
-                        className="btn-lg read-nav-button next-button">
+                        className="action-button top-button">
                         Next
               </button>
             </div>}

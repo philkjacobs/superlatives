@@ -47,13 +47,15 @@ h1{
 	font-weight: 500;
 	border-radius: 60px;
 	border: 0px;
-	padding: 0.3em 1.5em;
 	transform: translateX(-50%);
+	width: 9.7em;
+	padding: 0.3em 1.5em;
 }
-
+/*
 .action-button.fixed-width{
 	width: 8.5em;
-}
+	padding: 0.3em 1.5em;
+}*/
 
 .top-button{
 	bottom:80px;
@@ -177,7 +179,7 @@ h1{
 	justify-content: center;
 	padding-left: 1em;
 	padding-right: 1em;
-	height: 57%;
+	height: 42%;
 	overflow: scroll;
 	font-size:2.5em;
 	font-weight: 700;
@@ -205,8 +207,8 @@ h1{
 	}
 
 	.help-box{
-		left: 0.5em;
-		bottom: 0.5em;
+		left: 0.3em;
+		bottom: 0.3em;
 		height: 34px;
 		width: 34px;
 		line-height: 34px;
@@ -241,22 +243,23 @@ h1{
 	font-size: 1.2em;
 }
 
-.subtitle.next-super{
+.subtitle{
 	display: block;
 	position: fixed;
 	width: 80%;
 	left: 50%;
 	transform: translateX(-50%);
-	bottom: 4.5em;
 	font-size: 17px;
 	color: rgba(255,255,255,0.33);
 }
 
-.subtitle.hide-modal{
-	display: block;
-	position: relative;
-	color: rgba(255,255,255,0.3);
-	margin: 0 auto;
+.subtitle.next-super{
+	bottom: 8em;
+}
+
+.subtitle.read-count{
+	bottom:11em;
+	color: white;
 }
 
 .share-text{
