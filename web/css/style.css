@@ -92,13 +92,15 @@ h1{
 }
 
 .read-nav-button{
-	position: fixed;
 	background: #FFFFFF;
 	border-radius: 60px;
 	font-family: Barlow;
-	font-size: 1.5em;
+	font-size: 1.4em;
+	font-weight: 500;
 	color: #2F3A3A;
-	width: 40vw;
+	width: 6em;
+	margin-left: 0.3em;
+	margin-right: 0.3em;
 	bottom: 0.6em;
 }
 
@@ -173,9 +175,11 @@ h1{
 	justify-content: center;
 	padding-left: 1em;
 	padding-right: 1em;
-	height: 42%;
+	height: 48%;
 	font-size:2.5em;
 	font-weight: 700;
+	overflow: scroll;
+	overflow-x: hidden;
 }
 
 .help-box{
@@ -205,11 +209,6 @@ h1{
 		height: 34px;
 		width: 34px;
 		line-height: 34px;
-	}
-
-	.superlative{
-	display: flex;
-	overflow: scroll;
 	}
 }
 
@@ -243,20 +242,20 @@ h1{
 
 .subtitle{
 	display: block;
-	position: fixed;
 	width: 80%;
-	left: 50%;
-	transform: translateX(-50%);
 	font-size: 17px;
 	color: rgba(255,255,255,0.33);
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0.5em;
 }
 
 .subtitle.next-super{
-	bottom: 8em;
+	bottom: 7.5em;
 }
 
 .subtitle.read-count{
-	bottom:11em;
+	bottom:6em;
 	color: white;
 }
 
