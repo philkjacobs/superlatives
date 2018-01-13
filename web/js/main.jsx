@@ -38,7 +38,8 @@ class Application extends React.Component {
       pingInterval: null,
       showOnboarding: false,
       showFeedbackModal: false,
-      feedbackMessage:""
+      feedbackMessage:"",
+      showSuperWrittenToast:false
     };
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
@@ -50,13 +51,13 @@ class Application extends React.Component {
     this.handleIdChange = this.handleIdChange.bind(this);
     this.continueButtonPressed = this.continueButtonPressed.bind(this);
     this.changeGameState = this.changeGameState.bind(this);
-    this.onNameSubmit = this.onNameSubmit.bind(this);
     this.listenForServerMessages = this.listenForServerMessages.bind(this);
     this.closeJoinModal = this.closeJoinModal.bind(this);
     this.closeOptionsModal = this.closeOptionsModal.bind(this);
     this.closeFeedbackModal = this.closeFeedbackModal.bind(this);
     this.sendFeedbackToServer = this.sendFeedbackToServer.bind(this);
     this.ping = this.ping.bind(this);
+    this.showSuperWrittenToast = this.showSuperWrittenToast.bind(this);
 
   }
 
@@ -72,7 +73,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 }.bind(this))}</div> : null}
 
         <div style={style} className="vt-center input-group-lg">
-            <form onSubmit={this.onNameSubmit}>
+            <form>
                 <label style={{display:'block'}}>
                   <input
                     type="text"
@@ -89,6 +90,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
           </button>
 
         </div>
+
+        {this.state.showSuperWrittenToast ? <div className="added-toast">Added! Keep writing...</div> : null}
 
         {this.state.gameState=="menu" ? <Menu.MenuScreen 
           hostGameButtonPressed={this.hostGameButtonPressed}
@@ -177,15 +180,6 @@ return(<div className="custom-button waitingroom">{player}</div>)
     });
   }
 
-  onNameSubmit(e){
-    e.preventDefault();
-    document.activeElement.blur();
-    this.setState({
-      gameState:"menu"
-    })
-    this.continueButtonPressed();
-  }
-
   handleIdChange(e){
     this.setState({
       gameId: e.target.value
@@ -199,12 +193,17 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   continueButtonPressed(){
-    if(this.state.gameId==""){
-      this.setState({
-        gameState:"menu"
-      })
+    // Check for no name
+    if(this.state.playerName==""){
+      notify.show("Please enter a name.","error",TOAST_TIMEOUT)
     } else {
+      if(this.state.gameId==""){
+        this.setState({
+          gameState:"menu"
+        })
+      } else {
       this.login('join')
+      }
     }
   }
 
@@ -324,8 +323,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
     var message = {"msg":"write_supers","data":{"super":data}, "error":""}
     this.state.socket.send(JSON.stringify(message))
 
-    notify.show("Added! Keep writing...","success",TOAST_TIMEOUT)
-
+    this.showSuperWrittenToast()
     this.listenForServerMessages()
   }
 
@@ -345,6 +343,13 @@ return(<div className="custom-button waitingroom">{player}</div>)
     return players.filter((p) => {
       return p !== playerName
     })
+  }
+
+  showSuperWrittenToast(){
+    console.log("SHOW TOAST!")
+    this.setState({showSuperWrittenToast:true})
+
+    setTimeout(function() { this.setState({showSuperWrittenToast: false}); }.bind(this), 1000);
   }
 
   listenForServerMessages(){
