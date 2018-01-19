@@ -430,17 +430,14 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   sendFeedbackToServer(message){
-    console.log("BUTTON CLICKED!")
     var url = "https://super-latives.herokuapp.com/feedback";
     var params = "feedback="+message;
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
-    console.log(xhr)
-    console.log(params)
 
     xhr.onreadystatechange = function () {
-      if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        console.log(xhr.responseText);
+      if(xhr.readyState === 4) {
+        notify.show("Feedback submitted, thank you!","success",TOAST_TIMEOUT)
       } else {
         notify.show("Error sending feedback.","error",TOAST_TIMEOUT)
       }
