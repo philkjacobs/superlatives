@@ -439,8 +439,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
     console.log(params)
 
     xhr.onreadystatechange = function () {
-      if(xhr.readyState===4) {
-        notify.show("Feedback submitted, thank you!","success",TOAST_TIMEOUT)
+      if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        console.log(xhr.responseText);
       } else {
         notify.show("Error sending feedback.","error",TOAST_TIMEOUT)
       }
@@ -448,6 +448,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
     //Send the proper header information along with the request
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
     xhr.send(params);
   }
 }
