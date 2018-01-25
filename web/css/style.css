@@ -11,6 +11,10 @@ h1{
 	font-size: 40px;
 }
 
+p{
+	font-weight: 400;
+}
+
 .container {
 	margin: 0 auto;
 	text-align: center;
