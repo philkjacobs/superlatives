@@ -3,12 +3,14 @@ import * as ReactDOM from 'react-dom';
 import ReactModal from 'react-modal';
 import {MODAL_STYLE} from './components/ModalStyle.jsx';
 import {MOVE_TO_ASSIGN_MODAL_STYLE} from './components/ModalStyle.jsx';
+import {ONBOARDING_MODAL_STYLE} from './components/ModalStyle.jsx';
 import Loader from './components/Loader.jsx';
 import * as Menu from './components/Menu.jsx';
 import WriteSupers from './components/WriteSupers.jsx';
 import AssignSupers from './components/AssignSupers.jsx';
 import ReadSupers from './components/ReadSupers.jsx';
 import FeedbackModal from './components/FeedbackModal.jsx';
+import OnboardingModal from './components/OnboardingModal.jsx';
 import Notifications, {notify} from 'react-notify-toast';
 import * as QueryString from 'query-string';
 
@@ -36,7 +38,7 @@ class Application extends React.Component {
       socket:null,
       supers:[],
       pingInterval: null,
-      showOnboarding: false,
+      showOnboardingModal: false,
       showFeedbackModal: false,
       feedbackMessage:"",
       showSuperWrittenToast:false
@@ -55,6 +57,7 @@ class Application extends React.Component {
     this.closeJoinModal = this.closeJoinModal.bind(this);
     this.closeOptionsModal = this.closeOptionsModal.bind(this);
     this.closeFeedbackModal = this.closeFeedbackModal.bind(this);
+    this.closeOnboardingModal = this.closeOnboardingModal.bind(this);
     this.sendFeedbackToServer = this.sendFeedbackToServer.bind(this);
     this.ping = this.ping.bind(this);
     this.showSuperWrittenToast = this.showSuperWrittenToast.bind(this);
@@ -116,6 +119,14 @@ return(<div className="custom-button waitingroom">{player}</div>)
                                                               onClick={this.submitFeedbackButtonPressed}>Submit feedback</button>
                                                       <button className="custom-button modal"
                                                               onClick={this.showOnboardingButtonPressed}>Learn the game</button>
+                      </ReactModal></div> : null}
+
+        {this.state.showOnboardingModal ? <div><ReactModal isOpen={true}
+                                                      onRequestClose={this.closeOnboardingModal}
+                                                      style={ONBOARDING_MODAL_STYLE}
+                                                      shouldCloseOnOverlayClick={true}>
+                                                      <OnboardingModal />
+                                                      
                       </ReactModal></div> : null}
 
         {this.state.showFeedbackModal ? <div><ReactModal isOpen={true}
@@ -272,10 +283,15 @@ return(<div className="custom-button waitingroom">{player}</div>)
     });
   }
 
+  closeOnboardingModal(){
+    this.setState({
+      showOnboardingModal: false,
+      showOptionsModal: false
+    })
+  }
+
   showOnboardingButtonPressed(){
-    this.setState({showOnboarding:true})
-    // We don't have onboarding for now so just show toast
-    notify.show("Coming soon...","success",TOAST_TIMEOUT);
+    this.setState({showOnboardingModal:true})
   }
 
   login(type){
