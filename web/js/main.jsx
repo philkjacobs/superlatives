@@ -159,8 +159,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
           
           <button className="help-box"
             onClick={this.optionsButtonPressed}>
-            <div className="help-box">?
-            </div>
+            ?
           </button>
           
       </div>
