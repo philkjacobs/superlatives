@@ -196,6 +196,10 @@ p{
 	color: #2F3A3A;
 }
 
+.code{
+	margin-top: 1em;
+	font-size: 1.5rem;
+
 .name{
 	position: fixed;
 	top: 1em;
