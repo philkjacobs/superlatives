@@ -125,7 +125,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
                                                       onRequestClose={this.closeOnboardingModal}
                                                       style={ONBOARDING_MODAL_STYLE}
                                                       shouldCloseOnOverlayClick={true}>
-                                                      <OnboardingModal />
+                                                      <div onClick={this.closeOnboardingModal}><OnboardingModal/></div>
                                                       
                       </ReactModal></div> : null}
 
