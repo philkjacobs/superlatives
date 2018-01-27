@@ -89,7 +89,7 @@ export default class WriteSupers extends React.Component {
                       onChange={this.handleChange}
                       className="form-control"/>
             </label>
-            <div className="input-subtitle">Select enter to submit ↵
+            <div className="input-subtitle">Press enter to add award ↵
             </div>
             {this.state.didTimerRunOut ? <input  type="submit"
                     placeholder="Continue"
