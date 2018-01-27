@@ -464,8 +464,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
     //Send the proper header information along with the request
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
     xhr.send(params);
+    this.setState({feedbackMessage:""})
   }
 }
 
