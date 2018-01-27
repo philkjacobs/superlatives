@@ -47,7 +47,9 @@ export class ShareGameModal extends React.Component{
 export class MenuScreen extends React.Component{
   render(){
     return(
-      <div className="container vt-center">       
+      <div className="container vt-center">
+
+          <div className="name">{this.props.playerName}</div>      
 
           <button
             onClick={this.props.hostGameButtonPressed}

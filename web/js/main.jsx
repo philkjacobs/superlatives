@@ -97,7 +97,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
         {this.state.showSuperWrittenToast ? <div className="added-toast">Added! Keep writing...</div> : null}
 
-        {this.state.gameState=="menu" ? <Menu.MenuScreen 
+        {this.state.gameState=="menu" ? <Menu.MenuScreen
+          playerName={this.state.playerName} 
           hostGameButtonPressed={this.hostGameButtonPressed}
           joinGameButtonPressed={this.joinGameButtonPressed}/> : null}
 
