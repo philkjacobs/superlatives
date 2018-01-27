@@ -213,6 +213,9 @@ return(<div className="custom-button waitingroom">{player}</div>)
     // Check for no name
     if(this.state.playerName==""){
       notify.show("Please enter a name.","error",TOAST_TIMEOUT)
+    // Check for long name
+    } else if(this.state.playerName.length>22){
+      notify.show("Please enter a shorter name.","error",TOAST_TIMEOUT)
     } else {
       if(this.state.gameId==""){
         this.setState({
