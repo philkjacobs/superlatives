@@ -83,6 +83,7 @@ export default class WriteSupers extends React.Component {
 
             <label style={{display:'block'}}>
               <input  type="text"
+                      placeholder="Enter award here..."
                       value={this.state.super}
                       onChange={this.handleChange}
                       className="form-control"/>
