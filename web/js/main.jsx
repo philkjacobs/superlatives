@@ -15,7 +15,7 @@ import Notifications, {notify} from 'react-notify-toast';
 import * as QueryString from 'query-string';
 
 
-export const TOAST_TIMEOUT = 1500;
+export const TOAST_TIMEOUT = 3000;
 const REFRESH_TIMER = 20000;
 
 
