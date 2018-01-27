@@ -168,11 +168,9 @@ return(<div className="custom-button waitingroom">{player}</div>)
           changeGameState={function(state){this.changeGameState(state)}.bind(this)} /> : null}
 
           
-          <button className="help-box"
-            onClick={this.optionsButtonPressed}>
-            <div className="help-box">?
-            </div>
-          </button>
+          
+            <div className="help-box" onClick={this.optionsButtonPressed}>?</div>
+
           
       </div>
     )
