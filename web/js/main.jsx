@@ -427,6 +427,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
         })
         this.stopPing();
         this.state.socket.close();
+        this.setState({gameId:""})
         this.state.socket.onclose = function(event){
           console.log("Socket closed!");
         };

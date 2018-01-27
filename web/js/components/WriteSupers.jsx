@@ -45,8 +45,8 @@ export default class WriteSupers extends React.Component {
       this.moveToAssign(e);
     } else {
       // Timer still running. Submit super to server.
-      this.setState({super:""})
       this.props.submitSuper(this.state.super)
+      this.setState({super:""})
     }
   }
 
