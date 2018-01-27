@@ -179,7 +179,7 @@ p{
 	justify-content: center;
 	padding-left: 1em;
 	padding-right: 1em;
-	height: 48%;
+	height: 42%;
 	font-size:2.5em;
 	font-weight: 700;
 	overflow: scroll;
@@ -199,6 +199,14 @@ p{
 .code{
 	margin-top: 1em;
 	font-size: 1.5rem;
+
+.name{
+	position: fixed;
+	top: 1em;
+	left: 50%;
+	transform: translateX(-50%);
+	text-transform: uppercase;
+	font-size: 1.3em;
 }
 
 /*Small screens*/

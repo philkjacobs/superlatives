@@ -97,7 +97,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
         {this.state.showSuperWrittenToast ? <div className="added-toast">Added! Keep writing...</div> : null}
 
-        {this.state.gameState=="menu" ? <Menu.MenuScreen 
+        {this.state.gameState=="menu" ? <Menu.MenuScreen
+          playerName={this.state.playerName} 
           hostGameButtonPressed={this.hostGameButtonPressed}
           joinGameButtonPressed={this.joinGameButtonPressed}/> : null}
 
@@ -125,7 +126,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
                                                       onRequestClose={this.closeOnboardingModal}
                                                       style={ONBOARDING_MODAL_STYLE}
                                                       shouldCloseOnOverlayClick={true}>
-                                                      <OnboardingModal />
+                                                      <div onClick={this.closeOnboardingModal}><OnboardingModal/></div>
                                                       
                       </ReactModal></div> : null}
 
@@ -168,11 +169,9 @@ return(<div className="custom-button waitingroom">{player}</div>)
           changeGameState={function(state){this.changeGameState(state)}.bind(this)} /> : null}
 
           
-          <button className="help-box"
-            onClick={this.optionsButtonPressed}>
-            <div className="help-box">?
-            </div>
-          </button>
+          
+            <div className="help-box" onClick={this.optionsButtonPressed}>?</div>
+
           
       </div>
     )
@@ -215,6 +214,9 @@ return(<div className="custom-button waitingroom">{player}</div>)
     // Check for no name
     if(this.state.playerName==""){
       notify.show("Please enter a name.","error",TOAST_TIMEOUT)
+    // Check for long name
+    } else if(this.state.playerName.length>22){
+      notify.show("Please enter a shorter name.","error",TOAST_TIMEOUT)
     } else {
       if(this.state.gameId==""){
         this.setState({
@@ -425,6 +427,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
         })
         this.stopPing();
         this.state.socket.close();
+        this.setState({gameId:""})
         this.state.socket.onclose = function(event){
           console.log("Socket closed!");
         };
@@ -461,8 +464,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
     //Send the proper header information along with the request
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
     xhr.send(params);
+    this.setState({feedbackMessage:""})
   }
 }
 
