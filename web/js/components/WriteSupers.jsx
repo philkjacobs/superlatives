@@ -82,7 +82,7 @@ export default class WriteSupers extends React.Component {
         <form onSubmit={this.onSubmit} className="input-group-lg vt-center">
 
             <label style={{display:'block'}}>
-              <input  autofocus
+              <input  autoFocus
                       type="text"
                       placeholder="Enter award here..."
                       value={this.state.super}
