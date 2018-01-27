@@ -1,2 +1,4 @@
 tornado==4.5.2
 requests==2.18.4
+aiopg==0.13.2
+sqlalchemy==1.2.0
