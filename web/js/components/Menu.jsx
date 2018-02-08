@@ -89,6 +89,7 @@ export class WaitingRoom extends React.Component {
                                                   isOpen={this.state.showModal}
                                                   toggleModal={function(){this.toggleModal()}.bind(this)}/> : null}
           <h2 className="code">GAME CODE: {this.props.gameId}</h2>
+          {this.props.isHost ? null : <div className="waiting-for-host">Waiting for Host to start game</div>}
           <h1>Waiting Room</h1>
           <div className="player-list">
             {this.props.players.map(function(player){
