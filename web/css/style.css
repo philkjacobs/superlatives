@@ -152,6 +152,13 @@ p{
 	font-size: 30px;
 }
 
+.waiting-for-host{
+	font-family: Barlow;
+	font-size: 1em;
+	color: #808282;
+	text-transform: uppercase;
+}
+
 .description{
 	margin-top:3vh;
 	margin-bottom: 10px;
