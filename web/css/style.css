@@ -56,6 +56,14 @@ p{
 	padding: 0.3em 1.5em;
 }
 
+.close-onboarding{
+	position: fixed;
+	bottom: 0.7em;
+	left: 50%;
+	transform: translateX(-50%);
+	color: rgba(255,255,255,0.33);
+}
+
 .top-button{
 	bottom:80px;
 }
