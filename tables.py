@@ -21,6 +21,7 @@ player_stats = Table(
     Column('open_ts', Integer),
     Column('close_ts', Integer),
     Column('state', String),
+    Column('game_id', String),
 )
 
 
@@ -31,6 +32,11 @@ async def create_player_stats_table(conn):
         close_ts bigint DEFAULT NULL,
         state varchar(255) DEFAULT NULL
     )''')
+
+
+async def add_game_id_player_stats(conn):
+    return await conn.execute('''ALTER TABLE player_stats ADD COLUMN IF NOT EXISTS game_id varchar(255) DEFAULT NULL;
+    ''')
 
 
 async def async_db_call(fn):
@@ -50,4 +56,5 @@ async def async_db_call(fn):
 def setup_and_migrate_db(ioloop):
     return all([
         ioloop.run_until_complete(ensure_future(async_db_call(create_player_stats_table))),
+        ioloop.run_until_complete(ensure_future(async_db_call(add_game_id_player_stats))),
     ])

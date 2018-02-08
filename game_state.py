@@ -3,10 +3,14 @@ import json
 import logging
 import random
 import string
+from time import time
 
 from enum import Enum
+from tornado.ioloop import IOLoop
 from tornado.web import MissingArgumentError
 from tornado.websocket import WebSocketHandler
+from tables import async_db_call, player_stats
+
 MAX_NAME_LENGTH = 22
 
 _game_map = {}  # game_id -> set(websockets)
@@ -29,6 +33,7 @@ class GameHandler(WebSocketHandler):
         self.game_id = None
         self.is_host = False
         self.game_state = None
+        self.open_ts = int(time())
         self.supers_written = set()
         self.supers_assigned = []
         self.supers_received = []
@@ -168,8 +173,23 @@ class GameHandler(WebSocketHandler):
             raise ValueError('WebSocket Message {} does not exist'.format(msg))
 
     def on_close(self):
+        IOLoop.current().spawn_callback(self.log_player_state)
+
         if self.game_id in _game_map:
             _game_map[self.game_id].discard(self)
+            if not _game_map[self.game_id]:
+                del _game_map[self.game_id]
+
+    async def log_player_state(self):
+        async def inner_query(conn):
+            return await conn.execute(player_stats.insert().values(
+                open_ts=self.open_ts,
+                close_ts=int(time()),
+                state=self.game_state.value if self.game_state else None,
+                game_id=self.game_id,
+            ))
+
+        await async_db_call(inner_query)
 
     def send_assigned_supers(self):
         all_supers = list(itertools.chain.from_iterable(
