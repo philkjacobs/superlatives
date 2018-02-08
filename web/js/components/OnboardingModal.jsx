@@ -17,6 +17,7 @@ export default class OnboardingModal extends React.Component {
             <p>You will be given a random list of awards. Assign them to the person that best fits the description. You can’t assign awards to yourself!</p>
             <h3>Stage 3: Read</h3>
             <p>After all awards have been assigned, go around the group reading the awards assigned to you, one at a time.</p>
+            <div className="close-onboarding">CLOSE</div>
           </div>
     )
   }

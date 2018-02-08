@@ -57,7 +57,7 @@ export const ONBOARDING_MODAL_STYLE = {
     left              : 0,
     right             : 0,
     bottom            : 0,
-    backgroundColor   : 'rgba(255, 255, 255, 0.91)'
+    backgroundColor   : '#2F3A3A'
   },
   content : {
     position                   : 'absolute',
@@ -66,7 +66,7 @@ export const ONBOARDING_MODAL_STYLE = {
     right                      : '10px',
     height                     : '16em',
     bottom                     : '40px',
-    border                     : '1px solid #ccc',
+    border                     : '0px solid #ccc',
     background                 : '#2F3A3A',
     overflow                   : 'auto',
     WebkitOverflowScrolling    : 'touch',
