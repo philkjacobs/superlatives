@@ -41,7 +41,8 @@ class Application extends React.Component {
       showOnboardingModal: false,
       showFeedbackModal: false,
       feedbackMessage:"",
-      showSuperWrittenToast:false
+      showSuperWrittenToast:false,
+      showSocketClosedModal:false
     };
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
@@ -62,6 +63,8 @@ class Application extends React.Component {
     this.ping = this.ping.bind(this);
     this.showSuperWrittenToast = this.showSuperWrittenToast.bind(this);
     this.onNameSubmit = this.onNameSubmit.bind(this);
+    this.socketOnClose = this.socketOnClose.bind(this);
+    this.backToMainMenuButtonPressed = this.backToMainMenuButtonPressed.bind(this);
 
   }
 
@@ -110,6 +113,15 @@ return(<div className="custom-button waitingroom">{player}</div>)
           onChange={function(e){this.handleIdChange(e)}.bind(this)}
           onSubmit={function(data){this.login('join')}.bind(this)}
           closeModal={this.closeJoinModal}/>
+                      </ReactModal></div> : null}
+
+
+
+        {this.state.showSocketClosedModal ? <div><ReactModal isOpen={true}
+                                                      style={MOVE_TO_ASSIGN_MODAL_STYLE}>
+                                                      <h2>Connection lost.</h2>
+                                                      <p>It looks like you were disconnected from the game. Wait for the next game to rejoin.</p>
+                                                      <button className="btn btn-danger btn-lg btn-block" onClick={this.backToMainMenuButtonPressed}>Return to main menu</button>
                       </ReactModal></div> : null}
 
         {this.state.showOptionsModal ? <div><ReactModal isOpen={true}
@@ -208,6 +220,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
     this.continueButtonPressed();     
   }
 
+  backToMainMenuButtonPressed(){
+    this.setState({showSocketClosedModal:false})
+    this.changeGameState("menu")
+  }
 
   continueButtonPressed(){
     // Check for no name
@@ -378,6 +394,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   listenForServerMessages(){
+
+    // Function to call when socket closes
+    this.state.socket.onclose = this.socketOnClose;
+
     // Listen for any messages from the server after changing state
     this.state.socket.onmessage = function(event){
       var response = JSON.parse(event.data);
@@ -424,12 +444,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
           gameState: "read",
           supers:response.data.supers
         })
-        this.stopPing();
         this.state.socket.close();
-        this.setState({gameId:""})
-        this.state.socket.onclose = function(event){
-          console.log("Socket closed!");
-        };
         console.log("Supers to be read are "+this.state.supers)
       }
 
@@ -445,6 +460,19 @@ return(<div className="custom-button waitingroom">{player}</div>)
         console.log("Slackers are "+this.state.waitingOnPlayers)
       }
     }.bind(this)
+  }
+
+  socketOnClose(){
+    this.stopPing();
+    this.setState({gameId:""})
+    console.log("Socket closed!")
+    switch(this.state.gameState){
+      case "read":
+        break;
+      default:
+        // notify.show("Uh oh. You got disconnected","error",TOAST_TIMEOUT)
+        this.setState({showSocketClosedModal:true})
+    }
   }
 
   sendFeedbackToServer(message){
