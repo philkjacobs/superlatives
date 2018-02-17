@@ -83,7 +83,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Enter name"
+                    placeholder="e.g. Ben"
                     value={this.state.playerName}
                     onChange={this.handleNameChange}
                     ref={(input) => {this.nameInput = input; console.log("FOCUSING"); }}/>
