@@ -160,7 +160,7 @@ p{
 	font-size: 30px;
 }
 
-.waiting-for-host{
+.waiting-for-host, .player-count{
 	font-family: Barlow;
 	font-size: 1em;
 	color: #808282;
