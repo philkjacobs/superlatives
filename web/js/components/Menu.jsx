@@ -75,6 +75,7 @@ export class WaitingRoom extends React.Component {
     }
     this.startGameButtonPressed = this.startGameButtonPressed.bind(this)
     this.toggleModal = this.toggleModal.bind(this)
+    this.getPlayerCountString = this.getPlayerCountString.bind(this)
   }
 
   componentDidMount(){
@@ -91,6 +92,7 @@ export class WaitingRoom extends React.Component {
           <h2 className="code">GAME CODE: {this.props.gameId}</h2>
           {this.props.isHost ? null : <div className="waiting-for-host">Waiting for Host to start game</div>}
           <h1>Waiting Room</h1>
+          <div className="player-count">{this.getPlayerCountString()}</div>
           <div className="player-list">
             {this.props.players.map(function(player){
                 return (
@@ -111,6 +113,14 @@ export class WaitingRoom extends React.Component {
           </div>
       </div>
     )
+  }
+
+  getPlayerCountString(){
+    if(this.props.players.length==1){
+      return "Waiting for players to join"
+    } else {
+      return `${this.props.players.length} players`
+    }
   }
 
   startGameButtonPressed(){
