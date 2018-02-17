@@ -77,6 +77,14 @@ p{
 	font-size: 1.8em;
 }
 
+.start-text{
+	font-family: Barlow;
+	font-weight: 400;
+	font-size: 1em;
+	text-transform: uppercase;
+	margin-bottom: 1em;
+}
+
 .join.custom-button{
 	margin-bottom: 10px;
 	font-size: 1.5em;

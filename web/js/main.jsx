@@ -80,6 +80,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 }.bind(this))}</div> : null}
 
         <div style={style} className="vt-center input-group-lg">
+          <div className="start-text">Start by typing your name below</div>
             <form onSubmit={this.onNameSubmit}>
                 <label style={{display:'block'}}>
                   <input
@@ -87,7 +88,8 @@ return(<div className="custom-button waitingroom">{player}</div>)
                     className="form-control"
                     placeholder="Enter name"
                     value={this.state.playerName}
-                    onChange={this.handleNameChange}/>
+                    onChange={this.handleNameChange}
+                    ref={(input) => {this.nameInput = input; console.log("FOCUSING"); }}/>
                 </label>
               </form>
 
@@ -190,6 +192,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
   componentDidMount(){
     this.setState({pingInterval: setInterval(this.ping, REFRESH_TIMER)});
+    this.nameInput.focus();
   }
 
   componentWillUnmount() {
