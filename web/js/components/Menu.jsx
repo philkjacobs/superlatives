@@ -135,6 +135,10 @@ export class JoinGame extends React.Component {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
+  componentDidMount(){
+    this.joinModalInput.focus();
+  }
+
   render(){
     return(
           <div>
@@ -145,11 +149,12 @@ export class JoinGame extends React.Component {
                         value={this.props.gameId}
                         onChange={this.props.onChange}
                         className="form-control joinModalGameId"
+                        ref={(input)=>{this.joinModalInput = input;}}
                         />
               </label>
               <input  type="submit"
                       value="Join"
-                      className="custom-button join" />
+                      className="custom-button join"/>
               
               <button className="custom-button join" onClick={this.props.closeModal.bind(this)}>Cancel</button>
             </form>
