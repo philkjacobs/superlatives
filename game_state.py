@@ -1,6 +1,8 @@
+import hmac
 import itertools
 import json
 import logging
+import os
 import random
 import string
 from time import time
@@ -37,52 +39,24 @@ class GameHandler(WebSocketHandler):
         self.supers_written = set()
         self.supers_assigned = []
         self.supers_received = []
+        self.disconnected = False
+        self.reconnection_hmac = None
+        self.hmac_nonce = None
 
     def open(self):
-        try:
-            self.name = self.get_argument(name='name')
-            if not self.name.strip():
-                raise MissingArgumentError(arg_name='name')
-        except MissingArgumentError:
-            send_message(self, error='Please tell us your name.')
+        reconnection_hmac = self.get_argument(name='reconnect', default=None)
+        game_id = self.get_argument(name='game', default=None)
+        if reconnection_hmac is not None and game_id is not None:
+            reconnect(self, reconnection_hmac, game_id)
         else:
-            game_id = self.get_argument(name='game', default=None)
-
-            if game_id is None:
-                # if enough games are active this can loop infinitely
-                # but 36^4 = 1.6million which means that is not a
-                # realistic scenario in any near-term timeframe
-                while game_id is None or game_id in _game_map:
-                    game_id = u''.join(
-                        random.choice(string.ascii_uppercase + string.digits)
-                        for _ in range(4)
-                    )
-                _game_map[game_id] = set()
-                self.is_host = True
-            else:
-                # treat all user-typed game_ids as case insensitive
-                game_id = game_id.upper()
             try:
-                if len(self.name) > MAX_NAME_LENGTH:
-                    raise ValueError('Please restart with a shorter name.')
-                current_names = {player.name for player in _game_map[game_id]}
-                if self.name in current_names:
-                    raise ValueError('That name is already taken.')
-                arbitrary_player = next(iter(_game_map[game_id]), None)
-                if arbitrary_player and arbitrary_player.game_state is not None:
-                    raise ValueError('This game is already in progress.')
-
-                _game_map[game_id].add(self)
-                self.game_id = game_id
-            except KeyError:
-                send_message(self, error='Game {} not found.'.format(game_id))
-            except ValueError as e:
-                send_message(self, error=str(e))
+                self.name = self.get_argument(name='name')
+                if not self.name.strip():
+                    raise MissingArgumentError(arg_name='name')
+            except MissingArgumentError:
+                send_message(self, error='Please tell us your name.')
             else:
-                broadcast_message(self, message='login', data={
-                    'game':self.game_id,
-                    'players':[player.name for player in _game_map[self.game_id]]
-                })
+                login(self, game_id)
 
     async def on_message(self, message):
         raw = json.loads(message)
@@ -176,8 +150,8 @@ class GameHandler(WebSocketHandler):
         IOLoop.current().spawn_callback(self.log_player_state)
 
         if self.game_id in _game_map:
-            _game_map[self.game_id].discard(self)
-            if not _game_map[self.game_id]:
+            _game_map[self.game_id].disconnected = True
+            if all([u.disconnected for u in _game_map[self.game_id]]):
                 del _game_map[self.game_id]
 
     async def log_player_state(self):
@@ -209,6 +183,86 @@ class GameHandler(WebSocketHandler):
             send_message(player, message='read_supers_list', data={
                 'supers': player.supers_received
             })
+
+
+def login(socket, game_id):
+    if game_id is None:
+        # if enough games are active this can loop infinitely
+        # but 36^4 = 1.6million which means that is not a
+        # realistic scenario in any near-term timeframe
+        while game_id is None or game_id in _game_map:
+            game_id = u''.join(
+                random.choice(string.ascii_uppercase + string.digits)
+                for _ in range(4)
+            )
+        _game_map[game_id] = set()
+        socket.is_host = True
+    else:
+        # treat all user-typed game_ids as case insensitive
+        game_id = game_id.upper()
+    try:
+        if len(socket.name) > MAX_NAME_LENGTH:
+            raise ValueError('Please restart with a shorter name.')
+        current_names = {player.name for player in _game_map[game_id]}
+        if socket.name in current_names:
+            raise ValueError('That name is already taken.')
+        arbitrary_player = next(iter(_game_map[game_id]), None)
+        if arbitrary_player and arbitrary_player.game_state is not None:
+            raise ValueError('This game is already in progress.')
+
+        _game_map[game_id].add(socket)
+        socket.game_id = game_id
+
+        new_hmac, new_nonce = generate_reconnection_hmac(socket.name, socket.game_id)
+        socket.hmac_nonce = new_nonce
+        socket.reconnection_hmac = new_hmac
+        send_message(socket, message='reconnection', data={
+            'hmac': socket.reconnection_hmac
+        })
+    except KeyError:
+        send_message(socket, error='Game {} not found.'.format(game_id))
+    except ValueError as e:
+        send_message(socket, error=str(e))
+    else:
+        send_message(socket, message='')
+        broadcast_message(socket, message='login', data={
+            'game': socket.game_id,
+            'players': [player.name for player in _game_map[socket.game_id]]
+        })
+
+
+def reconnect(socket, reconnection_hmac, game_id):
+    user = next(
+        (u for u in _game_map[game_id] if hmac.compare_digest(reconnection_hmac, u.reconnection_hmac))
+    )
+    if not user:
+        raise ValueError("Reconnect Failed")
+    else:
+        # copy all user state -- this is nasty but I'll probably refactor later
+        socket.name = user.name
+        socket.game_id = user.game_id
+        socket.is_host = user.is_host
+        socket.game_state = user.game_state
+        socket.open_ts = user.open_ts
+        socket.supers_written = user.supers_written
+        socket.supers_assigned = user.supers_assigned
+        socket.supers_received = user.supers_received
+        socket.disconnected = False
+
+        new_hmac, new_nonce = generate_reconnection_hmac(socket.name, socket.game_id)
+        socket.hmac_nonce = new_nonce
+        socket.reconnection_hmac = new_hmac
+
+        send_message(socket, message='reconnection', data={
+            'hmac': socket.reconnection_hmac
+        })
+
+
+def generate_reconnection_hmac(name, game_id):
+    nonce = random.randint(0, 1000000)
+    HMAC_KEY = os.environ.get('HMAC_KEY')
+    return nonce, hmac.new(HMAC_KEY, ''.join((name, game_id, nonce))).hexdigest()
+
 
 def send_message(socket, message=None, data=None, error=None):
     assert any(v is not None for v in (message, data, error))
