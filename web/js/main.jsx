@@ -12,6 +12,7 @@ import ReadSupers from './components/ReadSupers.jsx';
 import FeedbackModal from './components/FeedbackModal.jsx';
 import OnboardingModal from './components/OnboardingModal.jsx';
 import Notifications, {notify} from 'react-notify-toast';
+import {withCookies, Cookies, CookiesProvider} from 'react-cookie';
 import * as QueryString from 'query-string';
 
 
@@ -42,7 +43,7 @@ class Application extends React.Component {
       showFeedbackModal: false,
       feedbackMessage:"",
       showSuperWrittenToast:false,
-      showSocketClosedModal:false
+      reconnectionCount: 1,
     };
 
     this.hostGameButtonPressed = this.hostGameButtonPressed.bind(this);
@@ -65,6 +66,7 @@ class Application extends React.Component {
     this.onNameSubmit = this.onNameSubmit.bind(this);
     this.socketOnClose = this.socketOnClose.bind(this);
     this.backToMainMenuButtonPressed = this.backToMainMenuButtonPressed.bind(this);
+    this.createSocketUrl = this.createSocketUrl.bind(this);
 
   }
 
@@ -89,7 +91,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
                     placeholder="e.g. Ben"
                     value={this.state.playerName}
                     onChange={this.handleNameChange}
-                    ref={(input) => {this.nameInput = input; console.log("FOCUSING"); }}/>
+                    ref={(input) => {this.nameInput = input}}/>
                 </label>
               </form>
 
@@ -119,7 +121,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
 
 
-        {this.state.showSocketClosedModal ? <div><ReactModal isOpen={true}
+        {this.state.gameState !== 'read' && this.state.gameState !== 'menu' && this.state.socket !== null && this.state.socket.readyState !== WebSocket.OPEN ? <div><ReactModal isOpen={true}
                                                       style={MOVE_TO_ASSIGN_MODAL_STYLE}>
                                                       <h2>Connection lost.</h2>
                                                       <p>It looks like you were disconnected from the game. Wait for the next game to rejoin.</p>
@@ -224,7 +226,6 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   backToMainMenuButtonPressed(){
-    this.setState({showSocketClosedModal:false})
     this.changeGameState("menu")
   }
 
@@ -315,16 +316,31 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   login(type){
-    const socketType = IS_PROD ? 'wss' : 'ws';
-    const socket = type==='host' ? `${socketType}://${location.host}/ws?name=${this.state.playerName}` : `${socketType}://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}`;
-    const webSocket = new WebSocket(socket)
+    const webSocket = new WebSocket(this.createSocketUrl(type));
 
-    this.setState({
-      socket: webSocket
+    this.setState((prevState) => {
+      return {
+        socket: webSocket,
+        reconnectionCount: prevState.reconnectionCount+1 ? type === 'reconnect' : prevState.reconnectionCount
+      }
     }, () => {
       this.listenForServerMessages();
     })
   }
+
+  createSocketUrl(type) {
+    const socketType = IS_PROD ? 'wss' : 'ws';
+    switch(type) {
+      case 'host':
+        return `${socketType}://${location.host}/ws?name=${this.state.playerName}`;
+      case 'join':
+        return `${socketType}://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}`;
+      case 'reconnect':
+        return `${socketType}://${location.host}/ws?name=${this.state.playerName}&game=${this.state.gameId}&reconnect=${this.props.cookies.get('reconnection')}`;
+      default:
+        throw 'everybody knows shit fuck'
+    }
+  };
 
   changeGameState(state){
     // Send message to server with new game state
@@ -333,7 +349,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
     var message;
 
-    if(state=="read" || state=="assign"){
+    if(state === "read" || state === "assign"){
       this.setState({
         gameState:"wait"
       })
@@ -343,18 +359,16 @@ return(<div className="custom-button waitingroom">{player}</div>)
       })
     }
 
-    if(state=="assign"){
+    if(state === "assign"){
       message = {"msg":"change_state", "data":{"state":state, "force":1}, "error":""}
       this.state.socket.send(JSON.stringify(message))
     } else {
       message = {"msg":"change_state", "data":{"state":state}, "error":""}
       this.state.socket.send(JSON.stringify(message))
-      this.listenForServerMessages()
     }
   }
 
   ping(){
-    console.log("PING!")
     this.state.socket.send(JSON.stringify({"msg":"ping","data":null,"error":null}))
   }
 
@@ -364,19 +378,16 @@ return(<div className="custom-button waitingroom">{player}</div>)
 
   writeSuper(data){
     // Write super to server
-    var message = {"msg":"write_supers","data":{"super":data}, "error":""}
+    const message = {"msg":"write_supers","data":{"super":data}, "error":""}
     this.state.socket.send(JSON.stringify(message))
 
     this.showSuperWrittenToast()
-    this.listenForServerMessages()
   }
 
   assignSuper(player,superText){
     // Assign super to server  
-    var message = {"msg":"assign_super","data":{"name":player, "super":superText}, "error":""}
+    const message = {"msg":"assign_super","data":{"name":player, "super":superText}, "error":""}
     this.state.socket.send(JSON.stringify(message))
-
-    this.listenForServerMessages()
   }
 
    removePlayerNameFromPlayerList(){
@@ -390,26 +401,24 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 
   showSuperWrittenToast(){
-    console.log("SHOW TOAST!")
     this.setState({showSuperWrittenToast:true})
 
     setTimeout(function() { this.setState({showSuperWrittenToast: false}); }.bind(this), 1000);
   }
 
   listenForServerMessages(){
+    this.state.socket.onopen = function(){this.setState({ reconnectionCount: 1 })}.bind(this);
 
-    // Function to call when socket closes
     this.state.socket.onclose = this.socketOnClose;
 
-    // Listen for any messages from the server after changing state
     this.state.socket.onmessage = function(event){
-      var response = JSON.parse(event.data);
+      const response = JSON.parse(event.data);
 
       if(response.error){
         notify.show(response.error,"error",TOAST_TIMEOUT)
       }
 
-      if(response.msg=='login'){
+      if(response.msg === 'login'){
         // Assuming success, go to the waiting room or update player list if already in waiting room
         this.setState({
           gameId:response.data.game,
@@ -419,10 +428,10 @@ return(<div className="custom-button waitingroom">{player}</div>)
         })
       }
 
-      if(response.msg=="change_state"){
-        var state = response.data.state.toLowerCase()
+      if(response.msg === "change_state"){
+        const state = response.data.state.toLowerCase();
 
-        if(state=="read" || state=="assign"){
+        if(state === "read" || state === "assign"){
           this.setState({
             gameState:"wait"
           })
@@ -434,7 +443,7 @@ return(<div className="custom-button waitingroom">{player}</div>)
       }
 
       // If we're in the assign stage, check if the server has returned a list of supers
-      if(response.msg=="assign_supers_list"){
+      if(response.msg === "assign_supers_list"){
         this.setState({
           gameState: "assign",
           supers:response.data.supers
@@ -442,39 +451,48 @@ return(<div className="custom-button waitingroom">{player}</div>)
       }
 
       // If we're in the read stage, check if the server has returned a list of supers
-      if(response.msg=="read_supers_list"){
+      if(response.msg === "read_supers_list"){
         this.setState({
           gameState: "read",
           supers:response.data.supers
         })
         this.state.socket.close();
-        console.log("Supers to be read are "+this.state.supers)
       }
 
       // If a super is assigned to the user, console log
-      if(response.msg=="assign_super"){
+      if(response.msg === "assign_super"){
         notify.show("Someone assigned you an award!","success",TOAST_TIMEOUT)
-      }      
+      }
 
-      if(response.msg=="waiting_on"){
+      if(response.msg === "waiting_on"){
         this.setState({
           waitingOnPlayers:response.data.players
         })
-        console.log("Slackers are "+this.state.waitingOnPlayers)
+      }
+
+      if(response.msg === "reconnection") {
+        const FOUR_HOURS_IN_SECONDS = 4 * 60 * 60;
+        this.props.cookies.set('reconnection', response.data.hmac, '/', {
+          maxAge: FOUR_HOURS_IN_SECONDS,
+        })
       }
     }.bind(this)
   }
 
   socketOnClose(){
     this.stopPing();
-    this.setState({gameId:""})
-    console.log("Socket closed!")
     switch(this.state.gameState){
       case "read":
+        this.props.cookies.remove('reconnection');
+        this.setState({gameId:""});
         break;
       default:
-        // notify.show("Uh oh. You got disconnected","error",TOAST_TIMEOUT)
-        this.setState({showSocketClosedModal:true})
+        this.setState((prevState) => {return {reconnectionCount:prevState.reconnectionCount+1}}, () => {
+          if(this.state.reconnectionCount < 6) {
+            setTimeout(() => this.login('reconnect'), 1000 * this.state.reconnectionCount ** 2)
+          }
+        })
+
     }
   }
 
@@ -499,7 +517,17 @@ return(<div className="custom-button waitingroom">{player}</div>)
   }
 }
 
+const ApplicationWithCookies = withCookies(Application);
+
+function Root(){
+  return (
+    <CookiesProvider>
+      <ApplicationWithCookies />
+    </CookiesProvider>
+  );
+}
+
 ReactDOM.render(
-  <Application />,
+  <Root/>,
   document.getElementById('root')
 );

@@ -1,4 +1,5 @@
 import hmac
+import hashlib
 import itertools
 import json
 import logging
@@ -149,10 +150,8 @@ class GameHandler(WebSocketHandler):
     def on_close(self):
         IOLoop.current().spawn_callback(self.log_player_state)
 
-        if self.game_id in _game_map:
-            _game_map[self.game_id].disconnected = True
-            if all([u.disconnected for u in _game_map[self.game_id]]):
-                del _game_map[self.game_id]
+        # Explicitly not cleaning up for now
+        # TODO(philip): properly handle memory cleanup
 
     async def log_player_state(self):
         async def inner_query(conn):
@@ -213,7 +212,7 @@ def login(socket, game_id):
         _game_map[game_id].add(socket)
         socket.game_id = game_id
 
-        new_hmac, new_nonce = generate_reconnection_hmac(socket.name, socket.game_id)
+        new_nonce, new_hmac  = generate_reconnection_hmac(socket.name, socket.game_id)
         socket.hmac_nonce = new_nonce
         socket.reconnection_hmac = new_hmac
         send_message(socket, message='reconnection', data={
@@ -234,8 +233,11 @@ def login(socket, game_id):
 def reconnect(socket, reconnection_hmac, game_id):
     user = next(
         (u for u in _game_map[game_id] if hmac.compare_digest(reconnection_hmac, u.reconnection_hmac))
-    )
+    , None)
     if not user:
+        logging.info(reconnection_hmac)
+        logging.info(game_id)
+        logging.info([u.reconnection_hmac for u in _game_map[game_id]])
         raise ValueError("Reconnect Failed")
     else:
         # copy all user state -- this is nasty but I'll probably refactor later
@@ -249,9 +251,14 @@ def reconnect(socket, reconnection_hmac, game_id):
         socket.supers_received = user.supers_received
         socket.disconnected = False
 
-        new_hmac, new_nonce = generate_reconnection_hmac(socket.name, socket.game_id)
+        new_nonce, new_hmac = generate_reconnection_hmac(socket.name, socket.game_id)
         socket.hmac_nonce = new_nonce
         socket.reconnection_hmac = new_hmac
+
+        # there is potential for race conditions as this isn't atomic
+        # but idc
+        _game_map[game_id].discard(user)
+        _game_map[game_id].add(socket)
 
         send_message(socket, message='reconnection', data={
             'hmac': socket.reconnection_hmac
@@ -259,9 +266,10 @@ def reconnect(socket, reconnection_hmac, game_id):
 
 
 def generate_reconnection_hmac(name, game_id):
-    nonce = random.randint(0, 1000000)
-    HMAC_KEY = os.environ.get('HMAC_KEY')
-    return nonce, hmac.new(HMAC_KEY, ''.join((name, game_id, nonce))).hexdigest()
+    nonce = str(random.randint(0, 1000000))
+    HMAC_KEY = bytes(os.environ.get('HMAC_KEY', 'DEVELOPMENT_SECRET_WOO'), 'utf-8')
+    message = bytes(''.join((name, game_id, nonce)), 'utf-8')
+    return nonce, hmac.new(HMAC_KEY, message, hashlib.sha256).hexdigest()
 
 
 def send_message(socket, message=None, data=None, error=None):
